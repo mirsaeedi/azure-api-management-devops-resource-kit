@@ -5,24 +5,24 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class APITemplateCreator : TemplateCreator
+    public class ApiTemplateCreator : TemplateCreator
     {
         private FileReader fileReader;
-        private PolicyTemplateCreator policyTemplateCreator;
-        private ProductAPITemplateCreator productAPITemplateCreator;
-        private DiagnosticTemplateCreator diagnosticTemplateCreator;
-        private ReleaseTemplateCreator releaseTemplateCreator;
+        private PolicyTemplateCreator _policyTemplateCreator;
+        private ProductAPITemplateCreator _productAPITemplateCreator;
+        private DiagnosticTemplateCreator _diagnosticTemplateCreator;
+        private ReleaseTemplateCreator _releaseTemplateCreator;
 
-        public APITemplateCreator(FileReader fileReader, PolicyTemplateCreator policyTemplateCreator, ProductAPITemplateCreator productAPITemplateCreator, DiagnosticTemplateCreator diagnosticTemplateCreator, ReleaseTemplateCreator releaseTemplateCreator)
+        public ApiTemplateCreator(FileReader fileReader)
         {
             this.fileReader = fileReader;
-            this.policyTemplateCreator = policyTemplateCreator;
-            this.productAPITemplateCreator = productAPITemplateCreator;
-            this.diagnosticTemplateCreator = diagnosticTemplateCreator;
-            this.releaseTemplateCreator = releaseTemplateCreator;
+            _policyTemplateCreator = new PolicyTemplateCreator(fileReader);
+            _productAPITemplateCreator = new ProductAPITemplateCreator() ;
+            _diagnosticTemplateCreator = new DiagnosticTemplateCreator();
+            _releaseTemplateCreator = new ReleaseTemplateCreator();
         }
 
-        public async Task<List<Template>> CreateAPITemplatesAsync(APIConfig api)
+        public async Task<List<Template>> CreateAPITemplatesAsync(ApiConfiguration api)
         {
             // determine if api needs to be split into multiple templates
             bool isSplit = isSplitAPI(api);
@@ -53,7 +53,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return apiTemplates;
         }
 
-        public async Task<Template> CreateAPITemplateAsync(APIConfig api, bool isSplit, bool isInitial)
+        public async Task<Template> CreateAPITemplateAsync(ApiConfiguration api, bool isSplit, bool isInitial)
         {
             // create empty template
             Template apiTemplate = CreateEmptyTemplate();
@@ -66,7 +66,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             List<TemplateResource> resources = new List<TemplateResource>();
             // create api resource 
-            APITemplateResource apiTemplateResource = await this.CreateAPITemplateResourceAsync(api, isSplit, isInitial);
+            ApiTemplateResource apiTemplateResource = await this.CreateAPITemplateResourceAsync(api, isSplit, isInitial);
             resources.Add(apiTemplateResource);
             // add the api child resources (api policies, diagnostics, etc) if this is the unified or subsequent template
             if (!isSplit || !isInitial)
@@ -78,18 +78,18 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return apiTemplate;
         }
 
-        public List<TemplateResource> CreateChildResourceTemplates(APIConfig api)
+        public List<TemplateResource> CreateChildResourceTemplates(ApiConfiguration api)
         {
             List<TemplateResource> resources = new List<TemplateResource>();
             // all child resources will depend on the api
             string[] dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{api.name}')]" };
 
-            PolicyTemplateResource apiPolicyResource = api.policy != null ? this.policyTemplateCreator.CreateAPIPolicyTemplateResource(api, dependsOn) : null;
-            List<PolicyTemplateResource> operationPolicyResources = api.operations != null ? this.policyTemplateCreator.CreateOperationPolicyTemplateResources(api, dependsOn) : null;
-            List<ProductAPITemplateResource> productAPIResources = api.products != null ? this.productAPITemplateCreator.CreateProductAPITemplateResources(api, dependsOn) : null;
-            DiagnosticTemplateResource diagnosticTemplateResource = api.diagnostic != null ? this.diagnosticTemplateCreator.CreateAPIDiagnosticTemplateResource(api, dependsOn) : null;
+            PolicyTemplateResource apiPolicyResource = api.policy != null ? this._policyTemplateCreator.CreateAPIPolicyTemplateResource(api, dependsOn) : null;
+            List<PolicyTemplateResource> operationPolicyResources = api.operations != null ? this._policyTemplateCreator.CreateOperationPolicyTemplateResources(api, dependsOn) : null;
+            List<ProductAPITemplateResource> productAPIResources = api.products != null ? this._productAPITemplateCreator.CreateProductAPITemplateResources(api, dependsOn) : null;
+            DiagnosticTemplateResource diagnosticTemplateResource = api.diagnostic != null ? this._diagnosticTemplateCreator.CreateAPIDiagnosticTemplateResource(api, dependsOn) : null;
             // add release resource if the name has been appended with ;rev{revisionNumber}
-            ReleaseTemplateResource releaseTemplateResource = api.name.Contains(";rev") == true ? this.releaseTemplateCreator.CreateAPIReleaseTemplateResource(api, dependsOn) : null;
+            ReleaseTemplateResource releaseTemplateResource = api.name.Contains(";rev") == true ? this._releaseTemplateCreator.CreateAPIReleaseTemplateResource(api, dependsOn) : null;
 
             // add resources if not null
             if (apiPolicyResource != null) resources.Add(apiPolicyResource);
@@ -101,13 +101,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return resources;
         }
 
-        public async Task<APITemplateResource> CreateAPITemplateResourceAsync(APIConfig api, bool isSplit, bool isInitial)
+        public async Task<ApiTemplateResource> CreateAPITemplateResourceAsync(ApiConfiguration api, bool isSplit, bool isInitial)
         {
             // create api resource
-            APITemplateResource apiTemplateResource = new APITemplateResource()
+            ApiTemplateResource apiTemplateResource = new ApiTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}')]",
-                type = ResourceTypeConstants.API,
+                type = ResourceType.Api,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new APITemplateProperties(),
                 dependsOn = new string[] { }
@@ -193,7 +193,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return apiTemplateResource;
         }
 
-        public string[] CreateProtocols(APIConfig api)
+        public string[] CreateProtocols(ApiConfiguration api)
         {
             string[] protocols;
             if (api.protocols != null)
@@ -205,12 +205,6 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 protocols = new string[1] { "https" };
             }
             return protocols;
-        }
-
-        public bool isSplitAPI(APIConfig apiConfig)
-        {
-            // the api needs to be split into multiple templates if the user has supplied a version or version set - deploying swagger related properties at the same time as api version related properties fails, so they must be written and deployed separately
-            return apiConfig.apiVersion != null || apiConfig.apiVersionSetId != null || (apiConfig.authenticationSettings != null && apiConfig.authenticationSettings.oAuth2 != null && apiConfig.authenticationSettings.oAuth2.authorizationServerId != null);
         }
     }
 }

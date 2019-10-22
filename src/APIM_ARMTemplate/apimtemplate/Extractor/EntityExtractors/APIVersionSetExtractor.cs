@@ -37,7 +37,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             Template armTemplate = GenerateEmptyTemplateWithParameters(policyXMLBaseUrl);
 
             // isolate apis in the case of a single api extraction
-            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceTypeConstants.API);
+            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceType.Api);
 
             List<TemplateResource> templateResources = new List<TemplateResource>();
 
@@ -56,7 +56,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 versionSetTemplateResource.apiVersion = GlobalConstants.APIVersion;
 
                 // only extract the product if this is a full extraction, or in the case of a single api, if it is found in products associated with the api
-                if (singleApiName == null || apiResources.SingleOrDefault(api => (api as APITemplateResource).properties.apiVersionSetId != null && (api as APITemplateResource).properties.apiVersionSetId.Contains(versionSetName)) != null)
+                if (singleApiName == null || apiResources.SingleOrDefault(api => (api as ApiTemplateResource).properties.apiVersionSetId != null && (api as ApiTemplateResource).properties.apiVersionSetId.Contains(versionSetName)) != null)
                 {
                     Console.WriteLine("'{0}' API version set found", versionSetName);
                     templateResources.Add(versionSetTemplateResource);

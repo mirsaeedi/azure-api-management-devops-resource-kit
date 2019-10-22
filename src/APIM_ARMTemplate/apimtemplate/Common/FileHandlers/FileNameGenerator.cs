@@ -4,21 +4,19 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileNameGenerator
     {
-
-        public FileNames GenerateFileNames(string apimServiceName)
+        public FileNames GenerateFileNames()
         {
-            // generate useable object with file names for consistency throughout project
             return new FileNames()
             {
-                apiVersionSets = $@"/{apimServiceName}-apiVersionSets.template.json",
-                authorizationServers = $@"/{apimServiceName}-authorizationServers.template.json",
-                backends = $@"/{apimServiceName}-backends.template.json",
-                globalServicePolicy = $@"/{apimServiceName}-globalServicePolicy.template.json",
-                loggers = $@"/{apimServiceName}-loggers.template.json",
-                namedValues = $@"/{apimServiceName}-namedValues.template.json",
-                products = $@"/{apimServiceName}-products.template.json",
-                parameters = $@"/{apimServiceName}-parameters.json",
-                linkedMaster = $@"/{apimServiceName}-master.template.json"
+                apiVersionSets = $@"/apiVersionSets.template.json",
+                authorizationServers = $@"/authorizationServers.template.json",
+                backends = $@"/backends.template.json",
+                globalServicePolicy = $@"/globalServicePolicy.template.json",
+                loggers = $@"/loggers.template.json",
+                namedValues = $@"/namedValues.template.json",
+                products = $@"/products.template.json",
+                parameters = $@"/parameters.json",
+                linkedMaster = $@"/-master.template.json"
             };
         }
 

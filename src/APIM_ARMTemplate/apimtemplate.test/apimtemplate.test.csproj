@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\apimtemplate\apimtemplate.csproj" />
+    <ProjectReference Include="..\apimtemplate\Apim.Arm.Creator.csproj" />
   </ItemGroup>
 
 </Project>

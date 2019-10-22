@@ -39,7 +39,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             List<TemplateResource> templateResources = new List<TemplateResource>();
 
             // isolate api resources in the case of a single api extraction, as they may reference authorization servers
-            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceTypeConstants.API);
+            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceType.Api);
 
             // pull all authorization servers for service
             string authorizationServers = await GetAuthorizationServersAsync(apimname, resourceGroup);
@@ -57,7 +57,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                 // only extract the authorization server if this is a full extraction, or in the case of a single api, if it is referenced by one of the api's authentication settings
                 bool isReferencedByAPI = false;
-                foreach (APITemplateResource apiResource in apiResources)
+                foreach (ApiTemplateResource apiResource in apiResources)
                 {
                     if (apiResource.properties.authenticationSettings != null &&
                         apiResource.properties.authenticationSettings.oAuth2 != null &&

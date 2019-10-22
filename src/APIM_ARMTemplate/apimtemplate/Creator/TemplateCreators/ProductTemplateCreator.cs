@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class ProductTemplateCreator : TemplateCreator
+    public class ProductTemplateCreator : TemplateCreator,ITemplateCreator
     {
         private PolicyTemplateCreator policyTemplateCreator;
 
@@ -12,7 +13,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             this.policyTemplateCreator = policyTemplateCreator;
         }
 
-        public Template CreateProductTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template productTemplate = CreateEmptyTemplate();
@@ -30,7 +31,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 ProductsTemplateResource productsTemplateResource = new ProductsTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{product.displayName}')]",
-                    type = ResourceTypeConstants.Product,
+                    type = ResourceType.Product,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = new ProductsTemplateProperties()
                     {

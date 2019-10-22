@@ -3,7 +3,7 @@ using System;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class APITemplateResource: TemplateResource
+    public class ApiTemplateResource: TemplateResource
     {
         public APITemplateProperties properties { get; set; }
         public APITemplateSubResource[] resources { get; set; }

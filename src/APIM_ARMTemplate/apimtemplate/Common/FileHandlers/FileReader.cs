@@ -69,6 +69,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             // determine whether file location is local file path or remote url and convert appropriately
             Uri uriResult;
             bool isUrl = Uri.TryCreate(fileLocation, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            
             if (isUrl)
             {
                 // make a request to the provided url and convert the response's content
@@ -86,7 +87,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             }
             else
             {
-                return RetrieveLocalFileContents(fileLocation);
+                return File.ReadAllText(fileLocation);
             }
         }
 

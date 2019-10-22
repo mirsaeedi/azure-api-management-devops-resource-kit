@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class AuthorizationServerTemplateCreator : TemplateCreator
+    public class AuthorizationServerTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template CreateAuthorizationServerTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template authorizationTemplate = CreateEmptyTemplate();
@@ -23,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 AuthorizationServerTemplateResource authorizationServerTemplateResource = new AuthorizationServerTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerTemplateProperties.displayName}')]",
-                    type = ResourceTypeConstants.AuthorizationServer,
+                    type = ResourceType.AuthorizationServer,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = authorizationServerTemplateProperties,
                     dependsOn = new string[] { }

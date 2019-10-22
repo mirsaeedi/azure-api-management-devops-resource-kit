@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class LoggerTemplateCreator : TemplateCreator
+    public class LoggerTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template CreateLoggerTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template loggerTemplate = CreateEmptyTemplate();
@@ -23,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 LoggerTemplateResource loggerTemplateResource = new LoggerTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{logger.name}')]",
-                    type = ResourceTypeConstants.Logger,
+                    type = ResourceType.Logger,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = new LoggerTemplateProperties()
                     {

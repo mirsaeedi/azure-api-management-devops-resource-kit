@@ -39,8 +39,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             List<TemplateResource> templateResources = new List<TemplateResource>();
 
             // isolate api and operation policy resources in the case of a single api extraction, as they may reference backends
-            var policyResources = apiTemplateResources.Where(resource => (resource.type == ResourceTypeConstants.APIPolicy || resource.type == ResourceTypeConstants.APIOperationPolicy || resource.type == ResourceTypeConstants.ProductPolicy));
-            var namedValueResources = propertyResources.Where(resource => (resource.type == ResourceTypeConstants.Property));
+            var policyResources = apiTemplateResources.Where(resource => (resource.type == ResourceType.ApiPolicy || resource.type == ResourceType.ApiOperationPolicy || resource.type == ResourceType.ProductPolicy));
+            var namedValueResources = propertyResources.Where(resource => (resource.type == ResourceType.Property));
 
             // pull all backends for service
             string backends = await GetBackendsAsync(apimname, resourceGroup);

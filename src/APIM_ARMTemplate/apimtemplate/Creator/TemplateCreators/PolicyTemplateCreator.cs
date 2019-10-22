@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class PolicyTemplateCreator: TemplateCreator
+    public class PolicyTemplateCreator: TemplateCreator,ITemplateCreator
     {
         private FileReader fileReader;
 
@@ -14,7 +15,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             this.fileReader = fileReader;
         }
 
-        public Template CreateGlobalServicePolicyTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template policyTemplate = CreateEmptyTemplate();
@@ -35,7 +36,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/policy')]",
-                type = ResourceTypeConstants.GlobalServicePolicy,
+                type = ResourceType.GlobalServicePolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -51,7 +52,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return policyTemplate;
         }
 
-        public PolicyTemplateResource CreateAPIPolicyTemplateResource(APIConfig api, string[] dependsOn)
+        public PolicyTemplateResource CreateAPIPolicyTemplateResource(ApiConfiguration api, string[] dependsOn)
         {
             Uri uriResult;
             bool isUrl = Uri.TryCreate(api.policy, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
@@ -59,7 +60,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}/policy')]",
-                type = ResourceTypeConstants.APIPolicy,
+                type = ResourceType.ApiPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -80,7 +81,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{product.displayName}/policy')]",
-                type = ResourceTypeConstants.ProductPolicy,
+                type = ResourceType.ProductPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -101,7 +102,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{apiName}/{policyPair.Key}/policy')]",
-                type = ResourceTypeConstants.APIOperationPolicy,
+                type = ResourceType.ApiOperationPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -114,7 +115,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return policyTemplateResource;
         }
 
-        public List<PolicyTemplateResource> CreateOperationPolicyTemplateResources(APIConfig api, string[] dependsOn)
+        public List<PolicyTemplateResource> CreateOperationPolicyTemplateResources(ApiConfiguration api, string[] dependsOn)
         {
             // create a policy resource for each policy listed in the config file and its associated provided xml file
             List<PolicyTemplateResource> policyTemplateResources = new List<PolicyTemplateResource>();

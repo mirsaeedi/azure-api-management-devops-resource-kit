@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
@@ -15,7 +16,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         // policy file location (local or url)
         public string policy { get; set; }
         public List<APIVersionSetConfig> apiVersionSets { get; set; }
-        public List<APIConfig> apis { get; set; }
+        public List<ApiConfiguration> apis { get; set; }
         public List<ProductConfig> products { get; set; }
         public List<LoggerConfig> loggers { get; set; }
         public List<AuthorizationServerTemplateProperties> authorizationServers { get; set; }
@@ -31,7 +32,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public string id { get; set; }
     }
 
-    public class APIConfig
+    public class ApiConfiguration
     {
         // used to build displayName and resource name from APITemplateResource schema
         public string name { get; set; }
@@ -58,6 +59,66 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public string protocols { get; set; }
         public DiagnosticConfig diagnostic { get; set; }
         // does not currently include subscriptionKeyParameterNames, sourceApiId, and wsdlSelector from APITemplateResource schema
+
+        public async Task<bool> IsDependOnLogger(FileReader fileReader)
+        {
+            if (diagnostic != null && diagnostic.loggerId != null)
+            {
+                return true;
+            }
+
+            string apiPolicy = policy != null ? await fileReader.RetrieveFileContentsAsync(policy) : "";
+            
+            if (apiPolicy.Contains("logger"))
+            {
+                return true;
+            }
+            
+            if (operations != null)
+            {
+                foreach (KeyValuePair<string, OperationsConfig> operation in operations)
+                {
+                    string operationPolicy = operation.Value.policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.policy) : "";
+                    if (operationPolicy.Contains("logger"))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public async Task<bool> IsDependOnBackend(FileReader fileReader)
+        {
+            string apiPolicy = policy != null ? await fileReader.RetrieveFileContentsAsync(policy) : "";
+
+            if (apiPolicy.Contains("set-backend-service"))
+            {
+                return true;
+            }
+
+            if (operations != null)
+            {
+                foreach (KeyValuePair<string, OperationsConfig> operation in operations)
+                {
+                    string operationPolicy = operation.Value.policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.policy) : "";
+                    if (operationPolicy.Contains("set-backend-service"))
+                    {
+                        // capture operation policy dependent on backend
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsSplitApi()
+        {
+            // the api needs to be split into multiple templates if the user has supplied a version or version set - deploying swagger related properties at the same time as api version related properties fails, so they must be written and deployed separately
+            return apiVersion != null || apiVersionSetId != null || (authenticationSettings != null && authenticationSettings.oAuth2 != null && authenticationSettings.oAuth2.authorizationServerId != null);
+        }
     }
 
     public class OperationsConfig

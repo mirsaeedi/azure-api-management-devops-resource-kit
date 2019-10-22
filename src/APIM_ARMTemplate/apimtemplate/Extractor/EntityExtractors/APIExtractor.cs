@@ -141,7 +141,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                 // convert returned api to template resource class
                 JObject oApiDetails = JObject.Parse(apiDetails);
-                APITemplateResource apiResource = JsonConvert.DeserializeObject<APITemplateResource>(apiDetails);
+                ApiTemplateResource apiResource = JsonConvert.DeserializeObject<ApiTemplateResource>(apiDetails);
                 string oApiName = ((JValue)oApiDetails["name"]).Value.ToString();
 
                 apiResource.type = ((JValue)oApiDetails["type"]).Value.ToString();
@@ -296,7 +296,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                         // convert returned api product associations to template resource class
                         ProductAPITemplateResource productAPIResource = JsonConvert.DeserializeObject<ProductAPITemplateResource>(item.ToString());
-                        productAPIResource.type = ResourceTypeConstants.ProductAPI;
+                        productAPIResource.type = ResourceType.ProductAPI;
                         productAPIResource.name = $"[concat(parameters('ApimServiceName'), '/{apiProductName}/{oApiName}')]";
                         productAPIResource.apiVersion = GlobalConstants.APIVersion;
                         productAPIResource.scale = null;
@@ -321,7 +321,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                     // convert returned diagnostic to template resource class
                     DiagnosticTemplateResource diagnosticResource = diagnostic.ToObject<DiagnosticTemplateResource>();
                     diagnosticResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{diagnosticName}')]";
-                    diagnosticResource.type = ResourceTypeConstants.APIDiagnostic;
+                    diagnosticResource.type = ResourceType.ApiDiagnostic;
                     diagnosticResource.apiVersion = GlobalConstants.APIVersion;
                     diagnosticResource.scale = null;
                     diagnosticResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class BackendTemplateCreator : TemplateCreator
+    public class BackendTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template CreateBackendTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template backendTemplate = CreateEmptyTemplate();
@@ -23,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 BackendTemplateResource backendTemplateResource = new BackendTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{backendTemplatePropeties.title}')]",
-                    type = ResourceTypeConstants.Backend,
+                    type = ResourceType.Backend,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = backendTemplatePropeties,
                     dependsOn = new string[] { }

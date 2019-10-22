@@ -7,41 +7,34 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 {
-    public class AppArgs
-    {
-        public bool create { get; set; }
-        public string extract { get; set; }
-    }
-
     class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
-            try
-            {   
-                var app = new CommandLineApplication() 
-                {
-                    Name = GlobalConstants.AppShortName,
-                    FullName = GlobalConstants.AppLongName,
-                    Description = GlobalConstants.AppDescription
-                };
-                
-                app.HelpOption(inherited: true);
-                app.Commands.Add(new CreateCommand());
-                app.Commands.Add(new ExtractCommand());
-                
-                app.OnExecute(() => {
-                    ColoredConsole.Error.WriteLine("No commands specified, please specify a command");
-                    app.ShowHelp();
-                    return 1;
-                });
-                return app.Execute(args);
-            }
-            catch (Exception e)
+            var app = ConfigureApplication();
+            app.Execute(args);
+        }
+
+        private static CommandLineApplication ConfigureApplication()
+        {
+            var app = new CommandLineApplication()
             {
-                ColoredConsole.Error.WriteLine(e.Message);
+                Name = GlobalConstants.AppShortName,
+                FullName = GlobalConstants.AppLongName,
+                Description = GlobalConstants.AppDescription
+            };
+
+            app.HelpOption(inherited: true);
+            app.Commands.Add(new CreateCommand());
+            app.Commands.Add(new ExtractCommand());
+
+            app.OnExecute(() =>
+            {
+                ColoredConsole.Error.WriteLine("No commands specified, please specify a command");
+                app.ShowHelp();
                 return 1;
-            }
+            });
+            return app;
         }
     }
 }

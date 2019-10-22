@@ -4,14 +4,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class ReleaseTemplateCreator
     {
-        public ReleaseTemplateResource CreateAPIReleaseTemplateResource(APIConfig api, string[] dependsOn)
+        public ReleaseTemplateResource CreateAPIReleaseTemplateResource(ApiConfiguration api, string[] dependsOn)
         {
             string releaseName = $"release-revision-{api.apiRevision}";
             // create release resource with properties
             ReleaseTemplateResource releaseTemplateResource = new ReleaseTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{releaseName}')]",
-                type = ResourceTypeConstants.APIRelease,
+                type = ResourceType.ApiRelease,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new ReleaseTemplateProperties()
                 {

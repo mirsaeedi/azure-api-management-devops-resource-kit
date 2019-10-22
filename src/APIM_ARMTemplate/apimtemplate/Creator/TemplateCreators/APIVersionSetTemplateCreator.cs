@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class APIVersionSetTemplateCreator : TemplateCreator
+    public class APIVersionSetTemplateCreator : TemplateCreator,ITemplateCreator
     {
-        public Template CreateAPIVersionSetTemplate(CreatorConfig creatorConfig)
+        public Template Create(CreatorConfig creatorConfig)
         {
             // create empty template
             Template apiVersionSetTemplate = CreateEmptyTemplate();
@@ -25,7 +26,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 APIVersionSetTemplateResource apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{versionSetId}')]",
-                    type = ResourceTypeConstants.APIVersionSet,
+                    type = ResourceType.ApiVersionSet,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = new APIVersionSetProperties()
                     {

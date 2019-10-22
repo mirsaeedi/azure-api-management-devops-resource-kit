@@ -150,7 +150,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "API configuration is required");
             }
-            foreach (APIConfig api in creatorConfig.apis)
+            foreach (ApiConfiguration api in creatorConfig.apis)
             {
                 if (api.name == null)
                 {
