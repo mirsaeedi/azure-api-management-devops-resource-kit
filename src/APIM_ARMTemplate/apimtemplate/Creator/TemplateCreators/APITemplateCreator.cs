@@ -107,7 +107,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             ApiTemplateResource apiTemplateResource = new ApiTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}')]",
-                type = ResourceType.Api,
+                Type = ResourceType.Api,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new APITemplateProperties(),
                 dependsOn = new string[] { }

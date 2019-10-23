@@ -180,7 +180,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             MasterTemplateResource masterTemplateResource = new MasterTemplateResource()
             {
                 name = name,
-                type = "Microsoft.Resources/deployments",
+                Type = "Microsoft.Resources/deployments",
                 apiVersion = GlobalConstants.LinkedAPIVersion,
                 properties = new MasterTemplateProperties()
                 {

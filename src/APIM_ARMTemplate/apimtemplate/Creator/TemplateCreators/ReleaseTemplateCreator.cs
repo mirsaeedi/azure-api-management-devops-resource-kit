@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             ReleaseTemplateResource releaseTemplateResource = new ReleaseTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{releaseName}')]",
-                type = ResourceType.ApiRelease,
+                Type = ResourceType.ApiRelease,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new ReleaseTemplateProperties()
                 {

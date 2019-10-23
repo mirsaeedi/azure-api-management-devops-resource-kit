@@ -39,7 +39,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             List<TemplateResource> templateResources = new List<TemplateResource>();
 
             // isolate api resources in the case of a single api extraction, as they may reference authorization servers
-            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceType.Api);
+            var apiResources = apiTemplateResources.Where(resource => resource.Type == ResourceType.Api);
 
             // pull all authorization servers for service
             string authorizationServers = await GetAuthorizationServersAsync(apimname, resourceGroup);

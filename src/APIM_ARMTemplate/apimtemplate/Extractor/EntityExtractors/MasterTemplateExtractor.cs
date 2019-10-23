@@ -101,7 +101,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             string namedValueDeploymentResourceName)
         {
             List<string> apiDependsOn = new List<string>();
-            var apiResources = apiTemplate.resources.Where(resource => resource.type == ResourceType.Api);
+            var apiResources = apiTemplate.resources.Where(resource => resource.Type == ResourceType.Api);
 
             // add dependency on all other template files by default for now
             apiDependsOn.Add($"[resourceId('Microsoft.Resources/deployments', '{namedValueDeploymentResourceName}')]");
@@ -121,7 +121,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             MasterTemplateResource masterTemplateResource = new MasterTemplateResource()
             {
                 name = name,
-                type = "Microsoft.Resources/deployments",
+                Type = "Microsoft.Resources/deployments",
                 apiVersion = GlobalConstants.LinkedAPIVersion,
                 properties = new MasterTemplateProperties()
                 {

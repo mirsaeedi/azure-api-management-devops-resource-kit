@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/policy')]",
-                type = ResourceType.GlobalServicePolicy,
+                Type = ResourceType.GlobalServicePolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -60,7 +60,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{api.name}/policy')]",
-                type = ResourceType.ApiPolicy,
+                Type = ResourceType.ApiPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -81,7 +81,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{product.displayName}/policy')]",
-                type = ResourceType.ProductPolicy,
+                Type = ResourceType.ProductPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {
@@ -102,7 +102,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             PolicyTemplateResource policyTemplateResource = new PolicyTemplateResource()
             {
                 name = $"[concat(parameters('ApimServiceName'), '/{apiName}/{policyPair.Key}/policy')]",
-                type = ResourceType.ApiOperationPolicy,
+                Type = ResourceType.ApiOperationPolicy,
                 apiVersion = GlobalConstants.APIVersion,
                 properties = new PolicyTemplateProperties()
                 {

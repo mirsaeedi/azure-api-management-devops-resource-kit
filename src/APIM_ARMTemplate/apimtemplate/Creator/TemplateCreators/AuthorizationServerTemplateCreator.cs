@@ -24,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 AuthorizationServerTemplateResource authorizationServerTemplateResource = new AuthorizationServerTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerTemplateProperties.displayName}')]",
-                    type = ResourceType.AuthorizationServer,
+                    Type = ResourceType.AuthorizationServer,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = authorizationServerTemplateProperties,
                     dependsOn = new string[] { }

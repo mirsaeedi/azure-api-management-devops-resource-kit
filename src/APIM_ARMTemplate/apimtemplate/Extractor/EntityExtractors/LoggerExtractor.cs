@@ -37,8 +37,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             Template armTemplate = GenerateEmptyTemplateWithParameters(policyXMLBaseUrl);
 
             // isolate product api associations in the case of a single api extraction
-            var diagnosticResources = apiTemplateResources.Where(resource => resource.type == ResourceType.ApiDiagnostic);
-            var policyResources = apiTemplateResources.Where(resource => (resource.type == ResourceType.ApiPolicy || resource.type == ResourceType.ApiOperationPolicy || resource.type == ResourceType.ProductPolicy));
+            var diagnosticResources = apiTemplateResources.Where(resource => resource.Type == ResourceType.ApiDiagnostic);
+            var policyResources = apiTemplateResources.Where(resource => (resource.Type == ResourceType.ApiPolicy || resource.Type == ResourceType.ApiOperationPolicy || resource.Type == ResourceType.ProductPolicy));
 
             List<TemplateResource> templateResources = new List<TemplateResource>();
 
@@ -53,7 +53,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 // convert returned logger to template resource class
                 LoggerTemplateResource loggerResource = JsonConvert.DeserializeObject<LoggerTemplateResource>(fullLoggerResource);
                 loggerResource.name = $"[concat(parameters('ApimServiceName'), '/{loggerName}')]";
-                loggerResource.type = ResourceType.Logger;
+                loggerResource.Type = ResourceType.Logger;
                 loggerResource.apiVersion = GlobalConstants.APIVersion;
                 loggerResource.scale = null;
 

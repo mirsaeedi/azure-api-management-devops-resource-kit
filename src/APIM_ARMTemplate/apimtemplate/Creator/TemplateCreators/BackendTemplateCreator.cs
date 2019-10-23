@@ -24,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 BackendTemplateResource backendTemplateResource = new BackendTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{backendTemplatePropeties.title}')]",
-                    type = ResourceType.Backend,
+                    Type = ResourceType.Backend,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = backendTemplatePropeties,
                     dependsOn = new string[] { }

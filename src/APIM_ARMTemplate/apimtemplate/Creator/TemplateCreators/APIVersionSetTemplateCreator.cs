@@ -26,7 +26,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 APIVersionSetTemplateResource apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{versionSetId}')]",
-                    type = ResourceType.ApiVersionSet,
+                    Type = ResourceType.ApiVersionSet,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = new APIVersionSetProperties()
                     {

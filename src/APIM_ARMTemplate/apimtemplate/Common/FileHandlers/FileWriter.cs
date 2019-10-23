@@ -6,7 +6,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileWriter
     {
-        public void WriteJSONToFile(object template, string location)
+        public void WriteJson(object template, string location)
         {
             // writes json object to provided location
             string jsonString = JsonConvert.SerializeObject(template,

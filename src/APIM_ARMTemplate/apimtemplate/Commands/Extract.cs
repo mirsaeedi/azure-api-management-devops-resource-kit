@@ -93,24 +93,24 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                     // write templates to output file location
                     string apiFileName = fileNameGenerator.GenerateExtractorAPIFileName(singleApiName, sourceApim);
-                    fileWriter.WriteJSONToFile(apiTemplate, String.Concat(@fileFolder, apiFileName));
-                    fileWriter.WriteJSONToFile(apiVersionSetTemplate, String.Concat(@fileFolder, fileNames.apiVersionSets));
-                    fileWriter.WriteJSONToFile(authorizationServerTemplate, String.Concat(@fileFolder, fileNames.authorizationServers));
-                    fileWriter.WriteJSONToFile(backendTemplate, String.Concat(@fileFolder, fileNames.backends));
-                    fileWriter.WriteJSONToFile(loggerTemplate, String.Concat(@fileFolder, fileNames.loggers));
-                    fileWriter.WriteJSONToFile(namedValueTemplate, String.Concat(@fileFolder, fileNames.namedValues));
-                    fileWriter.WriteJSONToFile(productTemplate, String.Concat(@fileFolder, fileNames.products));
-                    fileWriter.WriteJSONToFile(globalServicePolicyTemplate, String.Concat(@fileFolder, fileNames.globalServicePolicy));
+                    fileWriter.WriteJson(apiTemplate, String.Concat(@fileFolder, apiFileName));
+                    fileWriter.WriteJson(apiVersionSetTemplate, String.Concat(@fileFolder, fileNames.apiVersionSets));
+                    fileWriter.WriteJson(authorizationServerTemplate, String.Concat(@fileFolder, fileNames.authorizationServers));
+                    fileWriter.WriteJson(backendTemplate, String.Concat(@fileFolder, fileNames.backends));
+                    fileWriter.WriteJson(loggerTemplate, String.Concat(@fileFolder, fileNames.loggers));
+                    fileWriter.WriteJson(namedValueTemplate, String.Concat(@fileFolder, fileNames.namedValues));
+                    fileWriter.WriteJson(productTemplate, String.Concat(@fileFolder, fileNames.products));
+                    fileWriter.WriteJson(globalServicePolicyTemplate, String.Concat(@fileFolder, fileNames.globalServicePolicy));
 
                     if (linkedBaseUrl != null)
                     {
                         // create a master template that links to all other templates
                         Template masterTemplate = masterTemplateExtractor.GenerateLinkedMasterTemplate(apiTemplate, globalServicePolicyTemplate, apiVersionSetTemplate, productTemplate, loggerTemplate, backendTemplate, authorizationServerTemplate, namedValueTemplate, fileNames, apiFileName, linkedUrlQueryString, policyXMLBaseUrl);
-                        fileWriter.WriteJSONToFile(masterTemplate, String.Concat(@fileFolder, fileNames.linkedMaster));
+                        fileWriter.WriteJson(masterTemplate, String.Concat(@fileFolder, fileNames.linkedMaster));
                     }
 
                     // write parameters to outputLocation
-                    fileWriter.WriteJSONToFile(templateParameters, String.Concat(fileFolder, fileNames.parameters));
+                    fileWriter.WriteJson(templateParameters, String.Concat(fileFolder, fileNames.parameters));
                     Console.WriteLine("Templates written to output location");
                     Console.WriteLine("Press any key to exit process:");
 #if DEBUG

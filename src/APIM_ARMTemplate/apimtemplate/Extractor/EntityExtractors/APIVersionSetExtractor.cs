@@ -37,7 +37,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             Template armTemplate = GenerateEmptyTemplateWithParameters(policyXMLBaseUrl);
 
             // isolate apis in the case of a single api extraction
-            var apiResources = apiTemplateResources.Where(resource => resource.type == ResourceType.Api);
+            var apiResources = apiTemplateResources.Where(resource => resource.Type == ResourceType.Api);
 
             List<TemplateResource> templateResources = new List<TemplateResource>();
 

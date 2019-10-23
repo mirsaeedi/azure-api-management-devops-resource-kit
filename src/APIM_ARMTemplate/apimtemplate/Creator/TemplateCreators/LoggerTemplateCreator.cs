@@ -24,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 LoggerTemplateResource loggerTemplateResource = new LoggerTemplateResource()
                 {
                     name = $"[concat(parameters('ApimServiceName'), '/{logger.name}')]",
-                    type = ResourceType.Logger,
+                    Type = ResourceType.Logger,
                     apiVersion = GlobalConstants.APIVersion,
                     properties = new LoggerTemplateProperties()
                     {
