@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,43 +7,38 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class APIVersionSetTemplateCreator : TemplateCreator,ITemplateCreator
     {
-        public Template Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            // create empty template
-            Template apiVersionSetTemplate = CreateEmptyTemplate();
+            var template = EmptyTemplate;
+            template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
-            // add parameters
-            apiVersionSetTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
-            {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
+            var resources = new List<TemplateResource>();
 
-            List<TemplateResource> resources = new List<TemplateResource>();
-            foreach(APIVersionSetConfig apiVersionSet in creatorConfig.apiVersionSets)
+            foreach(var apiVersionSet in creatorConfig.ApiVersionSets)
             {
                 // create apiVersionSet resource with properties
                 // default version set id to version set if id is not provided
                 string versionSetId = (apiVersionSet != null && apiVersionSet.id != null) ? apiVersionSet.id : "versionset";
-                APIVersionSetTemplateResource apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
+                
+                var apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
                 {
-                    name = $"[concat(parameters('ApimServiceName'), '/{versionSetId}')]",
-                    Type = ResourceType.ApiVersionSet,
-                    apiVersion = GlobalConstants.APIVersion,
-                    properties = new APIVersionSetProperties()
+                    Name = $"[concat(parameters('ApimServiceName'), '/{versionSetId}')]",
+                    Properties = new ApiVersionSetProperties()
                     {
-                        displayName = apiVersionSet.displayName,
-                        description = apiVersionSet.description,
-                        versionHeaderName = apiVersionSet.versionHeaderName,
-                        versionQueryName = apiVersionSet.versionQueryName,
-                        versioningScheme = apiVersionSet.versioningScheme,
+                        DisplayName = apiVersionSet.DisplayName,
+                        Description = apiVersionSet.Description,
+                        VersionHeaderName = apiVersionSet.VersionHeaderName,
+                        VersionQueryName = apiVersionSet.VersionQueryName,
+                        VersioningScheme = apiVersionSet.VersioningScheme,
                     },
-                    dependsOn = new string[] { }
+                    DependsOn = new string[] { }
                 };
+
                 resources.Add(apiVersionSetTemplateResource);
             }
 
-            apiVersionSetTemplate.resources = resources.ToArray();
-            return apiVersionSetTemplate;
+            template.resources = resources.ToArray();
+            return await Task.FromResult(template);
         }
     }
 }

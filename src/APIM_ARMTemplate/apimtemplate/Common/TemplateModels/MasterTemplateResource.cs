@@ -2,21 +2,21 @@
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class MasterTemplateResource : TemplateResource
+    public class MasterTemplateResource : TemplateResource<MasterTemplateProperties>
     {
-        public MasterTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.Deployment;
     }
 
     public class MasterTemplateProperties
     {
-        public string mode { get; set; }
-        public MasterTemplateLink templateLink { get; set; }
-        public Dictionary<string, TemplateParameterProperties> parameters { get; set; }
+        public string Mode { get; set; }
+        public MasterTemplateLink TemplateLink { get; set; }
+        public Dictionary<string, TemplateParameterProperties> Parameters { get; set; }
     }
 
     public class MasterTemplateLink
     {
-        public string uri { get; set; }
-        public string contentVersion { get; set; }
+        public string Uri { get; set; }
+        public string ContentVersion { get; set; }
     }
 }

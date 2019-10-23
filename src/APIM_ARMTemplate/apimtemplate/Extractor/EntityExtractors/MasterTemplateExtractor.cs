@@ -23,7 +23,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             Template masterTemplate = GenerateEmptyTemplate();
 
             // add parameters
-            masterTemplate.parameters = this.CreateMasterTemplateParameters(true, linkedTemplatesUrlQueryString, policyXMLBaseUrl);
+            masterTemplate.Parameters = this.CreateMasterTemplateParameters(true, linkedTemplatesUrlQueryString, policyXMLBaseUrl);
 
             // add deployment resources that links to all resource files
             List<TemplateResource> resources = new List<TemplateResource>();
@@ -120,23 +120,22 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             // create deployment resource with provided arguments
             MasterTemplateResource masterTemplateResource = new MasterTemplateResource()
             {
-                name = name,
-                Type = "Microsoft.Resources/deployments",
-                apiVersion = GlobalConstants.LinkedAPIVersion,
-                properties = new MasterTemplateProperties()
+                Name = name,
+                ApiVersion = GlobalConstants.LinkedAPIVersion,
+                Properties = new MasterTemplateProperties()
                 {
-                    mode = "Incremental",
-                    templateLink = new MasterTemplateLink()
+                    Mode = "Incremental",
+                    TemplateLink = new MasterTemplateLink()
                     {
-                        uri = uriLink,
-                        contentVersion = "1.0.0.0"
+                        Uri = uriLink,
+                        ContentVersion = "1.0.0.0"
                     },
-                    parameters = new Dictionary<string, TemplateParameterProperties>
+                    Parameters = new Dictionary<string, TemplateParameterProperties>
                     {
                         { "ApimServiceName", new TemplateParameterProperties(){ value = "[parameters('ApimServiceName')]" } }
                     }
                 },
-                dependsOn = dependsOn
+                DependsOn = dependsOn
             };
             return masterTemplateResource;
         }
@@ -234,7 +233,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 };
                 parameters.Add("PolicyXMLBaseUrl", policyTemplateBaseUrlProperties);
             }
-            masterTemplate.parameters = parameters;
+            masterTemplate.Parameters = parameters;
             return masterTemplate;
         }
 

@@ -8,7 +8,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         [JsonProperty(PropertyName = "$schema")]
         public string schema { get; set; }
         public string contentVersion { get; set; }
-        public Dictionary<string, TemplateParameterProperties> parameters { get; set; }
+        public Dictionary<string, TemplateParameterProperties> Parameters { get; set; }
         public object variables { get; set; }
         public TemplateResource[] resources { get; set; }
         public object outputs { get; set; }
@@ -26,11 +26,16 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public string description { get; set; }
     }
     
-    public class TemplateResource {
-        public string name { get; set; }
-        public string Type { get; set; }
-        public string apiVersion { get; set; }
-        public string scale { get; set; }
-        public string[] dependsOn { get; set; }
+    public abstract class TemplateResource<TProperties> : TemplateResource {
+        public TProperties Properties { get; set; }
+    }
+
+    public abstract class TemplateResource
+    {
+        public string Name { get; set; }
+        public abstract string Type { get; }
+        public string ApiVersion { get; set; } = GlobalConstants.ApiVersion;
+        public string Scale { get; set; }
+        public string[] DependsOn { get; set; }
     }
 }

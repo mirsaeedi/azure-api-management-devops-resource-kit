@@ -12,7 +12,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ReleaseTemplateCreator releaseTemplateCreator = new ReleaseTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -22,7 +22,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 subscriptionRequired = true,
                 openApiSpec = "https://petstore.swagger.io/v2/swagger.json",
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             string[] dependsOn = new string[] { "dependsOn" };
@@ -30,8 +30,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // assert
             string releaseName = $"";
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{api.name}/release-revision-{api.apiRevision}')]", releaseTemplateResource.name);
-            Assert.Equal(dependsOn, releaseTemplateResource.dependsOn);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{api.name}/release-revision-{api.apiRevision}')]", releaseTemplateResource.Name);
+            Assert.Equal(dependsOn, releaseTemplateResource.DependsOn);
             Assert.Equal($"Release created to make revision {api.apiRevision} current.", releaseTemplateResource.properties.notes);
             Assert.Equal($"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{api.name}')]", releaseTemplateResource.properties.apiId);
         }

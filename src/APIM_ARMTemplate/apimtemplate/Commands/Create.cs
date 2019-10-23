@@ -4,6 +4,7 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apim.Arm.Creator.Creator.Models;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
@@ -14,7 +15,6 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             this.Name = GlobalConstants.CreateName;
             this.Description = GlobalConstants.CreateDescription;
 
-            // list command options
             CommandOption configFile = this.Option("--configFile <configFile>", "Config YAML file location", CommandOptionType.SingleValue).IsRequired();
 
             this.HelpOption();
@@ -29,6 +29,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 {
                     return;
                 }
+
+                var armTemplateCreator = new ArmTemplateCreator(creatorConfig);
             });
         }
 

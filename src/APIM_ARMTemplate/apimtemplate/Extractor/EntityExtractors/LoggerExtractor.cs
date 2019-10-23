@@ -15,7 +15,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/loggers?api-version={4}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/loggers/{4}?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, loggerName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, loggerName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -52,10 +52,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                 // convert returned logger to template resource class
                 LoggerTemplateResource loggerResource = JsonConvert.DeserializeObject<LoggerTemplateResource>(fullLoggerResource);
-                loggerResource.name = $"[concat(parameters('ApimServiceName'), '/{loggerName}')]";
-                loggerResource.Type = ResourceType.Logger;
-                loggerResource.apiVersion = GlobalConstants.APIVersion;
-                loggerResource.scale = null;
+                loggerResource.Name = $"[concat(parameters('ApimServiceName'), '/{loggerName}')]";
+                loggerResource.ApiVersion = GlobalConstants.ApiVersion;
+                loggerResource.Scale = null;
 
                 if (singleApiName == null)
                 {
@@ -70,14 +69,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                     bool isReferencedInDiagnostic = false;
                     foreach (PolicyTemplateResource policyTemplateResource in policyResources)
                     {
-                        if (policyTemplateResource.properties.value.Contains(loggerName))
+                        if (policyTemplateResource.Properties.Value.Contains(loggerName))
                         {
                             isReferencedInPolicy = true;
                         }
                     }
                     foreach (DiagnosticTemplateResource diagnosticTemplateResource in diagnosticResources)
                     {
-                        if (diagnosticTemplateResource.properties.loggerId.Contains(loggerName))
+                        if (diagnosticTemplateResource.Properties.LoggerId.Contains(loggerName))
                         {
                             isReferencedInDiagnostic = true;
                         }

@@ -1,68 +1,68 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class BackendTemplateResource : TemplateResource
+    public class BackendTemplateResource : TemplateResource<BackendTemplateProperties>
     {
-        public BackendTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.Backend;
     }
 
     public class BackendTemplateProperties
     {
-        public string title { get; set; }
-        public string description { get; set; }
-        public string resourceId { get; set; }
-        public BackendSubProperties properties { get; set; }
-        public BackendCredentials credentials { get; set; }
-        public BackendProxy proxy { get; set; }
-        public BackendTLS tls { get; set; }
-        public string url { get; set; }
-        public string protocol { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string ResourceId { get; set; }
+        public Properties Properties { get; set; }
+        public Credentials Credentials { get; set; }
+        public Proxy Proxy { get; set; }
+        public Tls Tls { get; set; }
+        public string Url { get; set; }
+        public string Protocol { get; set; }
     }
 
-    public class BackendSubProperties
+    public class Properties
     {
-        public BackendServiceFabricCluster serviceFabricCluster { get; set; }
+        public ServiceFabricCluster ServiceFabricCluster { get; set; }
     }
 
-    public class BackendServiceFabricCluster
+    public class ServiceFabricCluster
     {
-        public string clientCertificatethumbprint { get; set; }
-        public int maxPartitionResolutionRetries { get; set; }
-        public string[] managementEndpoints { get; set; }
-        public string[] serverCertificateThumbprints { get; set; }
-        public ServerX509Names[] serverX509Names { get; set; }
+        public string ClientCertificatethumbprint { get; set; }
+        public int MaxPartitionResolutionRetries { get; set; }
+        public string[] ManagementEndpoints { get; set; }
+        public string[] ServerCertificateThumbprints { get; set; }
+        public ServerX509Names[] ServerX509Names { get; set; }
     }
 
     public class ServerX509Names
     {
-        public string name { get; set; }
+        public string Name { get; set; }
         public string issuerCertificateThumbprint { get; set; }
     }
 
-    public class BackendCredentials
+    public class Credentials
     {
-        public string[] certificate { get; set; }
-        public object query { get; set; }
-        public object header { get; set; }
-        public BackendCredentialsAuthorization authorization { get; set; }
+        public string[] Certificate { get; set; }
+        public object Query { get; set; }
+        public object Header { get; set; }
+        public CredentialsAuthorization Authorization { get; set; }
     }
 
-    public class BackendCredentialsAuthorization
+    public class CredentialsAuthorization
     {
-        public string scheme { get; set; }
-        public string parameter { get; set; }
+        public string Scheme { get; set; }
+        public string Parameter { get; set; }
     }
 
-    public class BackendProxy
+    public class Proxy
     {
-        public string url { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
+        public string Url { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 
-    public class BackendTLS
+    public class Tls
     {
-        public bool validateCertificateChain { get; set; }
-        public bool validateCertificateName { get; set; }
+        public bool ValidateCertificateChain { get; set; }
+        public bool ValidateCertificateName { get; set; }
     }
 }

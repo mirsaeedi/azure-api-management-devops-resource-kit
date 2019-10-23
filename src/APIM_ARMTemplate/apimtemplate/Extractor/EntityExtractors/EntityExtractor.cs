@@ -30,22 +30,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
         public Template GenerateEmptyTemplate()
         {
-            TemplateCreator templateCreator = new TemplateCreator();
-            Template armTemplate = templateCreator.CreateEmptyTemplate();
-            return armTemplate;
+            return TemplateCreator.EmptyTemplate;
         }
 
         public Template GenerateEmptyTemplateWithParameters(string policyXMLBaseUrl)
         {
             Template armTemplate = GenerateEmptyTemplate();
-            armTemplate.parameters = new Dictionary<string, TemplateParameterProperties> { { "ApimServiceName", new TemplateParameterProperties() { type = "string" } } };
+            armTemplate.Parameters = new Dictionary<string, TemplateParameterProperties> { { "ApimServiceName", new TemplateParameterProperties() { type = "string" } } };
             if (policyXMLBaseUrl != null)
             {
                 TemplateParameterProperties policyTemplateBaseUrlParameterProperties = new TemplateParameterProperties()
                 {
                     type = "string"
                 };
-                armTemplate.parameters.Add("PolicyXMLBaseUrl", policyTemplateBaseUrlParameterProperties);
+                armTemplate.Parameters.Add("PolicyXMLBaseUrl", policyTemplateBaseUrlParameterProperties);
             }
             return armTemplate;
         }

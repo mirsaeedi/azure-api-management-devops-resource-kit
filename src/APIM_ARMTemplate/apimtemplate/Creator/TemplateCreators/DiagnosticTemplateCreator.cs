@@ -9,23 +9,21 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             // create diagnostic resource with properties
             DiagnosticTemplateResource diagnosticTemplateResource = new DiagnosticTemplateResource()
             {
-                name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{api.diagnostic.name}')]",
-                Type = ResourceType.ApiDiagnostic,
-                apiVersion = GlobalConstants.APIVersion,
-                properties = new DiagnosticTemplateProperties()
+                Name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{api.diagnostic.Name}')]",
+                Properties = new DiagnosticTemplateProperties()
                 {
-                    alwaysLog = api.diagnostic.alwaysLog,
-                    sampling = api.diagnostic.sampling,
-                    frontend = api.diagnostic.frontend,
-                    backend = api.diagnostic.backend,
-                    enableHttpCorrelationHeaders = api.diagnostic.enableHttpCorrelationHeaders
+                    AlwaysLog = api.diagnostic.AlwaysLog,
+                    Sampling = api.diagnostic.Sampling,
+                    Frontend = api.diagnostic.Frontend,
+                    Backend = api.diagnostic.Backend,
+                    EnableHttpCorrelationHeaders = api.diagnostic.EnableHttpCorrelationHeaders
                 },
-                dependsOn = dependsOn
+                DependsOn = dependsOn
             };
             // reference the provided logger if loggerId is provided
-            if (api.diagnostic.loggerId != null)
+            if (api.diagnostic.LoggerId != null)
             {
-                diagnosticTemplateResource.properties.loggerId = $"[resourceId('Microsoft.ApiManagement/service/loggers', parameters('ApimServiceName'), '{api.diagnostic.loggerId}')]";
+                diagnosticTemplateResource.Properties.LoggerId = $"[resourceId('{ResourceType.Logger}', parameters('ApimServiceName'), '{api.diagnostic.LoggerId}')]";
             }
             return diagnosticTemplateResource;
         }

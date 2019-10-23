@@ -2,16 +2,16 @@
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class PropertyTemplateResource : TemplateResource
+    public class PropertyTemplateResource : TemplateResource<PropertyResourceProperties>
     {
-        public PropertyResourceProperties properties { get; set; }
+        public override string Type => ResourceType.Property;
     }
 
     public class PropertyResourceProperties
     {
-        public IList<string> tags { get; set; }
-        public bool secret { get; set; }
-        public string displayName { get; set; }
-        public string value { get; set; }
+        public IList<string> Tags { get; set; }
+        public bool Secret { get; set; }
+        public string DisplayName { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -12,32 +12,32 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ProductTemplateCreator productTemplateCreator = ProductTemplateCreatorFactory.GenerateProductTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { products = new List<ProductConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Products = new List<ProductConfig>() };
             ProductConfig product = new ProductConfig()
             {
-                displayName = "displayName",
-                description = "description",
-                terms = "terms",
-                subscriptionRequired = true,
-                approvalRequired = true,
-                subscriptionsLimit = 1,
-                state = "state"
+                DisplayName = "displayName",
+                Description = "description",
+                Terms = "terms",
+                SubscriptionRequired = true,
+                ApprovalRequired = true,
+                SubscriptionsLimit = 1,
+                State = "state"
             };
-            creatorConfig.products.Add(product);
+            creatorConfig.Products.Add(product);
 
             // act
             Template productTemplate = productTemplateCreator.CreateProductTemplate(creatorConfig);
             ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.displayName}')]", productsTemplateResource.name);
-            Assert.Equal(product.displayName, productsTemplateResource.properties.displayName);
-            Assert.Equal(product.description, productsTemplateResource.properties.description);
-            Assert.Equal(product.terms, productsTemplateResource.properties.terms);
-            Assert.Equal(product.subscriptionsLimit, productsTemplateResource.properties.subscriptionsLimit);
-            Assert.Equal(product.subscriptionRequired, productsTemplateResource.properties.subscriptionRequired);
-            Assert.Equal(product.approvalRequired, productsTemplateResource.properties.approvalRequired);
-            Assert.Equal(product.state, productsTemplateResource.properties.state);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]", productsTemplateResource.Name);
+            Assert.Equal(product.DisplayName, productsTemplateResource.properties.displayName);
+            Assert.Equal(product.Description, productsTemplateResource.properties.description);
+            Assert.Equal(product.Terms, productsTemplateResource.properties.terms);
+            Assert.Equal(product.SubscriptionsLimit, productsTemplateResource.properties.subscriptionsLimit);
+            Assert.Equal(product.SubscriptionRequired, productsTemplateResource.properties.subscriptionRequired);
+            Assert.Equal(product.ApprovalRequired, productsTemplateResource.properties.approvalRequired);
+            Assert.Equal(product.State, productsTemplateResource.properties.state);
         }
 
         [Fact]
@@ -45,32 +45,32 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ProductTemplateCreator productTemplateCreator = ProductTemplateCreatorFactory.GenerateProductTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { products = new List<ProductConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Products = new List<ProductConfig>() };
             ProductConfig product = new ProductConfig()
             {
-                displayName = "displayName",
-                description = "description",
-                terms = "terms",
-                subscriptionRequired = false,
-                approvalRequired = true,
-                subscriptionsLimit = 1,
-                state = "state"
+                DisplayName = "displayName",
+                Description = "description",
+                Terms = "terms",
+                SubscriptionRequired = false,
+                ApprovalRequired = true,
+                SubscriptionsLimit = 1,
+                State = "state"
             };
-            creatorConfig.products.Add(product);
+            creatorConfig.Products.Add(product);
 
             // act
             Template productTemplate = productTemplateCreator.CreateProductTemplate(creatorConfig);
             ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.displayName}')]", productsTemplateResource.name);
-            Assert.Equal(product.displayName, productsTemplateResource.properties.displayName);
-            Assert.Equal(product.description, productsTemplateResource.properties.description);
-            Assert.Equal(product.terms, productsTemplateResource.properties.terms);
-            Assert.Equal(product.subscriptionRequired, productsTemplateResource.properties.subscriptionRequired);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]", productsTemplateResource.Name);
+            Assert.Equal(product.DisplayName, productsTemplateResource.properties.displayName);
+            Assert.Equal(product.Description, productsTemplateResource.properties.description);
+            Assert.Equal(product.Terms, productsTemplateResource.properties.terms);
+            Assert.Equal(product.SubscriptionRequired, productsTemplateResource.properties.subscriptionRequired);
             Assert.Null(productsTemplateResource.properties.subscriptionsLimit);
             Assert.Null(productsTemplateResource.properties.approvalRequired);
-            Assert.Equal(product.state, productsTemplateResource.properties.state);
+            Assert.Equal(product.State, productsTemplateResource.properties.state);
         }
     }
 }

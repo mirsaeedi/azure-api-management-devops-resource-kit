@@ -16,7 +16,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public ApiTemplateCreator(FileReader fileReader)
         {
             this.fileReader = fileReader;
-            _policyTemplateCreator = new PolicyTemplateCreator(fileReader);
+            _policyTemplateCreator = new PolicyTemplateCreator();
             _productAPITemplateCreator = new ProductAPITemplateCreator() ;
             _diagnosticTemplateCreator = new DiagnosticTemplateCreator();
             _releaseTemplateCreator = new ReleaseTemplateCreator();
@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public async Task<List<Template>> CreateAPITemplatesAsync(ApiConfiguration api)
         {
             // determine if api needs to be split into multiple templates
-            bool isSplit = isSplitAPI(api);
+            bool isSplit = api.IsSplitApi();
 
             // update api name if necessary (apiRevision > 1 and isCurrent = true) 
             int revisionNumber = 0;
@@ -55,34 +55,29 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
         public async Task<Template> CreateAPITemplateAsync(ApiConfiguration api, bool isSplit, bool isInitial)
         {
-            // create empty template
-            Template apiTemplate = CreateEmptyTemplate();
+            var template = EmptyTemplate;
+            template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
-            // add parameters
-            apiTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
-            {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
-
-            List<TemplateResource> resources = new List<TemplateResource>();
-            // create api resource 
-            ApiTemplateResource apiTemplateResource = await this.CreateAPITemplateResourceAsync(api, isSplit, isInitial);
+            var resources = new List<TemplateResource>();
+            var apiTemplateResource = await CreateApiTemplateResourceAsync(api, isSplit, isInitial);
             resources.Add(apiTemplateResource);
+
             // add the api child resources (api policies, diagnostics, etc) if this is the unified or subsequent template
             if (!isSplit || !isInitial)
             {
                 resources.AddRange(CreateChildResourceTemplates(api));
             }
-            apiTemplate.resources = resources.ToArray();
 
-            return apiTemplate;
+            template.resources = resources.ToArray();
+
+            return await Task.FromResult(template);
         }
 
         public List<TemplateResource> CreateChildResourceTemplates(ApiConfiguration api)
         {
             List<TemplateResource> resources = new List<TemplateResource>();
             // all child resources will depend on the api
-            string[] dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{api.name}')]" };
+            string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{api.name}')]" };
 
             PolicyTemplateResource apiPolicyResource = api.policy != null ? this._policyTemplateCreator.CreateAPIPolicyTemplateResource(api, dependsOn) : null;
             List<PolicyTemplateResource> operationPolicyResources = api.operations != null ? this._policyTemplateCreator.CreateOperationPolicyTemplateResources(api, dependsOn) : null;
@@ -101,52 +96,50 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return resources;
         }
 
-        public async Task<ApiTemplateResource> CreateAPITemplateResourceAsync(ApiConfiguration api, bool isSplit, bool isInitial)
+        public async Task<ApiTemplateResource> CreateApiTemplateResourceAsync(ApiConfiguration api, bool isSplit, bool isInitial)
         {
             // create api resource
             ApiTemplateResource apiTemplateResource = new ApiTemplateResource()
             {
-                name = $"[concat(parameters('ApimServiceName'), '/{api.name}')]",
-                Type = ResourceType.Api,
-                apiVersion = GlobalConstants.APIVersion,
-                properties = new APITemplateProperties(),
-                dependsOn = new string[] { }
+                Name = $"[concat(parameters('ApimServiceName'), '/{api.name}')]",
+                Properties = new ApiTemplateProperties(),
+                DependsOn = new string[] { }
             };
 
-            // add properties depending on whether the template is the initial, subsequent, or unified 
+            // add Properties depending on whether the template is the initial, subsequent, or unified 
             if (!isSplit || isInitial)
             {
-                // add metadata properties for initial and unified templates
-                apiTemplateResource.properties.apiVersion = api.apiVersion;
-                apiTemplateResource.properties.serviceUrl = api.serviceUrl;
-                apiTemplateResource.properties.type = api.type;
-                apiTemplateResource.properties.apiType = api.type;
-                apiTemplateResource.properties.description = api.description;
-                apiTemplateResource.properties.subscriptionRequired = api.subscriptionRequired;
-                apiTemplateResource.properties.apiRevision = api.apiRevision;
-                apiTemplateResource.properties.apiRevisionDescription = api.apiRevisionDescription;
-                apiTemplateResource.properties.apiVersionDescription = api.apiVersionDescription;
-                apiTemplateResource.properties.authenticationSettings = api.authenticationSettings;
-                apiTemplateResource.properties.path = api.suffix;
-                apiTemplateResource.properties.isCurrent = api.isCurrent;
-                apiTemplateResource.properties.displayName = api.name;
-                apiTemplateResource.properties.protocols = this.CreateProtocols(api);
+                // add metadata Properties for initial and unified templates
+                apiTemplateResource.Properties.apiVersion = api.apiVersion;
+                apiTemplateResource.Properties.serviceUrl = api.serviceUrl;
+                apiTemplateResource.Properties.type = api.type;
+                apiTemplateResource.Properties.apiType = api.type; //todo
+                apiTemplateResource.Properties.description = api.description;
+                apiTemplateResource.Properties.subscriptionRequired = api.subscriptionRequired;
+                apiTemplateResource.Properties.apiRevision = api.apiRevision;
+                apiTemplateResource.Properties.apiRevisionDescription = api.apiRevisionDescription;
+                apiTemplateResource.Properties.apiVersionDescription = api.apiVersionDescription;
+                apiTemplateResource.Properties.AuthenticationSettings = api.authenticationSettings;
+                apiTemplateResource.Properties.path = api.suffix;
+                apiTemplateResource.Properties.isCurrent = api.isCurrent;
+                apiTemplateResource.Properties.displayName = api.name;
+                apiTemplateResource.Properties.protocols = this.CreateProtocols(api);
                 // set the version set id
                 if (api.apiVersionSetId != null)
                 {
                     // point to the supplied version set if the apiVersionSetId is provided
-                    apiTemplateResource.properties.apiVersionSetId = $"[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), '{api.apiVersionSetId}')]";
+                    apiTemplateResource.Properties.ApiVersionSetId = $"[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), '{api.apiVersionSetId}')]";
                 }
                 // set the authorization server id
-                if (api.authenticationSettings != null && api.authenticationSettings.oAuth2 != null && api.authenticationSettings.oAuth2.authorizationServerId != null
-                    && apiTemplateResource.properties.authenticationSettings != null && apiTemplateResource.properties.authenticationSettings.oAuth2 != null && apiTemplateResource.properties.authenticationSettings.oAuth2.authorizationServerId != null)
+                if (api.authenticationSettings != null && api.authenticationSettings.OAuth2 != null && api.authenticationSettings.OAuth2.AuthorizationServerId != null
+                    && apiTemplateResource.Properties.AuthenticationSettings != null && apiTemplateResource.Properties.AuthenticationSettings.OAuth2 != null && apiTemplateResource.Properties.AuthenticationSettings.OAuth2.AuthorizationServerId != null)
                 {
-                    apiTemplateResource.properties.authenticationSettings.oAuth2.authorizationServerId = api.authenticationSettings.oAuth2.authorizationServerId;
+                    apiTemplateResource.Properties.AuthenticationSettings.OAuth2.AuthorizationServerId = api.authenticationSettings.OAuth2.AuthorizationServerId;
                 }
             }
             if (!isSplit || !isInitial)
             {
-                // add open api spec properties for subsequent and unified templates
+                // add open api spec Properties for subsequent and unified templates
                 string format;
                 string value;
 
@@ -186,9 +179,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                         format = "openapi";
                     }
                 }
-                apiTemplateResource.properties.format = format;
-                apiTemplateResource.properties.value = value;
-                apiTemplateResource.properties.path = api.suffix;
+                apiTemplateResource.Properties.format = format;
+                apiTemplateResource.Properties.value = value;
+                apiTemplateResource.Properties.path = api.suffix;
             }
             return apiTemplateResource;
         }

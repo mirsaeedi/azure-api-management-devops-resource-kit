@@ -1,24 +1,24 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class LoggerTemplateResource : TemplateResource
+    public class LoggerTemplateResource : TemplateResource<LoggerTemplateProperties>
     {
-        public LoggerTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.Logger;
     }
 
     public class LoggerTemplateProperties
     {
-        public string loggerType { get; set; }
-        public string description { get; set; }
-        public LoggerCredentials credentials { get; set; }
-        public bool isBuffered { get; set; }
-        public string resourceId { get; set; }
+        public string LoggerType { get; set; }
+        public string Description { get; set; }
+        public LoggerCredentials Credentials { get; set; }
+        public bool IsBuffered { get; set; }
+        public string ResourceId { get; set; }
     }
 
     public class LoggerCredentials
     {
-        public string name { get; set; }
-        public string connectionString { get; set; }
-        public string instrumentationKey { get; set; }
+        public string Name { get; set; }
+        public string ConnectionString { get; set; }
+        public string InstrumentationKey { get; set; }
     }
 }

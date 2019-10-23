@@ -51,11 +51,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateProducts(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.products != null)
+            if (creatorConfig.Products != null)
             {
-                foreach (ProductsTemplateProperties product in creatorConfig.products)
+                foreach (ProductsTemplateProperties product in creatorConfig.Products)
                 {
-                    if (product.displayName == null)
+                    if (product.DisplayName == null)
                     {
                         isValid = false;
                         throw new CommandParsingException(commandLineApplication, "Display name is required if an Product is provided");
@@ -68,11 +68,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateLoggers(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.loggers != null)
+            if (creatorConfig.Loggers != null)
             {
-                foreach (LoggerConfig logger in creatorConfig.loggers)
+                foreach (LoggerConfig logger in creatorConfig.Loggers)
                 {
-                    if (logger.name == null)
+                    if (logger.Name == null)
                     {
                         isValid = false;
                         throw new CommandParsingException(commandLineApplication, "Name is required if an Logger is provided");
@@ -85,11 +85,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateBackends(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.backends != null)
+            if (creatorConfig.Backends != null)
             {
-                foreach (BackendTemplateProperties backend in creatorConfig.backends)
+                foreach (BackendTemplateProperties backend in creatorConfig.Backends)
                 {
-                    if (backend.title == null)
+                    if (backend.Title == null)
                     {
                         isValid = false;
                         throw new CommandParsingException(commandLineApplication, "Title is required if a Backend is provided");
@@ -102,9 +102,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateAuthorizationServers(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.authorizationServers != null)
+            if (creatorConfig.AuthorizationServers != null)
             {
-                foreach (AuthorizationServerTemplateProperties authorizationServer in creatorConfig.authorizationServers)
+                foreach (AuthorizationServerTemplateProperties authorizationServer in creatorConfig.AuthorizationServers)
                 {
                     if (authorizationServer.displayName == null)
                     {
@@ -119,22 +119,22 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateBaseProperties(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.outputLocation == null)
+            if (creatorConfig.OutputLocation == null)
             {
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "Output location is required");
             }
-            if (creatorConfig.version == null)
+            if (creatorConfig.Version == null)
             {
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "Version is required");
             }
-            if (creatorConfig.apimServiceName == null)
+            if (creatorConfig.ApimServiceName == null)
             {
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "APIM service name is required");
             }
-            if (creatorConfig.linked == true && creatorConfig.linkedTemplatesBaseUrl == null)
+            if (creatorConfig.Linked == true && creatorConfig.LinkedTemplatesBaseUrl == null)
             {
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "LinkTemplatesBaseUrl is required for linked templates");
@@ -145,12 +145,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateAPIs(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if (creatorConfig.apis == null)
+            if (creatorConfig.Apis == null)
             {
                 isValid = false;
                 throw new CommandParsingException(commandLineApplication, "API configuration is required");
             }
-            foreach (ApiConfiguration api in creatorConfig.apis)
+            foreach (ApiConfiguration api in creatorConfig.Apis)
             {
                 if (api.name == null)
                 {
@@ -171,14 +171,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 {
                     foreach (KeyValuePair<string, OperationsConfig> operation in api.operations)
                     {
-                        if (operation.Value == null || operation.Value.policy == null)
+                        if (operation.Value == null || operation.Value.Policy == null)
                         {
                             isValid = false;
                             throw new CommandParsingException(commandLineApplication, "Policy XML is required if an API operation is provided");
                         }
                     }
                 }
-                if (api.diagnostic != null && api.diagnostic.loggerId == null)
+                if (api.diagnostic != null && api.diagnostic.LoggerId == null)
                 {
                     isValid = false;
                     throw new CommandParsingException(commandLineApplication, "LoggerId is required if an API diagnostic is provided");
@@ -190,11 +190,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool ValidateAPIVersionSets(CreatorConfig creatorConfig)
         {
             bool isValid = true;
-            if(creatorConfig.apiVersionSets != null)
+            if(creatorConfig.ApiVersionSets != null)
             {
-                foreach (APIVersionSetConfig apiVersionSet in creatorConfig.apiVersionSets)
+                foreach (APIVersionSetConfig apiVersionSet in creatorConfig.ApiVersionSets)
                 {
-                    if (apiVersionSet != null && apiVersionSet.displayName == null)
+                    if (apiVersionSet != null && apiVersionSet.DisplayName == null)
                     {
                         isValid = false;
                         throw new CommandParsingException(commandLineApplication, "Display name is required if an API Version Set is provided");

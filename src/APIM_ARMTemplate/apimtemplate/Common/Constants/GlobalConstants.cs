@@ -11,8 +11,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public const string ExtractName = "extract";
         public const string ExtractDescription = "Extract an existing API Management instance";
 
-        public const string APIVersion = "2019-01-01";
-        public const string LinkedAPIVersion = "2018-01-01";
+        public const string ApiVersion = "2019-01-01";
+        public const string LinkedAPIVersion = "2018-02-01";
 
         public const string azAccessToken = "account get-access-token --query \"accessToken\" --output json";
         public const string azSubscriptionId = "account show --query id -o json";        

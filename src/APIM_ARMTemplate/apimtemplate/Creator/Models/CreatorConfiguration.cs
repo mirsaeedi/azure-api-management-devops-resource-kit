@@ -4,30 +4,30 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class CLICreatorArguments
+    public class CliCreatorArguments
     {
         public string configFile { get; set; }
     }
 
     public class CreatorConfig
     {
-        public string version { get; set; }
-        public string apimServiceName { get; set; }
+        public string Version { get; set; }
+        public string ApimServiceName { get; set; }
         // policy file location (local or url)
-        public string policy { get; set; }
-        public List<APIVersionSetConfig> apiVersionSets { get; set; }
-        public List<ApiConfiguration> apis { get; set; }
-        public List<ProductConfig> products { get; set; }
-        public List<LoggerConfig> loggers { get; set; }
-        public List<AuthorizationServerTemplateProperties> authorizationServers { get; set; }
-        public List<BackendTemplateProperties> backends { get; set; }
-        public string outputLocation { get; set; }
-        public bool linked { get; set; }
-        public string linkedTemplatesBaseUrl { get; set; }
-        public string linkedTemplatesUrlQueryString { get; set; }
+        public string Policy { get; set; }
+        public List<APIVersionSetConfig> ApiVersionSets { get; set; }
+        public List<ApiConfiguration> Apis { get; set; }
+        public List<ProductConfig> Products { get; set; }
+        public List<LoggerConfig> Loggers { get; set; }
+        public List<AuthorizationServerTemplateProperties> AuthorizationServers { get; set; }
+        public List<BackendTemplateProperties> Backends { get; set; }
+        public string OutputLocation { get; set; }
+        public bool Linked { get; set; }
+        public string LinkedTemplatesBaseUrl { get; set; }
+        public string LinkedTemplatesUrlQueryString { get; set; }
     }
 
-    public class APIVersionSetConfig: APIVersionSetProperties
+    public class APIVersionSetConfig: ApiVersionSetProperties
     {
         public string id { get; set; }
     }
@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
         public async Task<bool> IsDependOnLogger(FileReader fileReader)
         {
-            if (diagnostic != null && diagnostic.loggerId != null)
+            if (diagnostic != null && diagnostic.LoggerId != null)
             {
                 return true;
             }
@@ -78,7 +78,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             {
                 foreach (KeyValuePair<string, OperationsConfig> operation in operations)
                 {
-                    string operationPolicy = operation.Value.policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.policy) : "";
+                    string operationPolicy = operation.Value.Policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.Policy) : "";
                     if (operationPolicy.Contains("logger"))
                     {
                         return true;
@@ -102,7 +102,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             {
                 foreach (KeyValuePair<string, OperationsConfig> operation in operations)
                 {
-                    string operationPolicy = operation.Value.policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.policy) : "";
+                    string operationPolicy = operation.Value.Policy != null ? await fileReader.RetrieveFileContentsAsync(operation.Value.Policy) : "";
                     if (operationPolicy.Contains("set-backend-service"))
                     {
                         // capture operation policy dependent on backend
@@ -117,30 +117,30 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool IsSplitApi()
         {
             // the api needs to be split into multiple templates if the user has supplied a version or version set - deploying swagger related properties at the same time as api version related properties fails, so they must be written and deployed separately
-            return apiVersion != null || apiVersionSetId != null || (authenticationSettings != null && authenticationSettings.oAuth2 != null && authenticationSettings.oAuth2.authorizationServerId != null);
+            return apiVersion != null || apiVersionSetId != null || (authenticationSettings != null && authenticationSettings.OAuth2 != null && authenticationSettings.OAuth2.AuthorizationServerId != null);
         }
     }
 
     public class OperationsConfig
     {
         // policy file location (local or url)
-        public string policy { get; set; }
+        public string Policy { get; set; }
     }
 
     public class DiagnosticConfig : DiagnosticTemplateProperties
     {
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 
     public class LoggerConfig : LoggerTemplateProperties
     {
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 
     public class ProductConfig : ProductsTemplateProperties
     {
         // policy file location (local or url)
-        public string policy { get; set; }
+        public string Policy { get; set; }
     }
     
 }

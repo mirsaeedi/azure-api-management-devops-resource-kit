@@ -10,15 +10,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             // create release resource with properties
             ReleaseTemplateResource releaseTemplateResource = new ReleaseTemplateResource()
             {
-                name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{releaseName}')]",
-                Type = ResourceType.ApiRelease,
-                apiVersion = GlobalConstants.APIVersion,
-                properties = new ReleaseTemplateProperties()
+                Name = $"[concat(parameters('ApimServiceName'), '/{api.name}/{releaseName}')]",
+                Properties = new ReleaseTemplateProperties()
                 {
-                    notes = $"Release created to make revision {api.apiRevision} current.",
-                    apiId = $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{api.name}')]"
+                    Notes = $"Release created to make revision {api.apiRevision} current.",
+                    ApiId = $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{api.name}')]"
                 },
-                dependsOn = dependsOn
+                DependsOn = dependsOn
             };
             return releaseTemplateResource;
         }

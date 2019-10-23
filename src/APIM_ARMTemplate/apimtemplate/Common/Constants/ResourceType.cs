@@ -1,10 +1,10 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    internal static class ResourceType
+    public static class ResourceType
     {
         public const string Api = "Microsoft.ApiManagement/service/apis";
-        public const string ApiVersionSet = "Microsoft.ApiManagement/service/apiVersionSets";
+        public const string ApiVersionSet = "Microsoft.ApiManagement/service/api-version-sets";
         public const string ApiDiagnostic = "Microsoft.ApiManagement/service/apis/diagnostics";
         public const string ApiOperation = "Microsoft.ApiManagement/service/apis/operations";
         public const string ApiOperationPolicy = "Microsoft.ApiManagement/service/apis/operations/policies";
@@ -19,5 +19,6 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public const string Product = "Microsoft.ApiManagement/service/products";
         public const string ProductPolicy = "Microsoft.ApiManagement/service/products/policies";
         public const string Property = "Microsoft.ApiManagement/service/properties";
+        public const string Deployment = "Microsoft.Resources/deployments";
     }
 }

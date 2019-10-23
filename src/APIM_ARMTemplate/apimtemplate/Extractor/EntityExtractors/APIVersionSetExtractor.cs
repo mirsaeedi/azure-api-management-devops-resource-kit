@@ -15,7 +15,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apiVersionSets?api-version={4}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apiVersionSets/{4}?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, APIVersionSetName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, APIVersionSetName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -52,11 +52,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                 // convert returned product to template resource class
                 APIVersionSetTemplateResource versionSetTemplateResource = JsonConvert.DeserializeObject<APIVersionSetTemplateResource>(versionSetDetails);
-                versionSetTemplateResource.name = $"[concat(parameters('ApimServiceName'), '/{versionSetName}')]";
-                versionSetTemplateResource.apiVersion = GlobalConstants.APIVersion;
+                versionSetTemplateResource.Name = $"[concat(parameters('ApimServiceName'), '/{versionSetName}')]";
+                versionSetTemplateResource.ApiVersion = GlobalConstants.ApiVersion;
 
                 // only extract the product if this is a full extraction, or in the case of a single api, if it is found in products associated with the api
-                if (singleApiName == null || apiResources.SingleOrDefault(api => (api as ApiTemplateResource).properties.apiVersionSetId != null && (api as ApiTemplateResource).properties.apiVersionSetId.Contains(versionSetName)) != null)
+                if (singleApiName == null || apiResources.SingleOrDefault(api => (api as ApiTemplateResource).Properties.ApiVersionSetId != null && (api as ApiTemplateResource).Properties.ApiVersionSetId.Contains(versionSetName)) != null)
                 {
                     Console.WriteLine("'{0}' API version set found", versionSetName);
                     templateResources.Add(versionSetTemplateResource);

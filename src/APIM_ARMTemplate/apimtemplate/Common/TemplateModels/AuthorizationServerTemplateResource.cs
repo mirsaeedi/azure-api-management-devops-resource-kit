@@ -1,17 +1,17 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class AuthorizationServerTemplateResource : TemplateResource
+    public class AuthorizationServerTemplateResource : TemplateResource<AuthorizationServerTemplateProperties>
     {
-        public AuthorizationServerTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.AuthorizationServer;
     }
 
     public class AuthorizationServerTemplateProperties
     {
-        public string description { get; set; }
-        public string[] authorizationMethods { get; set; }
-        public string[] clientAuthenticationMethod { get; set; }
-        public AuthorizationServerTokenBodyParameter[] tokenBodyParameters { get; set; }
+        public string Description { get; set; }
+        public string[] AuthorizationMethods { get; set; }
+        public string[] ClientAuthenticationMethod { get; set; }
+        public TokenBodyParameter[] TokenBodyParameters { get; set; }
         public string tokenEndpoint { get; set; }
         public bool supportState { get; set; }
         public string defaultScope { get; set; }
@@ -23,13 +23,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public string clientRegistrationEndpoint { get; set; }
         public string authorizationEndpoint { get; set; }
         public string[] grantTypes { get; set; }
-        public string clientId { get; set; }
+        public string ClientId { get; set; }
     }
 
-    public class AuthorizationServerTokenBodyParameter
+    public class TokenBodyParameter
     {
-        public string name { get; set; }
-        public string value { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
     }
 
 }

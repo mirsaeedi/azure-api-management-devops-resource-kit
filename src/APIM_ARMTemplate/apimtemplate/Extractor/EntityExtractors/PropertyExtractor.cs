@@ -14,7 +14,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/properties?api-version={4}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -24,7 +24,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/properties/{4}?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, propertyName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, propertyName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -47,11 +47,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 string fullPropertyResource = await GetPropertyDetailsAsync(apimname, resourceGroup, propertyName);
 
                 // convert returned named value to template resource class
-                PropertyTemplateResource propertyTemplateResource = JsonConvert.DeserializeObject<PropertyTemplateResource>(fullPropertyResource);
-                propertyTemplateResource.name = $"[concat(parameters('ApimServiceName'), '/{propertyName}')]";
-                propertyTemplateResource.Type = ResourceType.Property;
-                propertyTemplateResource.apiVersion = GlobalConstants.APIVersion;
-                propertyTemplateResource.scale = null;
+                var propertyTemplateResource = JsonConvert.DeserializeObject<PropertyTemplateResource>(fullPropertyResource);
+                propertyTemplateResource.Name = $"[concat(parameters('ApimServiceName'), '/{propertyName}')]";
+                propertyTemplateResource.Scale = null;
 
                 if (singleApiName == null)
                 {

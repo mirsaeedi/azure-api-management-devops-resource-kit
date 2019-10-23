@@ -12,37 +12,37 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             LoggerTemplateCreator loggerTemplateCreator = new LoggerTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { loggers = new List<LoggerConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Loggers = new List<LoggerConfig>() };
             LoggerConfig logger = new LoggerConfig()
             {
-                name = "name",
-                loggerType = "applicationinsights",
-                description = "description",
-                isBuffered = true,
-                resourceId = "resourceId",
-                credentials = new LoggerCredentials()
+                Name = "name",
+                LoggerType = "applicationinsights",
+                Description = "description",
+                IsBuffered = true,
+                ResourceId = "resourceId",
+                Credentials = new LoggerCredentials()
                 {
-                    connectionString = "connString",
-                    instrumentationKey = "iKey",
-                    name = "credName"
+                    ConnectionString = "connString",
+                    InstrumentationKey = "iKey",
+                    Name = "credName"
                 }
 
             };
-            creatorConfig.loggers.Add(logger);
+            creatorConfig.Loggers.Add(logger);
 
             // act
             Template loggerTemplate = loggerTemplateCreator.CreateLoggerTemplate(creatorConfig);
             LoggerTemplateResource loggerTemplateResource = (LoggerTemplateResource)loggerTemplate.resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{logger.name}')]", loggerTemplateResource.name);
-            Assert.Equal(logger.loggerType, loggerTemplateResource.properties.loggerType);
-            Assert.Equal(logger.description, loggerTemplateResource.properties.description);
-            Assert.Equal(logger.isBuffered, loggerTemplateResource.properties.isBuffered);
-            Assert.Equal(logger.resourceId, loggerTemplateResource.properties.resourceId);
-            Assert.Equal(logger.credentials.connectionString, loggerTemplateResource.properties.credentials.connectionString);
-            Assert.Equal(logger.credentials.instrumentationKey, loggerTemplateResource.properties.credentials.instrumentationKey);
-            Assert.Equal(logger.credentials.name, loggerTemplateResource.properties.credentials.name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{logger.Name}')]", loggerTemplateResource.Name);
+            Assert.Equal(logger.LoggerType, loggerTemplateResource.properties.LoggerType);
+            Assert.Equal(logger.Description, loggerTemplateResource.properties.Description);
+            Assert.Equal(logger.IsBuffered, loggerTemplateResource.properties.IsBuffered);
+            Assert.Equal(logger.ResourceId, loggerTemplateResource.properties.ResourceId);
+            Assert.Equal(logger.Credentials.ConnectionString, loggerTemplateResource.properties.Credentials.connectionString);
+            Assert.Equal(logger.Credentials.InstrumentationKey, loggerTemplateResource.properties.Credentials.instrumentationKey);
+            Assert.Equal(logger.Credentials.Name, loggerTemplateResource.properties.Credentials.name);
         }
     }
 }

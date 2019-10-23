@@ -13,7 +13,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -26,9 +26,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 subscriptionRequired = true,
                 authenticationSettings = new APITemplateAuthenticationSettings()
                 {
-                    oAuth2 = new APITemplateOAuth2()
+                    OAuth2 = new APITemplateOAuth2()
                     {
-                        authorizationServerId = "",
+                        AuthorizationServerId = "",
                         scope = ""
                     },
                     openid = new APITemplateOpenID()
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 isCurrent = true,
                 type = "http"
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             APITemplateResource apiTemplateResource = await apiTemplateCreator.CreateAPITemplateResourceAsync(api, true, true);
@@ -74,13 +74,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
                 openApiSpec = "https://petstore.swagger.io/v2/swagger.json"
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             APITemplateResource apiTemplateResource = await apiTemplateCreator.CreateAPITemplateResourceAsync(api, true, false);
@@ -96,7 +96,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -109,9 +109,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 subscriptionRequired = true,
                 authenticationSettings = new APITemplateAuthenticationSettings()
                 {
-                    oAuth2 = new APITemplateOAuth2()
+                    OAuth2 = new APITemplateOAuth2()
                     {
-                        authorizationServerId = "",
+                        AuthorizationServerId = "",
                         scope = ""
                     },
                     openid = new APITemplateOpenID()
@@ -126,7 +126,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 isCurrent = true,
                 type = "http"
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             APITemplateResource apiTemplateResource = await apiTemplateCreator.CreateAPITemplateResourceAsync(api, false, true);
@@ -159,7 +159,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -169,7 +169,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                 subscriptionRequired = true,
                 openApiSpec = "https://petstore.swagger.io/v2/swagger.json",
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             // the above api config will create a unified api template with a single resource

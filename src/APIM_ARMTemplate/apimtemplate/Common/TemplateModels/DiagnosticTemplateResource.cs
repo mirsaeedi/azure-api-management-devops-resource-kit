@@ -2,25 +2,25 @@
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class DiagnosticTemplateResource : APITemplateSubResource
+    public class DiagnosticTemplateResource : TemplateResource<DiagnosticTemplateProperties>
     {
-        public DiagnosticTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.ApiDiagnostic;
     }
 
     public class DiagnosticTemplateProperties
     {
-        public string alwaysLog { get; set; }
-        public string loggerId { get; set; }
-        public DiagnosticTemplateSampling sampling { get; set; }
-        public DiagnosticTemplateFrontendBackend frontend { get; set; }
-        public DiagnosticTemplateFrontendBackend backend { get; set; }
-        public Nullable<bool> enableHttpCorrelationHeaders { get; set; }
+        public string AlwaysLog { get; set; }
+        public string LoggerId { get; set; }
+        public DiagnosticTemplateSampling Sampling { get; set; }
+        public DiagnosticTemplateFrontendBackend Frontend { get; set; }
+        public DiagnosticTemplateFrontendBackend Backend { get; set; }
+        public bool? EnableHttpCorrelationHeaders { get; set; }
     }
 
     public class DiagnosticTemplateSampling
     {
-        public string samplingType { get; set; }
-        public double percentage { get; set; }
+        public string SamplingType { get; set; }
+        public double Percentage { get; set; }
     }
 
     public class DiagnosticTemplateFrontendBackend
@@ -37,7 +37,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
     public class DiagnosticTemplateRequestResponseBody
     {
-        public int bytes { get; set; }
+        public int Bytes { get; set; }
     }
 
 

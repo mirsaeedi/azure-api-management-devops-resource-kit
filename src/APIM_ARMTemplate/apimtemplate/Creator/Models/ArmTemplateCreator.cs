@@ -26,10 +26,10 @@ namespace Apim.Arm.Creator.Creator.Models
         private ApiTemplateCreator _apiTemplateCreator;
         private MasterTemplateCreator _masterTemplateCreator;
 
-        public ArmTemplateCreator(CreatorConfig creatorConfig,FileReader fileReader)
+        public ArmTemplateCreator(CreatorConfig creatorConfig)
         {
             _creatorConfig = creatorConfig;
-            _fileReader = fileReader;
+            _fileReader = new FileReader();
         }
 
         public async Task Create()
@@ -38,30 +38,53 @@ namespace Apim.Arm.Creator.Creator.Models
             var fileNames = fileNameGenerator.GenerateFileNames();
 
             //_productTemplateCreator = new ProductTemplateCreator(_policyTemplateCreator);
-            
-            SaveTemplate<PolicyTemplateCreator>(fileNames.globalServicePolicy);
-            SaveTemplate<APIVersionSetTemplateCreator>(fileNames.apiVersionSets);
-            SaveTemplate<LoggerTemplateCreator>(fileNames.loggers);
-            SaveTemplate<BackendTemplateCreator>(fileNames.backends);
-            SaveTemplate<AuthorizationServerTemplateCreator>(fileNames.authorizationServers);
-            SaveTemplate<ProductTemplateCreator>(fileNames.products);
 
+
+            Console.WriteLine("Creating global service policy template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<PolicyTemplateCreator>(fileNames.globalServicePolicy,c=>c.Policy!=null);
+
+            Console.WriteLine("Creating api version sets template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<APIVersionSetTemplateCreator>(fileNames.apiVersionSets, c => c.ApiVersionSets != null);
+
+            Console.WriteLine("Creating loggers template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<LoggerTemplateCreator>(fileNames.loggers, c => c.Loggers != null);
+
+            Console.WriteLine("Creating backeds template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<BackendTemplateCreator>(fileNames.backends, c => c.Backends != null);
+
+            Console.WriteLine("Creating authorization servers template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<AuthorizationServerTemplateCreator>(fileNames.authorizationServers, c => c.AuthorizationServers != null);
+
+            Console.WriteLine("Creating products template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<ProductTemplateCreator>(fileNames.products, c => c.Products != null);
+
+            Console.WriteLine("Creating api templates");
+            Console.WriteLine("------------------------------------------");
             await SaveApiTemplates();
-            SaveMasterTemplate();
+
+            Console.WriteLine("Creating master template");
+            Console.WriteLine("------------------------------------------");
+            await SaveMasterTemplate();
             
             Console.WriteLine("Templates written to output location");
         }
 
-        private void SaveMasterTemplate()
+        private async Task  SaveMasterTemplate()
         {
             var fileNameGenerator = new FileNameGenerator();
             var fileNames = fileNameGenerator.GenerateFileNames();
 
             var masterTemplateCreator = new MasterTemplateCreator(new FileReader());
 
-            if (_creatorConfig.linked == true)
+            if (_creatorConfig.Linked == true)
             {
-                var masterTemplate = masterTemplateCreator.Create(_creatorConfig);
+                var masterTemplate = await masterTemplateCreator.Create(_creatorConfig);
                 SaveTemplate(fileNames.linkedMaster, masterTemplate); //TODO
             }
 
@@ -77,34 +100,32 @@ namespace Apim.Arm.Creator.Creator.Models
             var apiInformation = new List<LinkedMasterTemplateAPIInformation>();
             var apiTemplateCreator = new ApiTemplateCreator(_fileReader);
 
-            foreach (var apiConfiguration in _creatorConfig.apis)
+            foreach (var apiConfiguration in _creatorConfig.Apis)
             {
                 var apiTemplates = await apiTemplateCreator.CreateAPITemplatesAsync(apiConfiguration);
 
                 foreach (var apiTemplate in apiTemplates)
                 {
                     var apiResource = apiTemplate.resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource;
-                    string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, apiConfiguration.IsSplitApi(), apiResource.properties.value == null, _creatorConfig.apimServiceName);
+                    string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, apiConfiguration.IsSplitApi(), apiResource.Properties.value == null, _creatorConfig.ApimServiceName);
 
                     SaveTemplate(apiFileName,apiTemplate);
                 }
             }
         }
 
-        private void SaveTemplate<TemplateCreator>(string fileName,params object[] constructorArgs) where TemplateCreator:ITemplateCreator
+        private async Task SaveTemplate<TemplateCreator>(string fileName,Predicate<CreatorConfig> hasTemplatePredicate,params object[] constructorArgs) where TemplateCreator:ITemplateCreator
         {
             var templateCreator = (TemplateCreator)Activator.CreateInstance(typeof(TemplateCreator), constructorArgs);
 
-            Console.WriteLine("Creating global service policy template");
-            Console.WriteLine("------------------------------------------");
-            var template = _creatorConfig.policy != null ? templateCreator.Create(_creatorConfig) : null;
+            var template = hasTemplatePredicate(_creatorConfig) ? await templateCreator.Create(_creatorConfig) : null;
 
             SaveTemplate(fileName, template);
         }
 
         private void SaveTemplate(string fileName, Template template)
         {
-            var path = Path.Combine(_creatorConfig.outputLocation, fileName);
+            var path = Path.Combine(_creatorConfig.OutputLocation, fileName);
             var fileWriter = new FileWriter();
             fileWriter.WriteJson(template, path);
         }

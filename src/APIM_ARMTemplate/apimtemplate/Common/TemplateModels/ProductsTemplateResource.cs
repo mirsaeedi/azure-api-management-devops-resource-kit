@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class ProductsTemplateResource : TemplateResource
+    public class ProductsTemplateResource : TemplateResource<ProductsTemplateProperties>
     {
-        public ProductsTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.Product;
     }
 
     public class ProductsTemplateProperties
     {
-        public string description { get; set; }
-        public string terms { get; set; }
-        public bool subscriptionRequired { get; set; }
-        public bool? approvalRequired { get; set; }
-        public int? subscriptionsLimit { get; set; }
-        public string state { get; set; }
-        public string displayName { get; set; }
+        public string Description { get; set; }
+        public string Terms { get; set; }
+        public bool SubscriptionRequired { get; set; }
+        public bool? ApprovalRequired { get; set; }
+        public int? SubscriptionsLimit { get; set; }
+        public string State { get; set; }
+        public string DisplayName { get; set; }
     }
 }

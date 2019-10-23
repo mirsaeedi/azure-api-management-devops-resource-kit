@@ -1,17 +1,17 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class APIVersionSetTemplateResource : TemplateResource
+    public class APIVersionSetTemplateResource : TemplateResource<ApiVersionSetProperties>
     {
-        public APIVersionSetProperties properties { get; set; }
+        public override string Type => ResourceType.ApiVersionSet;
     }
 
-    public class APIVersionSetProperties
+    public class ApiVersionSetProperties
     {
-        public string displayName { get; set; }
-        public string description { get; set; }
-        public string versionQueryName { get; set; }
-        public string versionHeaderName { get; set; }
-        public string versioningScheme { get; set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public string VersionQueryName { get; set; }
+        public string VersionHeaderName { get; set; }
+        public string VersioningScheme { get; set; }
     }
 }

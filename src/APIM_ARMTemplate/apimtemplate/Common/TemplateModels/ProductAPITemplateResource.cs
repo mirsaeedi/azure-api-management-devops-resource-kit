@@ -1,9 +1,9 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class ProductAPITemplateResource : TemplateResource
+    public class ProductAPITemplateResource : TemplateResource<ProductAPITemplateProperties>
     {
-        public ProductAPITemplateProperties properties { get; set; }
+        public override string Type => ResourceType.ProductAPI;
     }
 
     public class ProductAPITemplateProperties { }

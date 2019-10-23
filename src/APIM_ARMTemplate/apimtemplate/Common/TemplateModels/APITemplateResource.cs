@@ -3,16 +3,16 @@ using System;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class ApiTemplateResource: TemplateResource
+    public class ApiTemplateResource: TemplateResource<ApiTemplateProperties>
     {
-        public APITemplateProperties properties { get; set; }
-        public APITemplateSubResource[] resources { get; set; }
+        public TemplateResource[] Resources { get; set; }
+        public override string Type => ResourceType.Api;
     }
 
-    public class APITemplateProperties
+    public class ApiTemplateProperties
     {
         public string description { get; set; }
-        public APITemplateAuthenticationSettings authenticationSettings { get; set; }
+        public APITemplateAuthenticationSettings AuthenticationSettings { get; set; }
         public APITemplateSubscriptionKeyParameterNames subscriptionKeyParameterNames { get; set; }
         public string type { get; set; }
         public string apiRevision { get; set; }
@@ -20,7 +20,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public Nullable<bool> isCurrent { get; set; }
         public string apiRevisionDescription { get; set; }
         public string apiVersionDescription { get; set; }
-        public string apiVersionSetId { get; set; }
+        public string ApiVersionSetId { get; set; }
         public Nullable<bool> subscriptionRequired { get; set; }
         public string sourceApiId { get; set; }
         public string displayName { get; set; }
@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
     public class APITemplateAuthenticationSettings
     {
-        public APITemplateOAuth2 oAuth2 { get; set; }
+        public APITemplateOAuth2 OAuth2 { get; set; }
         public APITemplateOpenID openid { get; set; }
         public bool subscriptionKeyRequired { get; set; }
     }
@@ -64,7 +64,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
     public class APITemplateOAuth2
     {
-        public string authorizationServerId { get; set; }
+        public string AuthorizationServerId { get; set; }
         public string scope { get; set; }
     }
 
@@ -83,7 +83,4 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public string versionHeaderName { get; set; }
         public string versioningScheme { get; set; }
     }
-
-    public abstract class APITemplateSubResource : TemplateResource { }
-
 }

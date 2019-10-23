@@ -15,7 +15,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/authorizationServers?api-version={4}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/authorizationServers/{4}?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, authorizationServerName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, authorizationServerName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -52,17 +52,17 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                 // convert returned authorization server to template resource class
                 AuthorizationServerTemplateResource authorizationServerTemplateResource = JsonConvert.DeserializeObject<AuthorizationServerTemplateResource>(authorizationServer);
-                authorizationServerTemplateResource.name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerName}')]";
-                authorizationServerTemplateResource.apiVersion = GlobalConstants.APIVersion;
+                authorizationServerTemplateResource.Name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerName}')]";
+                authorizationServerTemplateResource.ApiVersion = GlobalConstants.ApiVersion;
 
                 // only extract the authorization server if this is a full extraction, or in the case of a single api, if it is referenced by one of the api's authentication settings
                 bool isReferencedByAPI = false;
                 foreach (ApiTemplateResource apiResource in apiResources)
                 {
-                    if (apiResource.properties.authenticationSettings != null &&
-                        apiResource.properties.authenticationSettings.oAuth2 != null &&
-                        apiResource.properties.authenticationSettings.oAuth2.authorizationServerId != null &&
-                        apiResource.properties.authenticationSettings.oAuth2.authorizationServerId.Contains(authorizationServerName))
+                    if (apiResource.Properties.AuthenticationSettings != null &&
+                        apiResource.Properties.AuthenticationSettings.OAuth2 != null &&
+                        apiResource.Properties.AuthenticationSettings.OAuth2.AuthorizationServerId != null &&
+                        apiResource.Properties.AuthenticationSettings.OAuth2.AuthorizationServerId.Contains(authorizationServerName))
                     {
                         isReferencedByAPI = true;
                     }

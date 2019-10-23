@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,41 +7,32 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class LoggerTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            // create empty template
-            Template loggerTemplate = CreateEmptyTemplate();
+            var template = EmptyTemplate;
+            template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
-            // add parameters
-            loggerTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
+            var resources = new List<TemplateResource>();
+            foreach (LoggerConfig logger in creatorConfig.Loggers)
             {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
-
-            List<TemplateResource> resources = new List<TemplateResource>();
-            foreach (LoggerConfig logger in creatorConfig.loggers)
-            {
-                // create logger resource with properties
-                LoggerTemplateResource loggerTemplateResource = new LoggerTemplateResource()
+                var loggerTemplateResource = new LoggerTemplateResource()
                 {
-                    name = $"[concat(parameters('ApimServiceName'), '/{logger.name}')]",
-                    Type = ResourceType.Logger,
-                    apiVersion = GlobalConstants.APIVersion,
-                    properties = new LoggerTemplateProperties()
+                    Name = $"[concat(parameters('ApimServiceName'), '/{logger.Name}')]",
+                    Properties = new LoggerTemplateProperties()
                     {
-                        loggerType = logger.loggerType,
-                        description = logger.description,
-                        credentials = logger.credentials,
-                        isBuffered = logger.isBuffered,
-                        resourceId = logger.resourceId
+                        LoggerType = logger.LoggerType,
+                        Description = logger.Description,
+                        Credentials = logger.Credentials,
+                        IsBuffered = logger.IsBuffered,
+                        ResourceId = logger.ResourceId
                     },
-                    dependsOn = new string[] { }
+                    DependsOn = new string[] { }
                 };
                 resources.Add(loggerTemplateResource);
             }
 
-            loggerTemplate.resources = resources.ToArray();
-            return loggerTemplate;
+            template.resources = resources.ToArray();
+            return await Task.FromResult(template);
         }
     }
 }

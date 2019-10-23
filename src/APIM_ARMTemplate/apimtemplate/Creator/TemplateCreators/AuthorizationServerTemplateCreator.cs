@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,34 +7,29 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class AuthorizationServerTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template Create(CreatorConfig creatorConfig)
+
+        public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            // create empty template
-            Template authorizationTemplate = CreateEmptyTemplate();
+            var authorizationTemplate = EmptyTemplate;
+            authorizationTemplate.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
-            // add parameters
-            authorizationTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
-            {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
+            var resources = new List<TemplateResource>();
 
-            List<TemplateResource> resources = new List<TemplateResource>();
-            foreach (AuthorizationServerTemplateProperties authorizationServerTemplateProperties in creatorConfig.authorizationServers)
+            foreach (var authorizationServerTemplateProperties in creatorConfig.AuthorizationServers)
             {
                 // create authorization server resource with properties
-                AuthorizationServerTemplateResource authorizationServerTemplateResource = new AuthorizationServerTemplateResource()
+                var authorizationServerTemplateResource = new AuthorizationServerTemplateResource()
                 {
-                    name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerTemplateProperties.displayName}')]",
-                    Type = ResourceType.AuthorizationServer,
-                    apiVersion = GlobalConstants.APIVersion,
-                    properties = authorizationServerTemplateProperties,
-                    dependsOn = new string[] { }
+                    Name = $"[concat(parameters('ApimServiceName'), '/{authorizationServerTemplateProperties.displayName}')]",
+                    Properties = authorizationServerTemplateProperties,
+                    DependsOn = new string[] { }
                 };
                 resources.Add(authorizationServerTemplateResource);
             }
 
             authorizationTemplate.resources = resources.ToArray();
-            return authorizationTemplate;
+
+            return await Task.FromResult(authorizationTemplate);
         }
     }
 }

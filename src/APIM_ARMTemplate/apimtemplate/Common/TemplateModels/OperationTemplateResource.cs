@@ -1,10 +1,10 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class OperationTemplateResource : APITemplateSubResource
+    public class OperationTemplateResource : TemplateResource<OperationTemplateProperties>
     {
-        public OperationTemplateProperties properties { get; set; }
         public PolicyTemplateResource[] resources { get; set; }
+        public override string Type => ResourceType.ApiOperation;
     }
 
     public class OperationTemplateProperties

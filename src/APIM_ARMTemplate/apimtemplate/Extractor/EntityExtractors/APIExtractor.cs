@@ -22,7 +22,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/operations?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -32,7 +32,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/operations/{5}?api-version={6}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, OperationName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, OperationName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/operations/{5}/policies/policy?api-version={6}&format=rawxml",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, OperationId, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, OperationId, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -52,7 +52,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis?api-version={4}",
-                baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+                baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -72,7 +72,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/policies/policy?api-version={5}&format=rawxml",
-                baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+                baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -82,7 +82,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/diagnostics?api-version={5}",
-                baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+                baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -92,7 +92,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/products?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/schemas?api-version={5}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -112,7 +112,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/apis/{4}/schemas/{5}?api-version={6}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, schemaName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, ApiName, schemaName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -144,24 +144,24 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 ApiTemplateResource apiResource = JsonConvert.DeserializeObject<ApiTemplateResource>(apiDetails);
                 string oApiName = ((JValue)oApiDetails["name"]).Value.ToString();
 
-                apiResource.Type = ((JValue)oApiDetails["type"]).Value.ToString();
-                apiResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}')]";
-                apiResource.apiVersion = GlobalConstants.APIVersion;
-                apiResource.scale = null;
+                
+                apiResource.Name = $"[concat(parameters('ApimServiceName'), '/{oApiName}')]";
+                apiResource.ApiVersion = GlobalConstants.ApiVersion;
+                apiResource.Scale = null;
 
-                if (apiResource.properties.apiVersionSetId != null)
+                if (apiResource.Properties.ApiVersionSetId != null)
                 {
-                    apiResource.dependsOn = new string[] { };
+                    apiResource.DependsOn = new string[] { };
 
-                    string versionSetName = apiResource.properties.apiVersionSetId;
+                    string versionSetName = apiResource.Properties.ApiVersionSetId;
                     int versionSetPosition = versionSetName.IndexOf("apiVersionSets/");
 
                     versionSetName = versionSetName.Substring(versionSetPosition, (versionSetName.Length - versionSetPosition));
-                    apiResource.properties.apiVersionSetId = $"[concat(resourceId('Microsoft.ApiManagement/service', parameters('ApimServiceName')), '/{versionSetName}')]";
+                    apiResource.Properties.ApiVersionSetId = $"[concat(resourceId('Microsoft.ApiManagement/service', parameters('ApimServiceName')), '/{versionSetName}')]";
                 }
                 else
                 {
-                    apiResource.dependsOn = new string[] { };
+                    apiResource.DependsOn = new string[] { };
                 }
 
                 templateResources.Add(apiResource);
@@ -187,14 +187,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                     // convert returned operation to template resource class
                     OperationTemplateResource operationResource = JsonConvert.DeserializeObject<OperationTemplateResource>(operationDetails);
-                    string operationResourceName = operationResource.name;
-                    operationResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{operationResourceName}')]";
-                    operationResource.apiVersion = GlobalConstants.APIVersion;
-                    operationResource.scale = null;
+                    string operationResourceName = operationResource.Name;
+                    operationResource.Name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{operationResourceName}')]";
+                    operationResource.ApiVersion = GlobalConstants.ApiVersion;
+                    operationResource.Scale = null;
 
                     // add api and schemas to operation dependsOn, if necessary
                     List<string> operationDependsOn = new List<string>() { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };
-                    foreach (OperationTemplateRepresentation operationTemplateRepresentation in operationResource.properties.request.representations)
+                    foreach (OperationTemplateRepresentation operationTemplateRepresentation in operationResource.Properties.request.representations)
                     {
                         if (operationTemplateRepresentation.schemaId != null)
                         {
@@ -206,7 +206,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                             }
                         }
                     }
-                    foreach (OperationsTemplateResponse operationTemplateResponse in operationResource.properties.responses)
+                    foreach (OperationsTemplateResponse operationTemplateResponse in operationResource.Properties.responses)
                     {
                         foreach (OperationTemplateRepresentation operationTemplateRepresentation in operationTemplateResponse.representations)
                         {
@@ -221,7 +221,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                             }
                         }
                     }
-                    operationResource.dependsOn = operationDependsOn.ToArray();
+                    operationResource.DependsOn = operationDependsOn.ToArray();
                     templateResources.Add(operationResource);
 
                     // add operation policy resource to api template
@@ -230,21 +230,21 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                         string operationPolicy = await GetOperationPolicyAsync(apimname, resourceGroup, oApiName, operationName);
                         Console.WriteLine($" - Operation policy found for {operationName} operation");
                         PolicyTemplateResource operationPolicyResource = JsonConvert.DeserializeObject<PolicyTemplateResource>(operationPolicy);
-                        operationPolicyResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{operationResourceName}/policy')]";
-                        operationPolicyResource.apiVersion = GlobalConstants.APIVersion;
-                        operationPolicyResource.scale = null;
-                        operationPolicyResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), '{oApiName}', '{operationResourceName}')]" };
+                        operationPolicyResource.Name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{operationResourceName}/policy')]";
+                        operationPolicyResource.ApiVersion = GlobalConstants.ApiVersion;
+                        operationPolicyResource.Scale = null;
+                        operationPolicyResource.DependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('ApimServiceName'), '{oApiName}', '{operationResourceName}')]" };
 
                         // write policy xml content to file and point to it if policyXMLBaseUrl is provided
                         if (policyXMLBaseUrl != null)
                         {
-                            string policyXMLContent = operationPolicyResource.properties.value;
+                            string policyXMLContent = operationPolicyResource.Properties.Value;
                             string policyFolder = String.Concat(fileFolder, $@"/policies");
                             string operationPolicyFileName = $@"/{operationName}-operationPolicy.xml";
                             this.fileWriter.CreateFolderIfNotExists(policyFolder);
                             this.fileWriter.WriteXMLToFile(policyXMLContent, String.Concat(policyFolder, operationPolicyFileName));
-                            operationPolicyResource.properties.format = "rawxml-link";
-                            operationPolicyResource.properties.value = $"[concat(parameters('PolicyXMLBaseUrl'), '{operationPolicyFileName}')]";
+                            operationPolicyResource.Properties.Format = "rawxml-link";
+                            operationPolicyResource.Properties.Value = $"[concat(parameters('PolicyXMLBaseUrl'), '{operationPolicyFileName}')]";
                         }
 
                         templateResources.Add(operationPolicyResource);
@@ -261,20 +261,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                     Console.WriteLine("API policy found");
                     PolicyTemplateResource apiPoliciesResource = JsonConvert.DeserializeObject<PolicyTemplateResource>(apiPolicies);
 
-                    apiPoliciesResource.apiVersion = GlobalConstants.APIVersion;
-                    apiPoliciesResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{apiPoliciesResource.name}')]";
-                    apiPoliciesResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiName}')]" };
+                    apiPoliciesResource.ApiVersion = GlobalConstants.ApiVersion;
+                    apiPoliciesResource.Name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{apiPoliciesResource.Name}')]";
+                    apiPoliciesResource.DependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiName}')]" };
 
                     // write policy xml content to file and point to it if policyXMLBaseUrl is provided
                     if (policyXMLBaseUrl != null)
                     {
-                        string policyXMLContent = apiPoliciesResource.properties.value;
+                        string policyXMLContent = apiPoliciesResource.Properties.Value;
                         string policyFolder = String.Concat(fileFolder, $@"/policies");
                         string apiPolicyFileName = $@"/{apiName}-apiPolicy.xml";
                         this.fileWriter.CreateFolderIfNotExists(policyFolder);
                         this.fileWriter.WriteXMLToFile(policyXMLContent, String.Concat(policyFolder, apiPolicyFileName));
-                        apiPoliciesResource.properties.format = "rawxml-link";
-                        apiPoliciesResource.properties.value = $"[concat(parameters('PolicyXMLBaseUrl'), '{apiPolicyFileName}')]";
+                        apiPoliciesResource.Properties.Format = "rawxml-link";
+                        apiPoliciesResource.Properties.Value = $"[concat(parameters('PolicyXMLBaseUrl'), '{apiPolicyFileName}')]";
                     }
                     templateResources.Add(apiPoliciesResource);
                 }
@@ -296,11 +296,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                         // convert returned api product associations to template resource class
                         ProductAPITemplateResource productAPIResource = JsonConvert.DeserializeObject<ProductAPITemplateResource>(item.ToString());
-                        productAPIResource.Type = ResourceType.ProductAPI;
-                        productAPIResource.name = $"[concat(parameters('ApimServiceName'), '/{apiProductName}/{oApiName}')]";
-                        productAPIResource.apiVersion = GlobalConstants.APIVersion;
-                        productAPIResource.scale = null;
-                        productAPIResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };
+                        productAPIResource.Name = $"[concat(parameters('ApimServiceName'), '/{apiProductName}/{oApiName}')]";
+                        productAPIResource.ApiVersion = GlobalConstants.ApiVersion;
+                        productAPIResource.Scale = null;
+                        productAPIResource.DependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };
 
                         templateResources.Add(productAPIResource);
                     }
@@ -320,16 +319,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
 
                     // convert returned diagnostic to template resource class
                     DiagnosticTemplateResource diagnosticResource = diagnostic.ToObject<DiagnosticTemplateResource>();
-                    diagnosticResource.name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{diagnosticName}')]";
-                    diagnosticResource.Type = ResourceType.ApiDiagnostic;
-                    diagnosticResource.apiVersion = GlobalConstants.APIVersion;
-                    diagnosticResource.scale = null;
-                    diagnosticResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };
+                    diagnosticResource.Name = $"[concat(parameters('ApimServiceName'), '/{oApiName}/{diagnosticName}')]";
+                    diagnosticResource.ApiVersion = GlobalConstants.ApiVersion;
+                    diagnosticResource.Scale = null;
+                    diagnosticResource.DependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{oApiName}')]" };
 
                     if (!diagnosticName.Contains("applicationinsights"))
                     {
                         // enableHttpCorrelationHeaders only works for application insights, causes errors otherwise
-                        diagnosticResource.properties.enableHttpCorrelationHeaders = null;
+                        diagnosticResource.Properties.EnableHttpCorrelationHeaders = null;
                     }
 
                     templateResources.Add(diagnosticResource);
@@ -382,10 +380,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 // pull returned schema and convert to template resource
                 RESTReturnedSchemaTemplate restReturnedSchemaTemplate = JsonConvert.DeserializeObject<RESTReturnedSchemaTemplate>(schemaDetails);
                 SchemaTemplateResource schemaDetailsResource = JsonConvert.DeserializeObject<SchemaTemplateResource>(schemaDetails);
-                schemaDetailsResource.properties.document.value = JsonConvert.SerializeObject(restReturnedSchemaTemplate.properties.document);
-                schemaDetailsResource.name = $"[concat(parameters('ApimServiceName'), '/{apiName}/{schemaName}')]";
-                schemaDetailsResource.apiVersion = GlobalConstants.APIVersion;
-                schemaDetailsResource.dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiName}')]" };
+                schemaDetailsResource.Properties.Document.Value = JsonConvert.SerializeObject(restReturnedSchemaTemplate.Properties.Document);
+                schemaDetailsResource.Name = $"[concat(parameters('ApimServiceName'), '/{apiName}/{schemaName}')]";
+                schemaDetailsResource.ApiVersion = GlobalConstants.ApiVersion;
+                schemaDetailsResource.DependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiName}')]" };
 
                 templateResources.Add(schemaDetailsResource);
 

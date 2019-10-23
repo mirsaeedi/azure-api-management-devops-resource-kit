@@ -12,27 +12,27 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             DiagnosticTemplateCreator diagnosticTemplateCreator = new DiagnosticTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { apis = new List<APIConfig>() };
+            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 diagnostic = new DiagnosticConfig()
                 {
-                    name = "applicationinsights",
-                    alwaysLog = "alwaysLog",
-                    loggerId = "loggerId",
-                    sampling = new DiagnosticTemplateSampling()
+                    Name = "applicationinsights",
+                    AlwaysLog = "alwaysLog",
+                    LoggerId = "loggerId",
+                    Sampling = new DiagnosticTemplateSampling()
                     {
-                        samplingType = "samplingType",
-                        percentage = 100
+                        SamplingType = "samplingType",
+                        Percentage = 100
                     },
-                    frontend = new DiagnosticTemplateFrontendBackend()
+                    Frontend = new DiagnosticTemplateFrontendBackend()
                     {
                         request = new DiagnosticTemplateRequestResponse()
                         {
                             headers = new string[] { "frontendrequestheader" },
                             body = new DiagnosticTemplateRequestResponseBody()
                             {
-                                bytes = 512
+                                Bytes = 512
                             }
                         },
                         response = new DiagnosticTemplateRequestResponse()
@@ -40,18 +40,18 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                             headers = new string[] { "frontendresponseheader" },
                             body = new DiagnosticTemplateRequestResponseBody()
                             {
-                                bytes = 512
+                                Bytes = 512
                             }
                         }
                     },
-                    backend = new DiagnosticTemplateFrontendBackend()
+                    Backend = new DiagnosticTemplateFrontendBackend()
                     {
                         request = new DiagnosticTemplateRequestResponse()
                         {
                             headers = new string[] { "backendrequestheader" },
                             body = new DiagnosticTemplateRequestResponseBody()
                             {
-                                bytes = 512
+                                Bytes = 512
                             }
                         },
                         response = new DiagnosticTemplateRequestResponse()
@@ -59,22 +59,22 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                             headers = new string[] { "backendresponseheader" },
                             body = new DiagnosticTemplateRequestResponseBody()
                             {
-                                bytes = 512
+                                Bytes = 512
                             }
                         }
                     },
-                    enableHttpCorrelationHeaders = true
+                    EnableHttpCorrelationHeaders = true
                 }
             };
-            creatorConfig.apis.Add(api);
+            creatorConfig.Apis.Add(api);
 
             // act
             string[] dependsOn = new string[] { "dependsOn" };
             DiagnosticTemplateResource diagnosticTemplateResource = diagnosticTemplateCreator.CreateAPIDiagnosticTemplateResource(api, dependsOn);
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{api.name}/{api.diagnostic.name}')]", diagnosticTemplateResource.name);
-            Assert.Equal(dependsOn, diagnosticTemplateResource.dependsOn);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{api.name}/{api.diagnostic.name}')]", diagnosticTemplateResource.Name);
+            Assert.Equal(dependsOn, diagnosticTemplateResource.DependsOn);
             Assert.Equal(api.diagnostic.alwaysLog, diagnosticTemplateResource.properties.alwaysLog);
             Assert.Equal($"[resourceId('Microsoft.ApiManagement/service/loggers', parameters('ApimServiceName'), '{api.diagnostic.loggerId}')]", diagnosticTemplateResource.properties.loggerId);
             Assert.Equal(api.diagnostic.enableHttpCorrelationHeaders, diagnosticTemplateResource.properties.enableHttpCorrelationHeaders);

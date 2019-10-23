@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
+using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class ProductAPITemplateCreator: ITemplateCreator
+    public class ProductAPITemplateCreator
     {
         private ProductAPITemplateResource CreateProductAPITemplateResource(string productID, string apiName, string[] dependsOn)
         {
             // create products/apis resource with properties
             ProductAPITemplateResource productAPITemplateResource = new ProductAPITemplateResource()
             {
-                name = $"[concat(parameters('ApimServiceName'), '/{productID}/{apiName}')]",
-                Type = ResourceType.ProductAPI,
-                apiVersion = GlobalConstants.APIVersion,
-                properties = new ProductAPITemplateProperties(),
-                dependsOn = dependsOn
+                Name = $"[concat(parameters('ApimServiceName'), '/{productID}/{apiName}')]",
+                Properties = new ProductAPITemplateProperties(),
+                DependsOn = dependsOn
             };
             return productAPITemplateResource;
         }

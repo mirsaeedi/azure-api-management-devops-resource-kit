@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,58 +8,69 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class ProductTemplateCreator : TemplateCreator,ITemplateCreator
     {
-        private PolicyTemplateCreator policyTemplateCreator;
-
-        public ProductTemplateCreator(PolicyTemplateCreator policyTemplateCreator)
+        public ProductTemplateCreator()
         {
-            this.policyTemplateCreator = policyTemplateCreator;
         }
 
-        public Template Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            // create empty template
-            Template productTemplate = CreateEmptyTemplate();
+            var template = EmptyTemplate;
+            template.Parameters.Add(ApiServiceNameParameter.Key,ApiServiceNameParameter.Value);
 
-            // add parameters
-            productTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
-            {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
+            var resources = new List<TemplateResource>();
 
-            List<TemplateResource> resources = new List<TemplateResource>();
-            foreach (ProductConfig product in creatorConfig.products)
+            foreach (ProductConfig product in creatorConfig.Products)
             {
                 // create product resource with properties
                 ProductsTemplateResource productsTemplateResource = new ProductsTemplateResource()
                 {
-                    name = $"[concat(parameters('ApimServiceName'), '/{product.displayName}')]",
-                    Type = ResourceType.Product,
-                    apiVersion = GlobalConstants.APIVersion,
-                    properties = new ProductsTemplateProperties()
+                    Name = $"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]",
+                    Properties = new ProductsTemplateProperties()
                     {
-                        description = product.description,
-                        terms = product.terms,
-                        subscriptionRequired = product.subscriptionRequired,
-                        approvalRequired = product.subscriptionRequired ? product.approvalRequired : null,
-                        subscriptionsLimit = product.subscriptionRequired ? product.subscriptionsLimit : null,
-                        state = product.state,
-                        displayName = product.displayName
+                        Description = product.Description,
+                        Terms = product.Terms,
+                        SubscriptionRequired = product.SubscriptionRequired,
+                        ApprovalRequired = product.SubscriptionRequired ? product.ApprovalRequired : null,
+                        SubscriptionsLimit = product.SubscriptionRequired ? product.SubscriptionsLimit : null,
+                        State = product.State,
+                        DisplayName = product.DisplayName
                     },
-                    dependsOn = new string[] { }
+                    DependsOn = new string[] { }
                 };
+
                 resources.Add(productsTemplateResource);
 
                 // create product policy resource that depends on the product, if provided
-                if (product.policy != null)
+                if (product.Policy != null)
                 {
-                    string[] dependsOn = new string[] { $"[resourceId('Microsoft.ApiManagement/service/products', parameters('ApimServiceName'), '{product.displayName}')]" };
-                    PolicyTemplateResource productPolicy = this.policyTemplateCreator.CreateProductPolicyTemplateResource(product, dependsOn);
+                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.DisplayName}')]" };
+                    PolicyTemplateResource productPolicy = CreateProductPolicyTemplateResource(product, dependsOn);
                     resources.Add(productPolicy);
                 }
             }
 
-            productTemplate.resources = resources.ToArray();
-            return productTemplate;
+            template.resources = resources.ToArray();
+            return await Task.FromResult(template);
+        }
+
+        public PolicyTemplateResource CreateProductPolicyTemplateResource(ProductConfig product, string[] dependsOn)
+        {
+            var fileReader = new FileReader();
+
+            bool isUrl = Uri.TryCreate(product.Policy, UriKind.Absolute, out var uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            
+            var policyTemplateResource = new PolicyTemplateResource(ResourceType.ProductPolicy)
+            {
+                Name = $"[concat(parameters('ApimServiceName'), '/{product.DisplayName}/policy')]",
+                Properties = new PolicyTemplateProperties()
+                {
+                    Format = isUrl ? "rawxml-link" : "rawxml",
+                    Value = isUrl ? product.Policy : fileReader.RetrieveLocalFileContents(product.Policy)
+                },
+                DependsOn = dependsOn
+            };
+
+            return policyTemplateResource;
         }
     }
 }

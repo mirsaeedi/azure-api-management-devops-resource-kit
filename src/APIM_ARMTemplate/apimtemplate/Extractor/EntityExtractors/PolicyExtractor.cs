@@ -20,7 +20,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             (string azToken, string azSubId) = await auth.GetAccessToken();
 
             string requestUrl = string.Format("{0}/subscriptions/{1}/resourceGroups/{2}/providers/Microsoft.ApiManagement/service/{3}/policies/policy?api-version={4}",
-               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.APIVersion);
+               baseUrl, azSubId, ResourceGroupName, ApiManagementName, GlobalConstants.ApiVersion);
 
             return await CallApiManagementAsync(azToken, requestUrl);
         }
@@ -41,20 +41,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                 Console.WriteLine($" - Global policy found for {apimname} API Management service");
                 PolicyTemplateResource globalServicePolicyResource = JsonConvert.DeserializeObject<PolicyTemplateResource>(globalServicePolicy);
                 // REST API will return format property as rawxml and value property as the xml by default
-                globalServicePolicyResource.name = $"[concat(parameters('ApimServiceName'), '/policy')]";
-                globalServicePolicyResource.apiVersion = GlobalConstants.APIVersion;
-                globalServicePolicyResource.scale = null;
+                globalServicePolicyResource.Name = $"[concat(parameters('ApimServiceName'), '/policy')]";
+                globalServicePolicyResource.ApiVersion = GlobalConstants.ApiVersion;
+                globalServicePolicyResource.Scale = null;
 
                 // write policy xml content to file and point to it if policyXMLBaseUrl is provided
                 if (policyXMLBaseUrl != null)
                 {
-                    string policyXMLContent = globalServicePolicyResource.properties.value;
+                    string policyXMLContent = globalServicePolicyResource.Properties.Value;
                     string policyFolder = String.Concat(fileFolder, $@"/policies");
                     string globalServicePolicyFileName = $@"/globalServicePolicy.xml";
                     this.fileWriter.CreateFolderIfNotExists(policyFolder);
                     this.fileWriter.WriteXMLToFile(policyXMLContent, String.Concat(policyFolder, globalServicePolicyFileName));
-                    globalServicePolicyResource.properties.format = "rawxml-link";
-                    globalServicePolicyResource.properties.value = $"[concat(parameters('PolicyXMLBaseUrl'), '{globalServicePolicyFileName}')]";
+                    globalServicePolicyResource.Properties.Format = "rawxml-link";
+                    globalServicePolicyResource.Properties.Value = $"[concat(parameters('PolicyXMLBaseUrl'), '{globalServicePolicyFileName}')]";
                 }
 
                 templateResources.Add(globalServicePolicyResource);

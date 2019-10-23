@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,34 +7,26 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class BackendTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public Template Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            // create empty template
-            Template backendTemplate = CreateEmptyTemplate();
+            var template = EmptyTemplate;
+            template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
-            // add parameters
-            backendTemplate.parameters = new Dictionary<string, TemplateParameterProperties>
-            {
-                { "ApimServiceName", new TemplateParameterProperties(){ type = "string" } }
-            };
+            var resources = new List<TemplateResource>();
 
-            List<TemplateResource> resources = new List<TemplateResource>();
-            foreach (BackendTemplateProperties backendTemplatePropeties in creatorConfig.backends)
+            foreach (var backendTemplatePropeties in creatorConfig.Backends)
             {
-                // create backend resource with properties
-                BackendTemplateResource backendTemplateResource = new BackendTemplateResource()
+                var backendTemplateResource = new BackendTemplateResource()
                 {
-                    name = $"[concat(parameters('ApimServiceName'), '/{backendTemplatePropeties.title}')]",
-                    Type = ResourceType.Backend,
-                    apiVersion = GlobalConstants.APIVersion,
-                    properties = backendTemplatePropeties,
-                    dependsOn = new string[] { }
+                    Name = $"[concat(parameters('ApimServiceName'), '/{backendTemplatePropeties.Title}')]",
+                    Properties = backendTemplatePropeties,
+                    DependsOn = new string[] { }
                 };
                 resources.Add(backendTemplateResource);
             }
 
-            backendTemplate.resources = resources.ToArray();
-            return backendTemplate;
+            template.resources = resources.ToArray();
+            return await Task.FromResult(template);
         }
     }
 }

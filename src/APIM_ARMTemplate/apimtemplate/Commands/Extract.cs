@@ -63,7 +63,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
                     // initialize file helper classes
                     FileWriter fileWriter = new FileWriter();
                     FileNameGenerator fileNameGenerator = new FileNameGenerator();
-                    FileNames fileNames = fileNameGenerator.GenerateFileNames(sourceApim);
+                    FileNames fileNames = fileNameGenerator.GenerateFileNames();
 
                     // initialize entity extractor classes
                     APIExtractor apiExtractor = new APIExtractor(fileWriter);

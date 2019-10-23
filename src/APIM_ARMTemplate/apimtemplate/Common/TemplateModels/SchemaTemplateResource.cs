@@ -1,30 +1,30 @@
 ﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class SchemaTemplateResource : APITemplateSubResource
+    public class SchemaTemplateResource : TemplateResource<SchemaTemplateProperties>
     {
-        public SchemaTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.ApiSchema;
     }
 
     public class SchemaTemplateProperties
     {
-        public string contentType { get; set; }
-        public SchemaTemplateDocument document { get; set; }
+        public string ContentType { get; set; }
+        public SchemaTemplateDocument Document { get; set; }
     }
 
     public class SchemaTemplateDocument
     {
-        public string value { get; set; }
+        public string Value { get; set; }
     }
 
-    public class RESTReturnedSchemaTemplate : APITemplateSubResource
+    public class RESTReturnedSchemaTemplate : TemplateResource<RESTReturnedSchemaTemplateProperties>
     {
-        public RESTReturnedSchemaTemplateProperties properties { get; set; }
+        public override string Type => ResourceType.ApiSchema;
     }
 
     public class RESTReturnedSchemaTemplateProperties
     {
-        public string contentType { get; set; }
-        public object document { get; set; }
+        public string ContentType { get; set; }
+        public object Document { get; set; }
     }
 }
