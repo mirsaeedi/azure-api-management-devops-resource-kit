@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/backends",
+      "properties": {
+        "title": "ValidationBackend",
+        "description": "ValidationBackend",
+        "credentials": {
+          "certificate": [
+            "15044E02B20B6D1341220EC7AC3B2360EBBA7A7D"
+          ]
+        },
+        "url": "https://ehsan-validation.com:4436/",
+        "protocol": "http"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ValidationBackend')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/backends",
+      "properties": {
+        "title": "SubmissionBackend",
+        "description": "SubmissionBackend",
+        "credentials": {
+          "certificate": [
+            "15044E02B20B6D1341220EC7AC3B2360EBBA7A7D"
+          ]
+        },
+        "url": "https://ehsan-submission.com:4436/",
+        "protocol": "http"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/SubmissionBackend')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/backends",
+      "properties": {
+        "title": "StatusBackend",
+        "description": "StatusBackend",
+        "credentials": {
+          "certificate": [
+            "15044E02B20B6D1341220EC7AC3B2360EBBA7A7D"
+          ]
+        },
+        "url": "https://ehsan-status.com:4436/",
+        "protocol": "http"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/StatusBackend')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    }
+  ]
+}

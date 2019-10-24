@@ -8,15 +8,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         {
             return new FileNames()
             {
-                apiVersionSets = $@"/apiVersionSets.template.json",
-                authorizationServers = $@"/authorizationServers.template.json",
-                backends = $@"/backends.template.json",
-                globalServicePolicy = $@"/globalServicePolicy.template.json",
-                loggers = $@"/loggers.template.json",
-                namedValues = $@"/namedValues.template.json",
-                products = $@"/products.template.json",
-                parameters = $@"/parameters.json",
-                linkedMaster = $@"/-master.template.json"
+                apiVersionSets = $@"apiVersionSets.template.json",
+                authorizationServers = $@"authorizationServers.template.json",
+                backends = $@"backends.template.json",
+                globalServicePolicy = $@"globalServicePolicy.template.json",
+                loggers = $@"loggers.template.json",
+                namedValues = $@"namedValues.template.json",
+                products = $@"products.template.json",
+                parameters = $@"parameters.json",
+                linkedMaster = $@"master.template.json"
             };
         }
 
@@ -26,11 +26,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             string sanitizedAPIName = GenerateOriginalAPIName(apiName);
             if (isSplitAPI == true)
             {
-                return isInitialAPI == true ? $@"/{apimServiceName}-{sanitizedAPIName}-initial.api.template.json" : $@"/{apimServiceName}-{sanitizedAPIName}-subsequent.api.template.json";
+                return isInitialAPI == true ? $@"{apimServiceName}-{sanitizedAPIName}-initial.api.template.json" : $@"{apimServiceName}-{sanitizedAPIName}-subsequent.api.template.json";
             }
             else
             {
-                return $@"/{apimServiceName}-{sanitizedAPIName}.api.template.json";
+                return $@"{apimServiceName}-{sanitizedAPIName}.api.template.json";
             }
         }
 

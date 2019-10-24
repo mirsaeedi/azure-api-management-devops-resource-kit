@@ -31,6 +31,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 }
 
                 var armTemplateCreator = new ArmTemplateCreator(creatorConfig);
+                await armTemplateCreator.Create();
             });
         }
 

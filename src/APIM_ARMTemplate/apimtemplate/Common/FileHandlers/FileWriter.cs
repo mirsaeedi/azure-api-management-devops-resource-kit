@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
+using Newtonsoft.Json.Serialization;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
@@ -13,8 +14,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
                             Formatting.Indented,
                             new JsonSerializerSettings
                             {
+                                ContractResolver = new DefaultContractResolver
+                                {
+                                    NamingStrategy = new CamelCaseNamingStrategy()
+                                },
                                 NullValueHandling = NullValueHandling.Ignore
+
                             });
+
             File.WriteAllText(location, jsonString);
         }
 

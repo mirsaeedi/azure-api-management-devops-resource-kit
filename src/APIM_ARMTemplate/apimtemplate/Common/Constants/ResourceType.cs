@@ -3,8 +3,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public static class ResourceType
     {
+        public const string Certificate = "Microsoft.ApiManagement/service/certificates";
         public const string Api = "Microsoft.ApiManagement/service/apis";
-        public const string ApiVersionSet = "Microsoft.ApiManagement/service/api-version-sets";
+        public const string ApiVersionSet = "Microsoft.ApiManagement/service/apiVersionSets";
         public const string ApiDiagnostic = "Microsoft.ApiManagement/service/apis/diagnostics";
         public const string ApiOperation = "Microsoft.ApiManagement/service/apis/operations";
         public const string ApiOperationPolicy = "Microsoft.ApiManagement/service/apis/operations/policies";

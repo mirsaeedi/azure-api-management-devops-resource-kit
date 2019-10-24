@@ -45,15 +45,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
                 using (StreamReader reader = new StreamReader(configFileLocation))
                 {
                     // deserialize provided file contents into yaml
-                    Deserializer deserializer = new Deserializer();
+                    var deserializer = new Deserializer();
                     object deserializedYaml = deserializer.Deserialize(reader);
-                    JsonSerializer jsonSerializer = new JsonSerializer();
-                    StringWriter writer = new StringWriter();
+                    var jsonSerializer = new JsonSerializer();
+                    var writer = new StringWriter();
                     // serialize json from yaml object
                     jsonSerializer.Serialize(writer, deserializedYaml);
                     string jsonText = writer.ToString();
                     // deserialize CreatorConfig from json string
-                    CreatorConfig yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
+                    var yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
                     return yamlObject;
                 }
             }

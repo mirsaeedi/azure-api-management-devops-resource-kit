@@ -13,11 +13,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
     {
         public string description { get; set; }
         public APITemplateAuthenticationSettings AuthenticationSettings { get; set; }
-        public APITemplateSubscriptionKeyParameterNames subscriptionKeyParameterNames { get; set; }
+        public APiTemplateSubscriptionKeyParameterNames subscriptionKeyParameterNames { get; set; }
         public string type { get; set; }
         public string apiRevision { get; set; }
         public string apiVersion { get; set; }
-        public Nullable<bool> isCurrent { get; set; }
+        public bool? isCurrent { get; set; }
         public string apiRevisionDescription { get; set; }
         public string apiVersionDescription { get; set; }
         public string ApiVersionSetId { get; set; }
@@ -41,7 +41,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public bool subscriptionKeyRequired { get; set; }
     }
 
-    public class APITemplateSubscriptionKeyParameterNames
+    public class APiTemplateSubscriptionKeyParameterNames
     {
         public string header { get; set; }
         public string query { get; set; }

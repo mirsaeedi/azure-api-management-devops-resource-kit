@@ -36,6 +36,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     {
         // used to build displayName and resource name from APITemplateResource schema
         public string name { get; set; }
+        public string displayName { get; set; }
         public string description { get; set; }
         public string serviceUrl { get; set; }
         // used to build type and apiType from APITemplateResource schema
@@ -58,7 +59,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public string products { get; set; }
         public string protocols { get; set; }
         public DiagnosticConfig diagnostic { get; set; }
-        // does not currently include subscriptionKeyParameterNames, sourceApiId, and wsdlSelector from APITemplateResource schema
+        public APiTemplateSubscriptionKeyParameterNames subscriptionKeyParameterNames { get; set; }
+        // does not currently include  sourceApiId, and wsdlSelector from APITemplateResource schema
 
         public async Task<bool> IsDependOnLogger(FileReader fileReader)
         {

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "ValidationApiVersionSet",
+        "description": "Contains the Validation APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ValidationApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "SubmissionApiVersionSet",
+        "description": "Contains the Submission APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/SubmissionApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "StatusApiVersionSet",
+        "description": "Contains the Status APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/StatusApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    }
+  ]
+}
