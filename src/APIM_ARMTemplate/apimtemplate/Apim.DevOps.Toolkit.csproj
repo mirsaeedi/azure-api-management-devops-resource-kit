@@ -14,8 +14,13 @@
     <Description>Apim DevOps Toolkit helps with the CI/CD.</Description>
     <RepositoryUrl>https://github.com/mirsaeedi/azure-api-management-devops-resource-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>apim, devops, cicd, azure</PackageTags>
+    <PackageTags>apim; devops; cicd; toolkit; azure</PackageTags>
+    <PackageLicenseUrl>https://github.com/mirsaeedi/RelationalGit</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/mirsaeedi/RelationalGit</PackageLicenseUrl>
+
     <PackageProjectUrl>https://github.com/mirsaeedi/azure-api-management-devops-resource-kit</PackageProjectUrl>
+    <AssemblyName>Apim.DevOps.Toolkit</AssemblyName>
+    <RootNamespace>Apim.DevOps.Toolkit</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

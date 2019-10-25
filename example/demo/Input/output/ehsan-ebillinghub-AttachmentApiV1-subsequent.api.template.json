@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "properties": {
+        "subscriptionKeyParameterNames": {
+          "header": "ProviderKey",
+          "query": "ProviderKey"
+        },
+        "apiRevision": "1",
+        "apiVersion": "v1",
+        "isCurrent": true,
+        "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), 'AttachmentApiVersionSet')]",
+        "subscriptionRequired": true,
+        "displayName": "AttachmentApiV1",
+        "path": "attachments",
+        "protocols": [
+          "http",
+          "https"
+        ]
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/AttachmentApiV1')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/policies",
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <base />\r\n\t\t<set-backend-service backend-id=\"AttachmentBackend\" />\r\n        <set-variable name=\"OperationId\" value=\"@(System.Guid.NewGuid().ToString())\" />\r\n        <set-header name=\"OperationId\" exists-action=\"override\">\r\n            <value>@(((string)context.Variables[\"OperationId\"]))</value>\r\n        </set-header>\r\n        <choose>\r\n            <when condition=\"@(!string.IsNullOrWhiteSpace(context.User.Note))\">\r\n                <set-header name=\"Provider\" exists-action=\"override\">\r\n                    <value>@(context.User.Note)</value>\r\n                </set-header>\r\n            </when>\r\n        </choose>\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n        <choose>\r\n            <when condition=\"@(context.Variables.ContainsKey(\"OperationId\"))\">\r\n                <set-header name=\"OperationId\" exists-action=\"override\">\r\n                    <value>@(((string)context.Variables[\"OperationId\"]))</value>\r\n                </set-header>\r\n            </when>\r\n        </choose>\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/AttachmentApiV1/policy')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'AttachmentApiV1')]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/BusinessPkg1/AttachmentApiV1')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'AttachmentApiV1')]"
+      ]
+    }
+  ]
+}

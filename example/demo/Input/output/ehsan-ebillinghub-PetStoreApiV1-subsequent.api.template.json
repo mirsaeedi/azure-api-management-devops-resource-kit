@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "properties": {
+        "apiRevision": "1",
+        "apiVersion": "v1",
+        "isCurrent": true,
+        "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), 'PetStoreApiVersionSet')]",
+        "subscriptionRequired": true,
+        "displayName": "PetStoreApiV1",
+        "path": "petstore",
+        "protocols": [
+          "http",
+          "https"
+        ]
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/PetStoreApiV1')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apis/policies",
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <base />\r\n\t\t<set-backend-service backend-id=\"PetStoreBackend\" />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n        <choose>\r\n            <when condition=\"@(context.Variables.ContainsKey(\"OperationId\"))\">\r\n                <set-header name=\"OperationId\" exists-action=\"override\">\r\n                    <value>@(((string)context.Variables[\"OperationId\"]))</value>\r\n                </set-header>\r\n            </when>\r\n        </choose>\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/PetStoreApiV1/policy')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'PetStoreApiV1')]"
+      ]
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/BusinessPkg1/PetStoreApiV1')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'PetStoreApiV1')]"
+      ]
+    }
+  ]
+}

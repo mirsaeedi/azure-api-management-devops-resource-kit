@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ApiManagement/service/apis",
+      "properties": {
+        "path": "petstore",
+        "value": "https://petstore.swagger.io/v2/swagger.json",
+        "format": "swagger-link-json"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/PetStoreApiV1')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    }
+  ]
+}

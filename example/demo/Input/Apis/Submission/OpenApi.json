@@ -1,0 +1,594 @@
+{
+  "x-generator": "NSwag v13.1.3.0 (NJsonSchema v10.0.27.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My API",
+    "description": "API functionalities.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/SubmissionRequests/{submissionId}/invoices/{id}/attachments": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Handles attachment association request.",
+        "operationId": "SubmissionAttachments_Post",
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "description": "Submission request identifier.",
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Invoice identifier.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "description": "Invoice attachment association details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AssociateSubmissionAttachmentRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "201": {
+            "description": "The request was created successfully."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The request could not be processed because of conflict in the current state of the resource.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request could not be processed because of conflict in the current state of the resource."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    },
+    "/api/v1/SubmissionRequests": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Create a submission request.",
+        "operationId": "SubmissionRequests_Post",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "submissionRequest",
+          "description": "The CreateSubmissionRequestRequest.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CreateSubmissionRequestRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The request was created successfully."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Provided Accept HTTP Header is not supported.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Provided Accept HTTP Header is not supported."
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Too large payload size.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Too large payload size."
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "The request entity has a media type which is not supported.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request entity has a media type which is not supported."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    },
+    "/api/v1/SubmissionRequests/{submissionId}/invoices/{id}/ready": {
+      "put": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Commits particular submission result to vendor.",
+        "operationId": "SubmissionRequests_CommitInvoice",
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "description": "Submission request Id.",
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Invoice identifier.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The request was successfully processed."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The request could not be processed because of conflict in the current state of the resource.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request could not be processed because of conflict in the current state of the resource."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssociateSubmissionAttachmentRequest": {
+        "type": "object",
+        "description": "The invoice attachment post request.",
+        "additionalProperties": false,
+        "required": [
+          "AttachmentId"
+        ],
+        "properties": {
+          "AttachmentId": {
+            "type": "string",
+            "description": "Gets or sets an id returned in response from Attachment API POST request.",
+            "format": "guid",
+            "minLength": 1
+          },
+          "AssociatedElementType": {
+            "description": "Gets or sets a type of invoice’s node that the attachment is related to.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AssociatedElementType"
+              }
+            ]
+          },
+          "AssociatedElementId": {
+            "type": "string",
+            "description": "Gets or sets an identifier of invoice’s node that the attachment is related to.",
+            "nullable": true
+          }
+        }
+      },
+      "AssociatedElementType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Invoice",
+          "Fee",
+          "Expense"
+        ],
+        "enum": [
+          "Invoice",
+          "Fee",
+          "Expense"
+        ]
+      },
+      "CreateSubmissionRequestRequest": {
+        "type": "object",
+        "description": "The submission request model.",
+        "additionalProperties": false,
+        "properties": {
+          "InvoicePayload": {
+            "type": "string",
+            "description": "Gets or sets the invoice payload",
+            "nullable": true
+          },
+          "InvoiceType": {
+            "description": "Gets or sets type of the submitting invoice.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InvoiceType"
+              }
+            ]
+          },
+          "InvoiceState": {
+            "description": "Gets or sets type of the submitting invoice state.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InvoiceState"
+              }
+            ]
+          }
+        }
+      },
+      "InvoiceType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "UBF",
+          "MultipleInvoiceUBF",
+          "TimeEntryInvoice",
+          "ESF",
+          "LEDES",
+          "TimeEntryESF",
+          "Ledes98B",
+          "Ledes98BI",
+          "Ledes98BIV2",
+          "Ledes2000",
+          "LedesXml20",
+          "LedesXml21"
+        ],
+        "enum": [
+          "UBF",
+          "MultipleInvoiceUBF",
+          "TimeEntryInvoice",
+          "ESF",
+          "LEDES",
+          "TimeEntryESF",
+          "Ledes98B",
+          "Ledes98BI",
+          "Ledes98BIV2",
+          "Ledes2000",
+          "LedesXml20",
+          "LedesXml21"
+        ]
+      },
+      "InvoiceState": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Proforma",
+          "FinalInvoice"
+        ],
+        "enum": [
+          "Proforma",
+          "FinalInvoice"
+        ]
+      }
+    }
+  }
+}

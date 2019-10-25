@@ -43,6 +43,18 @@
       ]
     },
     {
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n        <set-header name=\"Location\" exists-action=\"override\">\r\n            <value>@{\r\n\t\t\t\tvar locationHeader = context.Response.Headers.GetValueOrDefault(\"Location\", \"\");\r\n\t\t\t\tif(!String.IsNullOrWhiteSpace(locationHeader)){\r\n\t\t\t\tvar location = new Uri(locationHeader);\r\n\t\t\t\treturn    string.Format(\"{0}://{1}{2}{3}\",context.Request.OriginalUrl.Scheme,\r\n\t\t\t\tcontext.Request.OriginalUrl.Host,\r\n\t\t\t\tcontext.Api.Path,\r\n\t\t\t\tlocation.PathAndQuery);\r\n\t\t\t\t}\r\n\t\t\t\telse {\r\n\t\t\t\treturn  \"\"\t;\r\n\t\t\t\t}\r\n\t\t\t\r\n\t\t\t}</value>\r\n        </set-header>\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/SubmissionApiV1/SubmissionRequests_Post/policy')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'SubmissionApiV1')]"
+      ]
+    },
+    {
       "type": "Microsoft.ApiManagement/service/products/apis",
       "properties": {},
       "name": "[concat(parameters('ApimServiceName'), '/BusinessPkg1/SubmissionApiV1')]",

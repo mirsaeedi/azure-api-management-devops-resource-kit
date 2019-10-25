@@ -1,0 +1,374 @@
+{
+  "x-generator": "NSwag v13.1.3.0 (NJsonSchema v10.0.27.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My API",
+    "description": "API functionalities.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/email/{id}": {
+      "get": {
+        "tags": [
+          "Email"
+        ],
+        "summary": "Get email by id.",
+        "operationId": "Email_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the email.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful. See the response body for details."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          },
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    },
+    "/api/v1/search": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "summary": "Get emails by search request filters.",
+        "operationId": "Get emails by search request filters.",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "description": "An instance of a EmailSearchRequest model.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/EmailSearchRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful. See the response body for details."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          },
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EmailSearchRequest": {
+        "type": "object",
+        "description": "The request model for email search.",
+        "additionalProperties": false,
+        "properties": {
+          "StartDate": {
+            "type": "string",
+            "description": "Gets or sets a start date edge after which the email was received.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndDate": {
+            "type": "string",
+            "description": "Gets or sets an end date edge before which the email was received.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Subject": {
+            "type": "string",
+            "description": "Gets or sets the email's subject.",
+            "nullable": true
+          },
+          "From": {
+            "type": "string",
+            "description": "Gets or sets a value that indicates who the email was received from.",
+            "nullable": true
+          },
+          "InvoiceId": {
+            "type": "string",
+            "description": "Gets or sets the producer's invoice identifier to which the email belongs.",
+            "nullable": true
+          }
+        }
+      }
+    }
+  }
+}

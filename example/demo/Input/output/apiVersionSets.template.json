@@ -10,11 +10,77 @@
     {
       "type": "Microsoft.ApiManagement/service/apiVersionSets",
       "properties": {
-        "displayName": "ValidationApiVersionSet",
-        "description": "Contains the Validation APIs.",
+        "displayName": "PetStoreApiVersionSet",
+        "description": "Contains the PetStore APIs.",
         "versioningScheme": "Segment"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/ValidationApiVersionSet')]",
+      "name": "[concat(parameters('ApimServiceName'), '/PetStoreApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "AttachmentApiVersionSet",
+        "description": "Contains the Attachment APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/AttachmentApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "ClientApiVersionSet",
+        "description": "Contains the Client APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ClientApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "EmailApiVersionSet",
+        "description": "Contains the Email APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/EmailApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "InvoiceViewerApiVersionSet",
+        "description": "Contains the InvoiceViewer APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/InvoiceViewerApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "ProducerDataApiVersionSet",
+        "description": "Contains the ProducerData APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ProducerDataApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "StatusApiVersionSet",
+        "description": "Contains the Status APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/StatusApiVersionSet')]",
       "apiVersion": "2019-01-01",
       "dependsOn": []
     },
@@ -32,11 +98,22 @@
     {
       "type": "Microsoft.ApiManagement/service/apiVersionSets",
       "properties": {
-        "displayName": "StatusApiVersionSet",
-        "description": "Contains the Status APIs.",
+        "displayName": "ValidationApiVersionSet",
+        "description": "Contains the Validation APIs.",
         "versioningScheme": "Segment"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/StatusApiVersionSet')]",
+      "name": "[concat(parameters('ApimServiceName'), '/ValidationApiVersionSet')]",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "properties": {
+        "displayName": "VendorApiVersionSet",
+        "description": "Contains the Vendor APIs.",
+        "versioningScheme": "Segment"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/VendorApiVersionSet')]",
       "apiVersion": "2019-01-01",
       "dependsOn": []
     }

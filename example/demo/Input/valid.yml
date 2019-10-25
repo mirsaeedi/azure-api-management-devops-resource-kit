@@ -7,27 +7,80 @@ certificates:
       password: dddd #password for the Certificate
 
 apiVersionSets:
-    - id: ValidationApiVersionSet
-      displayName: ValidationApiVersionSet
-      description: Contains the Validation APIs.
+      
+    - id: PetStoreApiVersionSet
+      displayName: PetStoreApiVersionSet
+      description: Contains the PetStore APIs.
       versioningScheme: Segment
-    - id: SubmissionApiVersionSet
-      displayName: SubmissionApiVersionSet
-      description: Contains the Submission APIs.
+      
+    - id: AttachmentApiVersionSet
+      displayName: AttachmentApiVersionSet
+      description: Contains the Attachment APIs.
       versioningScheme: Segment
+      
+    - id: ClientApiVersionSet
+      displayName: ClientApiVersionSet
+      description: Contains the Client APIs.
+      versioningScheme: Segment
+      
+    - id: EmailApiVersionSet
+      displayName: EmailApiVersionSet
+      description: Contains the Email APIs.
+      versioningScheme: Segment
+      
+    - id: InvoiceViewerApiVersionSet
+      displayName: InvoiceViewerApiVersionSet
+      description: Contains the InvoiceViewer APIs.
+      versioningScheme: Segment
+            
+    - id: ProducerDataApiVersionSet
+      displayName: ProducerDataApiVersionSet
+      description: Contains the ProducerData APIs.
+      versioningScheme: Segment
+      
     - id: StatusApiVersionSet
       displayName: StatusApiVersionSet
       description: Contains the Status APIs.
       versioningScheme: Segment
       
+    - id: SubmissionApiVersionSet
+      displayName: SubmissionApiVersionSet
+      description: Contains the Submission APIs.
+      versioningScheme: Segment
+      
+    - id: ValidationApiVersionSet
+      displayName: ValidationApiVersionSet
+      description: Contains the Validation APIs.
+      versioningScheme: Segment
+      
+    - id: VendorApiVersionSet
+      displayName: VendorApiVersionSet
+      description: Contains the Vendor APIs.
+      versioningScheme: Segment
+      
+      
 apis:
-    - name: ValidationApiV1
-      displayName: ValidationApiV1   
-      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ValidationOpenApi.json    # Required, can be url or local file
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ValidationApiPolicy.xml   # Optional, can be url or local file
-      suffix: validation
+
+    - name: PetStoreApiV1
+      displayName: PetStoreApiV1   
+      openApiSpec: https://petstore.swagger.io/v2/swagger.json
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\PetStore\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: petstore
       apiVersion: v1
-      apiVersionSetId: ValidationApiVersionSet
+      apiVersionSetId: PetStoreApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+
+    - name: AttachmentApiV1
+      displayName: AttachmentApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Attachment\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Attachment\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: attachments
+      apiVersion: v1
+      apiVersionSetId: AttachmentApiVersionSet
       apiRevision: 1
       products: BusinessPkg1
       protocols: http, https
@@ -35,15 +88,15 @@ apis:
       isCurrent: true
       subscriptionKeyParameterNames: 
          header: ProviderKey
-         query: ProviderKey         
+         query: ProviderKey  
          
-    - name: SubmissionApiV1   
-      displayName: SubmissionApiV1
-      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\SubmissionOpenApi.json    # Required, can be url or local file
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\SubmissionApiPolicy.xml  # Optional, can be url or local file
-      suffix: submission
+    - name: ClientApiV1
+      displayName: ClientApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Client\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Client\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: clients
       apiVersion: v1
-      apiVersionSetId: SubmissionApiVersionSet
+      apiVersionSetId: ClientApiVersionSet
       apiRevision: 1
       products: BusinessPkg1
       protocols: http, https
@@ -53,10 +106,62 @@ apis:
          header: ProviderKey
          query: ProviderKey
          
+    - name: EmailApiV1
+      displayName: EmailApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Email\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Email\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: emails
+      apiVersion: v1
+      apiVersionSetId: EmailApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey      
+         
+    - name: InvoiceViewerApiV1
+      displayName: InvoiceViewerApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\InvoiceViewer\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\InvoiceViewer\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: invoice-viewer
+      apiVersion: v1
+      apiVersionSetId: InvoiceViewerApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+      operations:
+          Ledes_Post: 
+             policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Common\LocationResponsePolicy.xml 
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey
+               
+         
+    - name: ProducerDataApiV1
+      displayName: ProducerDataApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\ProducerData\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\ProducerData\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: producer
+      apiVersion: v1
+      apiVersionSetId: ProducerDataApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true 
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey
+         
     - name: StatusApiV1
       displayName: StatusApiV1
-      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\StatusOpenApi.json    # Required, can be url or local file
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\StatusApiPolicy.xml   # Optional, can be url or local file
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Status\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Status\ApiPolicy.xml   # Optional, can be url or local file
       suffix: status
       apiVersion: v1
       apiVersionSetId: StatusApiVersionSet
@@ -67,7 +172,65 @@ apis:
       isCurrent: true
       subscriptionKeyParameterNames: 
          header: ProviderKey
+         query: ProviderKey         
+         
+    - name: SubmissionApiV1   
+      displayName: SubmissionApiV1
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Submission\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Submission\ApiPolicy.xml  # Optional, can be url or local file
+      suffix: submission
+      apiVersion: v1
+      apiVersionSetId: SubmissionApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+      operations:
+          SubmissionRequests_Post: 
+             policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Common\LocationResponsePolicy.xml 
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
          query: ProviderKey
+         
+    - name: ValidationApiV1
+      displayName: ValidationApiV1   
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Validation\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Validation\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: validation
+      apiVersion: v1
+      apiVersionSetId: ValidationApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg1
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+      operations:
+          ValidationRequest_Post: #TODO
+             policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Common\LocationResponsePolicy.xml
+          ValidationRequest_Get: #TODO
+             policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Validation\RetrieveValidationRequestApiPolicy.xml
+          ValidatedInvoiceUri_Get:
+             policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Validation\RetrieveValidatedInvoiceApiPolicy.xml
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey      
+         
+    - name: VendorApiV1
+      displayName: StatusApiV1
+      openApiSpec: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Vendor\OpenApi.json    # Required, can be url or local file
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\Vendor\ApiPolicy.xml   # Optional, can be url or local file
+      suffix: vendors
+      apiVersion: v1
+      apiVersionSetId: VendorApiVersionSet
+      apiRevision: 1
+      products: BusinessPkg2
+      protocols: http, https
+      subscriptionRequired: true
+      isCurrent: true
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey         
          
 products:
     - displayName: AutomationTests
@@ -76,7 +239,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: notPublished
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ProductPolicy.xml
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Products\AutomationTests\policy.xml
       
     - displayName: BusinessPkg1
       description: EBH Business Package 1
@@ -84,7 +247,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: notPublished
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ProductPolicy.xml
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Products\BusinessPkg1\policy.xml
       
     - displayName: BusinessPkg2
       description: EBH Business Package 2
@@ -92,7 +255,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: notPublished
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ProductPolicy.xml 
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Products\BusinessPkg2\policy.xml 
       
     - displayName: BusinessPkg3
       description: EBH Business Package 3
@@ -100,7 +263,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: notPublished
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ProductPolicy.xml  
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Products\BusinessPkg3\policy.xml  
       
     - displayName: SystemMonitoring
       description: Product for system monitoring
@@ -108,16 +271,66 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: notPublished
-      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\ProductPolicy.xml
+      policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Products\SystemMonitoring\policy.xml
 
 backends:
-    - title: ValidationBackend
-      description: ValidationBackend
-      url: https://ehsan-validation.com:4436/
+
+    - title: PetStoreBackend
+      description: PetStoreBackend
+      url: https://petstore.swagger.io/v2
       protocol: http
       credentials:
         certificate:
             - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+
+    - title: AttachmentBackend
+      description: AttachmentBackend
+      url: https://ehsan-attachment.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: ClientBackend
+      description: ClientBackend
+      url: https://ehsan-client.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: EmailBackend
+      description: EmailBackend
+      url: https://ehsan-email.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: InvoiceViewerBackend
+      description: InvoiceViewerBackend
+      url: https://ehsan-invoice-viewer.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: ProducerDataBackend
+      description: ProducerDataBackend
+      url: https://ehsan-producer-data.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: StatusBackend
+      description: StatusBackend
+      url: https://ehsan-status.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
     - title: SubmissionBackend
       description: SubmissionBackend
       url: https://ehsan-submission.com:4436/
@@ -125,9 +338,18 @@ backends:
       credentials:
         certificate:
             - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
-    - title: StatusBackend
-      description: StatusBackend
-      url: https://ehsan-status.com:4436/
+            
+    - title: ValidationBackend
+      description: ValidationBackend
+      url: https://ehsan-validation.com:4436/
+      protocol: http
+      credentials:
+        certificate:
+            - 15044E02B20B6D1341220EC7AC3B2360EBBA7A7D
+            
+    - title: VendorBackend
+      description: VendorBackend
+      url: https://ehsan-vendor.com:4436/
       protocol: http
       credentials:
         certificate:

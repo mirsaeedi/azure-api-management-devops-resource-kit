@@ -27,8 +27,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             OpenAPISpecReader openAPISpecReader = new OpenAPISpecReader();
 
             // act
-            bool shouldOutputVersionTwo = await openAPISpecReader.isJSONOpenAPISpecVersionThreeAsync(String.Concat(this.openAPISpecFolder, "swaggerPetstore.json"));
-            bool shouldOutputVersionThree = await openAPISpecReader.isJSONOpenAPISpecVersionThreeAsync(String.Concat(this.openAPISpecFolder, "swaggerPetstorev3.json"));
+            bool shouldOutputVersionTwo = await openAPISpecReader.GetOpenApiVersion(String.Concat(this.openAPISpecFolder, "swaggerPetstore.json"));
+            bool shouldOutputVersionThree = await openAPISpecReader.GetOpenApiVersion(String.Concat(this.openAPISpecFolder, "swaggerPetstorev3.json"));
 
             // assert
             Assert.False(shouldOutputVersionTwo);

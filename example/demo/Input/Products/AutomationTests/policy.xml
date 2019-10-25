@@ -1,4 +1,4 @@
-﻿<policies>
+<policies>
     <inbound>
         <base />
         <set-header name="Provider" exists-action="override">

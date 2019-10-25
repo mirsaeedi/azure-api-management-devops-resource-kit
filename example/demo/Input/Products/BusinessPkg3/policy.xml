@@ -1,0 +1,17 @@
+<policies>
+    <inbound>
+        <base />
+        <set-header name="Provider" exists-action="override">
+            <value>EBH-BusinessPkg1</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

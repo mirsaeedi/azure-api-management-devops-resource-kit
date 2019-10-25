@@ -1,0 +1,445 @@
+{
+  "x-generator": "NSwag v13.1.3.0 (NJsonSchema v10.0.27.0 (Newtonsoft.Json v12.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My API",
+    "description": "API functionalities.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/ValidatedInvoice/{id}": {
+      "get": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Gets the URI for validated invoice by Id.",
+        "operationId": "ValidatedInvoiceUri_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The invoice Id.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/xml",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful. See the response body for details."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    },
+    "/api/v1/validationrequest/{id}": {
+      "get": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Gets the validation request status.",
+        "description": "Get Validation Results",
+        "operationId": "ValidationRequest_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Identifier of the validation request.",
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful. See the response body for details."
+          },
+          "202": {
+            "description": "The request has been accepted for processing, but the processing has not been completed."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource could not be found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    },
+    "/api/v1/validationrequest": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Submit new Validation request.",
+        "description": "Submit new Validation request",
+        "operationId": "ValidationRequest_Post",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Specify certain media types which are acceptable for the response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json",
+                "*/*"
+              ]
+            }
+          },
+          {
+            "name": "ProducerId",
+            "in": "header",
+            "required": true,
+            "description": "The Id of the producer submitting the request.  The ProducerId in the header must match the ProducerId passed in the original request body.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Provider",
+            "in": "header",
+            "required": true,
+            "description": "The access token provided by your service provider.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          },
+          {
+            "name": "Username",
+            "in": "header",
+            "description": "The username of the user submitting the request.  This value is used for reporting purposes only.  Usernames are defined by the caller.",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "validationRequest",
+          "description": "The CreateValidationRequestRequest object.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CreateValidationRequestRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The request was created successfully."
+          },
+          "400": {
+            "description": "The request was incorrectly formatted of missing required headers or parameters.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The request was incorrectly formatted of missing required headers or parameters.",
+                  "ModelState": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The provider key is not authorized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "StatusCode": 401,
+                  "Message": "The provider key is not authorized."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requestor is not authorized to view the response.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "The requestor is not authorized to view the response."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Message": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "192.175.0.1"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateValidationRequestRequest": {
+        "type": "object",
+        "description": "The validation request POST model.",
+        "additionalProperties": false,
+        "properties": {
+          "InvoicePayload": {
+            "type": "string",
+            "description": "Gets or sets the Invoice Payload.",
+            "nullable": true
+          },
+          "InvoiceType": {
+            "description": "Gets or sets the type of the invoice payload.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/InvoiceType"
+              }
+            ]
+          }
+        }
+      },
+      "InvoiceType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "UBF",
+          "MultipleInvoiceUBF",
+          "TimeEntryInvoice",
+          "ESF",
+          "LEDES",
+          "TimeEntryESF",
+          "Ledes98B",
+          "Ledes98BI",
+          "Ledes98BIV2",
+          "Ledes2000",
+          "LedesXml20",
+          "LedesXml21"
+        ],
+        "enum": [
+          "UBF",
+          "MultipleInvoiceUBF",
+          "TimeEntryInvoice",
+          "ESF",
+          "LEDES",
+          "TimeEntryESF",
+          "Ledes98B",
+          "Ledes98BI",
+          "Ledes98BIV2",
+          "Ledes2000",
+          "LedesXml20",
+          "LedesXml21"
+        ]
+      }
+    }
+  }
+}

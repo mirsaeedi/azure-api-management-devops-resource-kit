@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
+using Apim.DevOps.Toolkit.Extensions;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
@@ -119,51 +120,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             // add Properties depending on whether the template is the initial, subsequent, or unified 
             if (!isSplit || isInitial)
-            {
-                // add open api spec Properties for subsequent and unified templates
-                string format;
-                string value;
-
-                // determine if the open api spec is remote or local, yaml or json
-                Uri uriResult;
-                string fileContents = await this.fileReader.RetrieveFileContentsAsync(api.openApiSpec);
-                bool isJSON = this.fileReader.isJSON(fileContents);
-                bool isUrl = Uri.TryCreate(api.openApiSpec, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-
-                if (isUrl == true)
-                {
-                    value = api.openApiSpec;
-                    if (isJSON == true)
-                    {
-                        // open api spec is remote json file, use swagger-link-json for v2 and openapi-link for v3
-                        OpenAPISpecReader openAPISpecReader = new OpenAPISpecReader();
-                        bool isVersionThree = await openAPISpecReader.isJSONOpenAPISpecVersionThreeAsync(api.openApiSpec);
-                        format = isVersionThree == false ? "swagger-link-json" : "openapi-link";
-                    }
-                    else
-                    {
-                        // open api spec is remote yaml file
-                        format = "openapi-link";
-                    }
-                }
-                else
-                {
-                    value = fileContents;
-                    if (isJSON == true)
-                    {
-                        // open api spec is local json file, use swagger-json for v2 and openapi+json for v3
-                        OpenAPISpecReader openAPISpecReader = new OpenAPISpecReader();
-                        bool isVersionThree = await openAPISpecReader.isJSONOpenAPISpecVersionThreeAsync(api.openApiSpec);
-                        format = isVersionThree == false ? "swagger-json" : "openapi+json";
-                    }
-                    else
-                    {
-                        // open api spec is local yaml file
-                        format = "openapi";
-                    }
-                }
-                apiTemplateResource.Properties.format = format;
-                apiTemplateResource.Properties.value = value;
+            { 
+                var openAPISpecReader = new OpenAPISpecReader(api.openApiSpec);
+                
+                apiTemplateResource.Properties.format = await openAPISpecReader.GetOpenApiFormat();
+                apiTemplateResource.Properties.value = await openAPISpecReader.GetValue(); ;
                 apiTemplateResource.Properties.path = api.suffix;
             }
             if (!isSplit || !isInitial)
@@ -183,7 +144,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 apiTemplateResource.Properties.isCurrent = api.isCurrent;
                 apiTemplateResource.Properties.displayName = api.name;
                 apiTemplateResource.Properties.subscriptionKeyParameterNames = api.subscriptionKeyParameterNames;
-                apiTemplateResource.Properties.protocols = this.CreateProtocols(api);
+                apiTemplateResource.Properties.protocols = api.protocols.GetItem(new[] { "https"});
                 // set the version set id
                 if (api.apiVersionSetId != null)
                 {
@@ -200,18 +161,5 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return apiTemplateResource;
         }
 
-        public string[] CreateProtocols(ApiConfiguration api)
-        {
-            string[] protocols;
-            if (api.protocols != null)
-            {
-                protocols = api.protocols.Split(", ");
-            }
-            else
-            {
-                protocols = new string[1] { "https" };
-            }
-            return protocols;
-        }
     }
 }

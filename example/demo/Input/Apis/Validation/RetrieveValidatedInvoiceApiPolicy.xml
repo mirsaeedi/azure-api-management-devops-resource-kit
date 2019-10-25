@@ -1,0 +1,46 @@
+﻿<policies>
+    <inbound>
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <choose>
+            <when condition="@(context.Response.StatusCode == 404)">
+                <set-body />
+            </when>
+            <otherwise>
+                <set-variable name="validatedInvoiceSAS" value="@(context.Response.Body.As<string>())" />
+                <set-variable name="OperationId" value="@(context.Response.Headers.GetValueOrDefault("OperationId",""))" />
+                <send-request mode="new" response-variable-name="validatedInvoice" timeout="60" ignore-error="false">
+                    <set-url>@(((string)context.Variables["validatedInvoiceSAS"]))</set-url>
+                    <set-method>GET</set-method>
+                </send-request>
+                <set-body>@(((IResponse)context.Variables["validatedInvoice"]).Body.As<string>())</set-body>
+                <choose>
+                    <when condition="@(context.Response.StatusCode == 500)">
+                        <set-header name="OperationId" exists-action="override">
+                            <value>@(((string)context.Variables["OperationId"]))</value>
+                        </set-header>
+                    </when>
+                    <when condition="@(((IResponse)context.Variables["validatedInvoice"]).StatusCode == 404)">
+                        <set-status code="@(((IResponse)context.Variables["validatedInvoice"]).StatusCode)" reason="Not Found" />
+                        <set-body />
+                    </when>
+                    <when condition="@(((IResponse)context.Variables["validatedInvoice"]).StatusCode != 200 && ((IResponse)context.Variables["validatedInvoice"]).StatusCode != 404)">
+                        <set-status code="500" reason="Internal Server Error" />
+                        <set-body />
+                    </when>
+                </choose>
+                <set-header name="Content-Type" exists-action="override">
+                    <value>application/xml; charset=utf-8</value>
+                </set-header>
+            </otherwise>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

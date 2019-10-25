@@ -10,52 +10,24 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileReader
     {
+        private static HttpClient _httpClient = new HttpClient();
         public async Task<CreatorConfig> ConvertConfigYAMLToCreatorConfigAsync(string configFileLocation)
         {
-            // determine whether file location is local file path or remote url and convert appropriately
-            Uri uriResult;
-            bool isUrl = Uri.TryCreate(configFileLocation, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-            if (isUrl)
+            var content = await RetrieveFileContentsAsync(configFileLocation);
+            return ConvertYamlToJson(content);
+        }
+
+        private static CreatorConfig ConvertYamlToJson(string yamlContent)
+        {
+            var deserializer = new Deserializer();
+            object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
+            var jsonSerializer = new JsonSerializer();
+            using (var writer = new StringWriter())
             {
-                // make a request to the provided url and convert the response's content
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(uriResult);
-                if (response.IsSuccessStatusCode)
-                {
-                    Stream stream = await response.Content.ReadAsStreamAsync();
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        Deserializer deserializer = new Deserializer();
-                        object deserializedYaml = deserializer.Deserialize(reader);
-                        JsonSerializer jsonSerializer = new JsonSerializer();
-                        StringWriter writer = new StringWriter();
-                        jsonSerializer.Serialize(writer, deserializedYaml);
-                        string jsonText = writer.ToString();
-                        CreatorConfig yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
-                        return yamlObject;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Unable to fetch remote config YAML file.");
-                }
-            }
-            else
-            {
-                using (StreamReader reader = new StreamReader(configFileLocation))
-                {
-                    // deserialize provided file contents into yaml
-                    var deserializer = new Deserializer();
-                    object deserializedYaml = deserializer.Deserialize(reader);
-                    var jsonSerializer = new JsonSerializer();
-                    var writer = new StringWriter();
-                    // serialize json from yaml object
-                    jsonSerializer.Serialize(writer, deserializedYaml);
-                    string jsonText = writer.ToString();
-                    // deserialize CreatorConfig from json string
-                    var yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
-                    return yamlObject;
-                }
+                jsonSerializer.Serialize(writer, deserializedYaml);
+                string jsonText = writer.ToString();
+                var yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
+                return yamlObject;
             }
         }
 
@@ -66,42 +38,21 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
         public async Task<string> RetrieveFileContentsAsync(string fileLocation)
         {
-            // determine whether file location is local file path or remote url and convert appropriately
-            Uri uriResult;
-            bool isUrl = Uri.TryCreate(fileLocation, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            bool isUrl = Uri.TryCreate(fileLocation, UriKind.Absolute, out var uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
             
             if (isUrl)
             {
-                // make a request to the provided url and convert the response's content
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(uriResult);
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    return content;
-                }
-                else
+                var response = await _httpClient.GetAsync(uriResult);
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Unable to fetch remote file - {fileLocation}");
                 }
+
+                return await response.Content.ReadAsStringAsync();
             }
-            else
-            {
-                return File.ReadAllText(fileLocation);
-            }
+
+            return File.ReadAllText(fileLocation);
         }
 
-        public bool isJSON(string fileContents)
-        {
-            try
-            {
-                object deserializedFileContents = JsonConvert.DeserializeObject<object>(fileContents);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
     }
 }
