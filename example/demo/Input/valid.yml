@@ -66,8 +66,6 @@ apis:
       openApiSpec: https://petstore.swagger.io/v2/swagger.json
       policy: C:\Users\u6104652\source\repos\azure-api-management-devops-resource-kit\example\demo\Input\Apis\PetStore\ApiPolicy.xml   # Optional, can be url or local file
       suffix: petstore
-      apiVersion: v1
-      apiVersionSetId: PetStoreApiVersionSet
       apiRevision: 1
       products: BusinessPkg1
       protocols: http, https

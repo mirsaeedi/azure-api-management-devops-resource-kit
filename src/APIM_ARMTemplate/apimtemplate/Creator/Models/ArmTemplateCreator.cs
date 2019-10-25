@@ -13,12 +13,12 @@ namespace Apim.Arm.Creator.Creator.Models
     public class ArmTemplateCreator
     {
         private CreatorConfig _creatorConfig;
-        private FileReader _fileReader;
+        private FileWriter _fileWriter;
 
         public ArmTemplateCreator(CreatorConfig creatorConfig)
         {
             _creatorConfig = creatorConfig;
-            _fileReader = new FileReader();
+            _fileWriter = new FileWriter();
         }
 
         public async Task Create()
@@ -49,7 +49,6 @@ namespace Apim.Arm.Creator.Creator.Models
             Console.WriteLine("Creating authorization servers template");
             Console.WriteLine("------------------------------------------");
             await SaveTemplate<AuthorizationServerTemplateCreator>(fileNames.authorizationServers, c => c.AuthorizationServers != null);
-
 
             Console.WriteLine("Creating api templates");
             Console.WriteLine("------------------------------------------");
@@ -83,7 +82,7 @@ namespace Apim.Arm.Creator.Creator.Models
         public async Task SaveApiTemplates()
         {
             var apiInformation = new List<LinkedMasterTemplateAPIInformation>();
-            var apiTemplateCreator = new ApiTemplateCreator(_fileReader);
+            var apiTemplateCreator = new ApiTemplateCreator();
 
             foreach (var apiConfiguration in _creatorConfig.Apis)
             {
@@ -92,7 +91,7 @@ namespace Apim.Arm.Creator.Creator.Models
                 foreach (var apiTemplate in apiTemplates)
                 {
                     var apiResource = apiTemplate.resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource; // todo
-                    string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, apiConfiguration.IsSplitApi(), apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
+                    string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, true, apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
                     
                     var path = Path.Combine(_creatorConfig.OutputLocation, apiFileName);
                     SaveTemplate(path, apiTemplate);
@@ -114,8 +113,7 @@ namespace Apim.Arm.Creator.Creator.Models
         private void SaveTemplate(string fileName, Template template)
         {
             var path = Path.Combine(_creatorConfig.OutputLocation, fileName);
-            var fileWriter = new FileWriter();
-            fileWriter.WriteJson(template, path);
+            _fileWriter.WriteJson(template, path);
         }
     }
 }

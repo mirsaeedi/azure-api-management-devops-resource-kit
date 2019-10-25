@@ -11,9 +11,7 @@
       "type": "Microsoft.ApiManagement/service/apis",
       "properties": {
         "apiRevision": "1",
-        "apiVersion": "v1",
         "isCurrent": true,
-        "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), 'PetStoreApiVersionSet')]",
         "subscriptionRequired": true,
         "displayName": "PetStoreApiV1",
         "path": "petstore",

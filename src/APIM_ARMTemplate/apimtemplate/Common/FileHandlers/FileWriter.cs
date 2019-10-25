@@ -7,10 +7,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileWriter
     {
-        public void WriteJson(object template, string location)
+        public void WriteJson<T>(T template, string location)
         {
-            // writes json object to provided location
-            string jsonString = JsonConvert.SerializeObject(template,
+            var jsonString = JsonConvert.SerializeObject(template,
                             Formatting.Indented,
                             new JsonSerializerSettings
                             {
@@ -19,8 +18,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
                                     NamingStrategy = new CamelCaseNamingStrategy()
                                 },
                                 NullValueHandling = NullValueHandling.Ignore
-
                             });
+
+            var fileInfo = new FileInfo(location);
+
+            if (!fileInfo.Directory.Exists)
+                fileInfo.Directory.Create();
 
             File.WriteAllText(location, jsonString);
         }

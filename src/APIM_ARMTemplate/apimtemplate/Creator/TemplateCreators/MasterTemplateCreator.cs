@@ -69,7 +69,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 var apiInfo = new LinkedMasterTemplateAPIInformation()
                 {
                     Name = api.name,
-                    IsSplit = api.IsSplitApi(),
+                    IsSplit = true,
                     DependsOnGlobalServicePolicies = creatorConfig.Policy != null,
                     DependsOnVersionSets = api.apiVersionSetId != null,
                     DependsOnProducts = api.products != null,
@@ -78,47 +78,27 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                     DependsOnBackends = await api.IsDependOnBackend(fileReader)
                 };
 
-                if (apiInfo.IsSplit == true)
+                // add a deployment resource for both api template files
+                string originalAPIName = fileNameGenerator.GenerateOriginalAPIName(apiInfo.Name);
+                string initialAPIDeploymentResourceName = $"{originalAPIName}-InitialAPITemplate";
+                string subsequentAPIDeploymentResourceName = $"{originalAPIName}-SubsequentAPITemplate";
+
+                string initialAPIFileName = fileNameGenerator.GenerateCreatorAPIFileName(apiInfo.Name, apiInfo.IsSplit, true, creatorConfig.ApimServiceName);
+                string initialAPIUri = GenerateLinkedTemplateUri(creatorConfig, initialAPIFileName);
+                var initialAPIDependsOn = new List<string>(CreateAPIResourceDependencies(creatorConfig, apiInfo));
+
+                if (i > 0)
                 {
-                    // add a deployment resource for both api template files
-                    string originalAPIName = fileNameGenerator.GenerateOriginalAPIName(apiInfo.Name);
-                    string initialAPIDeploymentResourceName = $"{originalAPIName}-InitialAPITemplate";
-                    string subsequentAPIDeploymentResourceName = $"{originalAPIName}-SubsequentAPITemplate";
-
-                    string initialAPIFileName = fileNameGenerator.GenerateCreatorAPIFileName(apiInfo.Name, apiInfo.IsSplit, true, creatorConfig.ApimServiceName);
-                    string initialAPIUri = GenerateLinkedTemplateUri(creatorConfig, initialAPIFileName);
-                    var initialAPIDependsOn = new List<string>(CreateAPIResourceDependencies(creatorConfig,apiInfo));
-
-                    if (i > 0)
-                    {
-                        var previousApi = creatorConfig.Apis[i - 1];
-                        initialAPIDependsOn.Add($"[resourceId('Microsoft.Resources/deployments', '{previousApi.name}-SubsequentAPITemplate')]");
-                    }
-                    
-                    resources.Add(this.CreateLinkedMasterTemplateResource(initialAPIDeploymentResourceName, initialAPIUri, initialAPIDependsOn.ToArray()));
-
-                    string subsequentAPIFileName = fileNameGenerator.GenerateCreatorAPIFileName(apiInfo.Name, apiInfo.IsSplit, false, creatorConfig.ApimServiceName);
-                    string subsequentAPIUri = GenerateLinkedTemplateUri(creatorConfig, subsequentAPIFileName);
-                    string[] subsequentAPIDependsOn = new string[] { $"[resourceId('Microsoft.Resources/deployments', '{initialAPIDeploymentResourceName}')]" };
-                    resources.Add(this.CreateLinkedMasterTemplateResource(subsequentAPIDeploymentResourceName, subsequentAPIUri, subsequentAPIDependsOn));
+                    var previousApi = creatorConfig.Apis[i - 1];
+                    initialAPIDependsOn.Add($"[resourceId('Microsoft.Resources/deployments', '{previousApi.name}-SubsequentAPITemplate')]");
                 }
-                else
-                {
-                    // add a deployment resource for the unified api template file
-                    string originalAPIName = fileNameGenerator.GenerateOriginalAPIName(apiInfo.Name);
-                    string unifiedAPIDeploymentResourceName = $"{originalAPIName}-APITemplate";
-                    string unifiedAPIFileName = fileNameGenerator.GenerateCreatorAPIFileName(apiInfo.Name, apiInfo.IsSplit, true, creatorConfig.ApimServiceName);
-                    string unifiedAPIUri = GenerateLinkedTemplateUri(creatorConfig, unifiedAPIFileName);
-                    var unifiedAPIDependsOn = new List<string>(CreateAPIResourceDependencies(creatorConfig,apiInfo));
-                    
-                    if (i > 0)
-                    {
-                        var previousApi = creatorConfig.Apis[i - 1];
-                        unifiedAPIDependsOn.Add($"[resourceId('Microsoft.Resources/deployments', '{previousApi.name}-SubsequentAPITemplate')]");
-                    }
 
-                    resources.Add(this.CreateLinkedMasterTemplateResource(unifiedAPIDeploymentResourceName, unifiedAPIUri, unifiedAPIDependsOn.ToArray()));
-                }
+                resources.Add(this.CreateLinkedMasterTemplateResource(initialAPIDeploymentResourceName, initialAPIUri, initialAPIDependsOn.ToArray()));
+
+                string subsequentAPIFileName = fileNameGenerator.GenerateCreatorAPIFileName(apiInfo.Name, apiInfo.IsSplit, false, creatorConfig.ApimServiceName);
+                string subsequentAPIUri = GenerateLinkedTemplateUri(creatorConfig, subsequentAPIFileName);
+                string[] subsequentAPIDependsOn = new string[] { $"[resourceId('Microsoft.Resources/deployments', '{initialAPIDeploymentResourceName}')]" };
+                resources.Add(this.CreateLinkedMasterTemplateResource(subsequentAPIDeploymentResourceName, subsequentAPIUri, subsequentAPIDependsOn));
             }
 
             masterTemplate.resources = resources.ToArray();

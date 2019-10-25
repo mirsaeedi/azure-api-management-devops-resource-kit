@@ -87,7 +87,6 @@
       "name": "PetStoreApiV1-InitialAPITemplate",
       "apiVersion": "2019-05-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'versionSetTemplate')]",
         "[resourceId('Microsoft.Resources/deployments', 'productsTemplate')]",
         "[resourceId('Microsoft.Resources/deployments', 'backendsTemplate')]"
       ]
