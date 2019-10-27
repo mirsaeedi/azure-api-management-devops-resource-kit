@@ -6,7 +6,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class CliCreatorArguments
     {
-        public string configFile { get; set; }
+        public string ConfigFile { get; set; }
     }
 
     public class CreatorConfig

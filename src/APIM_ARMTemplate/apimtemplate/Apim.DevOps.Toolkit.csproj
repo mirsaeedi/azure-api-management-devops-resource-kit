@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>apim-toolkit</ToolCommandName>
+    <ToolCommandName>dotnet-apim</ToolCommandName>
     <ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
     <PackageId>Apim.DevOps.Toolkit</PackageId>
     <Version>0.8.0</Version>
@@ -42,7 +42,7 @@
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.5" />
     <PackageReference Include="Microsoft.Azure.Management.ApiManagement" Version="4.0.6-preview" />
     <PackageReference Include="Microsoft.Azure.Management.Authorization" Version="2.9.0-preview" />
-    <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.27.0" />
+    <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.27.2" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="Colors.Net" Version="1.1.0" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.2" />

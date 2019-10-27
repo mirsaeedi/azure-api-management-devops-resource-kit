@@ -1,8 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
-using System;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.Models;
 
@@ -12,10 +9,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     {
         public CreateCommand()
         {
-            this.Name = GlobalConstants.CreateName;
-            this.Description = GlobalConstants.CreateDescription;
+            Name = GlobalConstants.CreateName;
+            Description = GlobalConstants.CreateDescription;
 
-            CommandOption configFile = this.Option("--configFile <configFile>", "Config YAML file location", CommandOptionType.SingleValue).IsRequired();
+            var configFile = Option("--configFile <configFile>", "Config YAML file location", CommandOptionType.SingleValue).IsRequired();
 
             this.HelpOption();
 
@@ -38,7 +35,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         private bool IsCreatorConfigValid(CreatorConfig creatorConfig)
         {
             CreatorConfigurationValidator creatorConfigurationValidator = new CreatorConfigurationValidator(this);
-            bool isValidCreatorConfig = creatorConfigurationValidator.ValidateCreatorConfig(creatorConfig);
+            bool isValidCreatorConfig = creatorConfigurationValidator.Validate(creatorConfig);
             return isValidCreatorConfig;
         }
 
