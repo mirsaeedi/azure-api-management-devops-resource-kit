@@ -44,7 +44,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 {
                     // if policy is a url inline the url, if it is a local file inline the file contents
                     Format = isUrl ? "rawxml-link" : "rawxml",
-                    Value = isUrl ? policy : this._fileReader.RetrieveLocalFileContents(policy)
+                    Value = isUrl ? policy : this._fileReader.RetrieveFileContentsAsync(policy)
                 },
                 DependsOn = dependsOn
             };

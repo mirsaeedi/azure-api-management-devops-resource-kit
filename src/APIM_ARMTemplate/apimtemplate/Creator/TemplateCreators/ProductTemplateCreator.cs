@@ -65,7 +65,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 Properties = new PolicyTemplateProperties()
                 {
                     Format = isUrl ? "rawxml-link" : "rawxml",
-                    Value = isUrl ? product.Policy : fileReader.RetrieveLocalFileContents(product.Policy)
+                    Value = isUrl ? product.Policy : fileReader.RetrieveFileContentsAsync(product.Policy)
                 },
                 DependsOn = dependsOn
             };
