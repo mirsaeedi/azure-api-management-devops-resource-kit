@@ -12,9 +12,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
     public class FileReader
     {
         private static HttpClient _httpClient = new HttpClient();
-        public async Task<CreatorConfig> ConvertConfigYAMLToCreatorConfigAsync(string configFileLocation)
+        public async Task<CreatorConfig> GetCreatorConfigFromPath(string configFilePath)
         {
-            var content = await RetrieveFileContentsAsync(configFileLocation);
+            var content = await RetrieveFileContentsAsync(configFilePath);
             return GetCreatorConfig(content);
         }
 
