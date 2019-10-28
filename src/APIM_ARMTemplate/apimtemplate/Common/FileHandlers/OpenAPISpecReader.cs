@@ -19,7 +19,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         {
             var contents = await GetContents();
 
-            OpenAPISpecWithVersion openAPISpecWithVersion = JsonConvert.DeserializeObject<OpenAPISpecWithVersion>(contents);
+            var openAPISpecWithVersion = JsonConvert.DeserializeObject<OpenAPISpecWithVersion>(contents);
             return openAPISpecWithVersion.Swagger != null ? openAPISpecWithVersion.Swagger : openAPISpecWithVersion.OpenApi;
         }
 

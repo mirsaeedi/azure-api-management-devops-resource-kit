@@ -6,15 +6,39 @@ using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using Apim.DevOps.Toolkit.Extensions;
+using System.Collections.Generic;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileReader
     {
         private static HttpClient _httpClient = new HttpClient();
-        public async Task<CreatorConfig> GetCreatorConfigFromYaml(string configFilePath)
+
+        public async Task<string[]> GetReplacementVariablesFromYaml(string replacementVariablesFilePath)
+        {
+            if (string.IsNullOrEmpty(replacementVariablesFilePath))
+            {
+                return new string[0];
+            }
+
+            var content = await RetrieveFileContentsAsync(replacementVariablesFilePath);
+            var deserializer = new Deserializer();
+            var replacementVariables = deserializer.Deserialize<string[]>(content);
+
+            return replacementVariables;
+        }
+
+        public async Task<CreatorConfig> GetCreatorConfigFromYaml(string configFilePath, IEnumerable<string> replacementVariables)
         {
             var content = await RetrieveFileContentsAsync(configFilePath);
+
+            foreach (var replacementVariable in replacementVariables)
+            {
+                var keyVal = replacementVariable.CreateReplacementKeyValue();
+
+                content = content.Replace(keyVal.Key, keyVal.Value);
+            }
+
             return GetCreatorConfig(content);
         }
 
@@ -22,6 +46,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         {
             var deserializer = new Deserializer();
             object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
+           
             var jsonSerializer = new JsonSerializer();
 
             using (var writer = new StringWriter())

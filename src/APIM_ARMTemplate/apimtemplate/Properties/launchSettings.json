@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "create --configFile \"C:\\Users\\u6104652\\source\\repos\\azure-api-management-devops-resource-kit\\example\\demo\\Input\\valid.yml\""
+      "commandLineArgs": "create --configFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\valid.yml\" --replacementFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\replace.yml\" --replacementVars \"ehsan=1;x=2\""
     }
   }
 }

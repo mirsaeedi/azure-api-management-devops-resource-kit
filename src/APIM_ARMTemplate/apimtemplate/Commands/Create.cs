@@ -2,6 +2,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.Models;
+using System.Linq;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
@@ -14,11 +15,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             var configFile = Option("--configFile <configFile>", "Config YAML file location", CommandOptionType.SingleValue).IsRequired();
 
+            var replacementFile =  Option("--replacementFile <replacementFile>", "replacement file location", CommandOptionType.SingleValue);
+
+            var replacementVars = Option("--replacementVars <replacementVars>", "replacement variables semicolon seprated", CommandOptionType.SingleValue);
+            
             this.HelpOption();
 
             this.OnExecuteAsync(async (cancellationToken) =>
             {
-                var creatorConfig = await GetCreatorConfig(configFile);
+                var creatorConfig = await GetCreatorConfig(configFile, replacementFile, replacementVars);
 
                 var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
 
@@ -39,10 +44,17 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return isValidCreatorConfig;
         }
 
-        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile)
+        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile,CommandOption replacementFile, CommandOption replacementVars)
         {
             var fileReader = new FileReader();
-            return await fileReader.GetCreatorConfigFromYaml(configFile.Value());
+
+            var replacementVariablesFromFile = await fileReader.GetReplacementVariablesFromYaml(replacementFile.Value());
+
+            var replacementVariablesFromCommandLine = !replacementVars.HasValue() ? new string[0] : replacementVars.Value().Split(";");
+
+            var vars = replacementVariablesFromFile.Concat(replacementVariablesFromCommandLine);
+
+            return await fileReader.GetCreatorConfigFromYaml(configFile.Value(), vars);
         }
     }
 }

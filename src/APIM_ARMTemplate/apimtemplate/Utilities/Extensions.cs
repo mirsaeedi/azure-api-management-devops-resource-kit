@@ -35,5 +35,11 @@ namespace Apim.DevOps.Toolkit.Extensions
         {
             return Uri.TryCreate(path, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
+
+        public static (string Key, string Value) CreateReplacementKeyValue(this string replacementVariable)
+        {
+            var keyValue = replacementVariable.Split("=");
+            return ($"$({keyValue[0]})", keyValue[1]);
+        }
     }
 }

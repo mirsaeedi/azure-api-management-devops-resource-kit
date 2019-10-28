@@ -7,7 +7,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileWriter
     {
-        public void WriteJson<T>(T template, string location)
+        public void WriteJson<T>(T template, string filePath)
         {
             var jsonString = JsonConvert.SerializeObject(template,
                             Formatting.Indented,
@@ -20,24 +20,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var fileInfo = new FileInfo(location);
-
+            var fileInfo = new FileInfo(filePath);
+            
             if (!fileInfo.Directory.Exists)
                 fileInfo.Directory.Create();
 
-            File.WriteAllText(location, jsonString);
-        }
-
-        public void WriteXMLToFile(string xmlContent, string location)
-        {
-            // writes xml content to provided location
-            File.WriteAllText(location, xmlContent);
-        }
-
-        public void CreateFolderIfNotExists(string folderLocation)
-        {
-            // creates directory if it does not already exist
-            System.IO.Directory.CreateDirectory(folderLocation);
+            File.WriteAllText(filePath, jsonString);
         }
     }
 }
