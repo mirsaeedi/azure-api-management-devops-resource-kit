@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile)
         {
             var fileReader = new FileReader();
-            return await fileReader.GetCreatorConfigFromPath(configFile.Value());
+            return await fileReader.GetCreatorConfigFromYaml(configFile.Value());
         }
     }
 }

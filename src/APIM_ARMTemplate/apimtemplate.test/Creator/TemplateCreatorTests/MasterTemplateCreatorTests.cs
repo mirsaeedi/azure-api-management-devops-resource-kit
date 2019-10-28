@@ -28,7 +28,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             Template masterTemplate = masterTemplateCreator.CreateLinkedMasterTemplate(creatorConfig, globalServicePolicyTemplate, apiVersionSetsTemplate, productsTemplate, loggersTemplate, null, null, apiInfoList, creatorFileNames, creatorConfig.ApimServiceName, fileNameGenerator);
 
             // assert
-            Assert.Equal(count, masterTemplate.resources.Length);
+            Assert.Equal(count, masterTemplate.Resources.Length);
         }
 
         [Fact]

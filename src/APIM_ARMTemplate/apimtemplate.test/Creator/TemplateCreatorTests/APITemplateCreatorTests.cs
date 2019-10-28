@@ -174,7 +174,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             // act
             // the above api config will create a unified api template with a single resource
             List<Template> apiTemplates = await apiTemplateCreator.CreateAPITemplatesAsync(api);
-            APITemplateResource apiTemplateResource = apiTemplates.FirstOrDefault().resources[0] as APITemplateResource;
+            APITemplateResource apiTemplateResource = apiTemplates.FirstOrDefault().Resources[0] as APITemplateResource;
 
             // assert
             Assert.Contains(";rev", apiTemplateResource.name);

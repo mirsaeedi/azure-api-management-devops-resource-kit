@@ -32,7 +32,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // act
             Template loggerTemplate = loggerTemplateCreator.CreateLoggerTemplate(creatorConfig);
-            LoggerTemplateResource loggerTemplateResource = (LoggerTemplateResource)loggerTemplate.resources[0];
+            LoggerTemplateResource loggerTemplateResource = (LoggerTemplateResource)loggerTemplate.Resources[0];
 
             // assert
             Assert.Equal($"[concat(parameters('ApimServiceName'), '/{logger.Name}')]", loggerTemplateResource.Name);

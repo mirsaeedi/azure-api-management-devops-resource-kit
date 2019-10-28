@@ -23,7 +23,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                    "YAMLConfigs", Path.DirectorySeparatorChar, "valid.yml");
 
             // act
-            CreatorConfig creatorConfig = await fileReader.GetCreatorConfigFromPath(fileLocation);
+            CreatorConfig creatorConfig = await fileReader.GetCreatorConfigFromYaml(fileLocation);
 
             // assert
             Assert.Equal("0.0.1", creatorConfig.Version);

@@ -1,4 +1,5 @@
 ﻿using Apim.Arm.Creator.Creator.TemplateCreators;
+using Apim.DevOps.Toolkit.ArmTemplates;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using System;
@@ -90,7 +91,7 @@ namespace Apim.Arm.Creator.Creator.Models
 
                 foreach (var apiTemplate in apiTemplates)
                 {
-                    var apiResource = apiTemplate.resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource; // todo
+                    var apiResource = apiTemplate.Resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource; // todo
                     string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, true, apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
                     
                     var path = Path.Combine(_creatorConfig.OutputLocation, apiFileName);

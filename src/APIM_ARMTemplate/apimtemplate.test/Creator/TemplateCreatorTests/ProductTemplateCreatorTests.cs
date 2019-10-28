@@ -27,7 +27,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // act
             Template productTemplate = productTemplateCreator.CreateProductTemplate(creatorConfig);
-            ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.resources[0];
+            ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.Resources[0];
 
             // assert
             Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]", productsTemplateResource.Name);
@@ -60,7 +60,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // act
             Template productTemplate = productTemplateCreator.CreateProductTemplate(creatorConfig);
-            ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.resources[0];
+            ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.Resources[0];
 
             // assert
             Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]", productsTemplateResource.Name);

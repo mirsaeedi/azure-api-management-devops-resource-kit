@@ -16,7 +16,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // act
             Template policyTemplate = policyTemplateCreator.CreateGlobalServicePolicyTemplate(creatorConfig);
-            PolicyTemplateResource policyTemplateResource = policyTemplate.resources[0] as PolicyTemplateResource;
+            PolicyTemplateResource policyTemplateResource = policyTemplate.Resources[0] as PolicyTemplateResource;
 
             // assert
             Assert.Equal($"[concat(parameters('ApimServiceName'), '/policy')]", policyTemplateResource.Name);

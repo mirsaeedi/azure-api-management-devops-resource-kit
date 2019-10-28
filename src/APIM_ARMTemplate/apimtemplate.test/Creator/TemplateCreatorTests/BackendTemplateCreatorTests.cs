@@ -63,7 +63,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
 
             // act
             Template backendTemplate = backendTemplateCreator.CreateBackendTemplate(creatorConfig);
-            BackendTemplateResource backendTemplateResource = (BackendTemplateResource)backendTemplate.resources[0];
+            BackendTemplateResource backendTemplateResource = (BackendTemplateResource)backendTemplate.Resources[0];
 
             // assert
             Assert.Equal($"[concat(parameters('ApimServiceName'), '/{backend.Title}')]", backendTemplateResource.Name);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Apim.DevOps.Toolkit.ArmTemplates;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
@@ -7,6 +8,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     public class CliCreatorArguments
     {
         public string ConfigFile { get; set; }
+        public string VariableFilePath { get; set; }
     }
 
     public class CreatorConfig
@@ -19,15 +21,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public List<ApiConfiguration> Apis { get; set; }
         public List<ProductConfig> Products { get; set; }
         public List<LoggerConfig> Loggers { get; set; }
-        public List<AuthorizationServerTemplateProperties> AuthorizationServers { get; set; }
-        public List<BackendTemplateProperties> Backends { get; set; }
+        public List<AuthorizationServerProperties> AuthorizationServers { get; set; }
+        public List<BackendProperties> Backends { get; set; }
         public string OutputLocation { get; set; }
         public bool Linked { get; set; }
         public string LinkedTemplatesBaseUrl { get; set; }
         public string LinkedTemplatesUrlQueryString { get; set; }
     }
 
-    public class APIVersionSetConfig: ApiVersionSetProperties
+    public class APIVersionSetConfig : ApiVersionSetProperties
     {
         public string id { get; set; }
     }
@@ -70,12 +72,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             }
 
             string apiPolicy = policy != null ? await fileReader.RetrieveFileContentsAsync(policy) : "";
-            
+
             if (apiPolicy.Contains("logger"))
             {
                 return true;
             }
-            
+
             if (operations != null)
             {
                 foreach (KeyValuePair<string, OperationsConfig> operation in operations)
@@ -134,15 +136,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public string Name { get; set; }
     }
 
-    public class LoggerConfig : LoggerTemplateProperties
+    public class LoggerConfig : LoggerProperties
     {
         public string Name { get; set; }
     }
 
-    public class ProductConfig : ProductsTemplateProperties
+    public class ProductConfig : ProductsProperties
     {
         // policy file location (local or url)
         public string Policy { get; set; }
     }
-    
+
 }
