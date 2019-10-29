@@ -18,12 +18,14 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             var replacementFile =  Option("--replacementFile <replacementFile>", "replacement file location", CommandOptionType.SingleValue);
 
             var replacementVars = Option("--replacementVars <replacementVars>", "replacement variables semicolon seprated", CommandOptionType.SingleValue);
-            
+
+            var prefixFileName = Option("--prefix <prefix>", "prefix of generated files", CommandOptionType.SingleValue);
+
             this.HelpOption();
 
             this.OnExecuteAsync(async (cancellationToken) =>
             {
-                var creatorConfig = await GetCreatorConfig(configFile, replacementFile, replacementVars);
+                var creatorConfig = await GetCreatorConfig(configFile, replacementFile, replacementVars, prefixFileName);
 
                 var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
 
@@ -44,7 +46,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return isValidCreatorConfig;
         }
 
-        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile,CommandOption replacementFile, CommandOption replacementVars)
+        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile,CommandOption replacementFile, CommandOption replacementVars,CommandOption prefixFileName)
         {
             var fileReader = new FileReader();
 
@@ -54,7 +56,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             var vars = replacementVariablesFromFile.Concat(replacementVariablesFromCommandLine);
 
-            return await fileReader.GetCreatorConfigFromYaml(configFile.Value(), vars);
+            var creatorConfig = await fileReader.GetCreatorConfigFromYaml(configFile.Value(), vars);
+
+            creatorConfig.PrefixFileName = prefixFileName.Value();
+
+            return creatorConfig;
         }
     }
 }

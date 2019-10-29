@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         }
         public async Task<Template> Create(CreatorConfig creatorConfig)
         {
-            var fileNameGenerator = new FileNameGenerator();
+            var fileNameGenerator = new FileNameGenerator(creatorConfig.PrefixFileName);
             var fileNames = fileNameGenerator.GenerateFileNames();
             var fileReader = new FileReader();
 

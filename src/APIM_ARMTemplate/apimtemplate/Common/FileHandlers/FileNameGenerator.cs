@@ -1,22 +1,29 @@
 ﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
+using System;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileNameGenerator
     {
+        private string _prefix;
+        public FileNameGenerator(string prefix)
+        {
+            _prefix = string.IsNullOrEmpty(prefix) ? "" : prefix.Replace("$datetime", DateTime.Now.ToString("yyyyMMdd-HHmm")) + "-";
+        }
+
         public FileNames GenerateFileNames()
         {
             return new FileNames()
             {
-                apiVersionSets = $@"apiVersionSets.template.json",
-                authorizationServers = $@"authorizationServers.template.json",
-                backends = $@"backends.template.json",
-                globalServicePolicy = $@"globalServicePolicy.template.json",
-                loggers = $@"loggers.template.json",
-                namedValues = $@"namedValues.template.json",
-                products = $@"products.template.json",
-                parameters = $@"parameters.json",
-                linkedMaster = $@"master.template.json"
+                apiVersionSets = $@"{_prefix}apiVersionSets.template.json",
+                authorizationServers = $@"{_prefix}authorizationServers.template.json",
+                backends = $@"{_prefix}backends.template.json",
+                globalServicePolicy = $@"{_prefix}globalServicePolicy.template.json",
+                loggers = $@"{_prefix}loggers.template.json",
+                namedValues = $@"{_prefix}namedValues.template.json",
+                products = $@"{_prefix}products.template.json",
+                parameters = $@"{_prefix}parameters.json",
+                linkedMaster = $@"{_prefix}master.template.json"
             };
         }
 
@@ -26,17 +33,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             string sanitizedAPIName = GenerateOriginalAPIName(apiName);
             if (isSplitAPI == true)
             {
-                return isInitialAPI == true ? $@"{apimServiceName}-{sanitizedAPIName}-initial.api.template.json" : $@"{apimServiceName}-{sanitizedAPIName}-subsequent.api.template.json";
+                return isInitialAPI == true ? $@"{_prefix}{sanitizedAPIName}-initial.api.template.json" : $@"{_prefix}{sanitizedAPIName}-subsequent.api.template.json";
             }
             else
             {
-                return $@"{apimServiceName}-{sanitizedAPIName}.api.template.json";
+                return $@"{_prefix}{apimServiceName}-{sanitizedAPIName}.api.template.json";
             }
-        }
-
-        public string GenerateExtractorAPIFileName(string singleAPIName, string apimServiceName)
-        {
-            return singleAPIName == null ? $@"/{apimServiceName}-apis.template.json" : $@"/{apimServiceName}-{singleAPIName}-api.template.json";
         }
 
         public string GenerateOriginalAPIName(string apiName)

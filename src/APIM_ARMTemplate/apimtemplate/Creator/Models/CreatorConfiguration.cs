@@ -27,6 +27,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
         public bool Linked { get; set; }
         public string LinkedTemplatesBaseUrl { get; set; }
         public string LinkedTemplatesUrlQueryString { get; set; }
+        public string PrefixFileName { get; set; }
     }
 
     public class APIVersionSetConfig : ApiVersionSetProperties

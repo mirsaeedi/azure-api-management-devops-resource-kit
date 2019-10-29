@@ -24,7 +24,7 @@ namespace Apim.Arm.Creator.Creator.Models
 
         public async Task Create()
         {
-            var fileNameGenerator = new FileNameGenerator();
+            var fileNameGenerator = new FileNameGenerator(_creatorConfig.PrefixFileName);
             var fileNames = fileNameGenerator.GenerateFileNames();
 
             Console.WriteLine("Creating global service policy template");
@@ -64,7 +64,7 @@ namespace Apim.Arm.Creator.Creator.Models
 
         private async Task  SaveMasterTemplate()
         {
-            var fileNameGenerator = new FileNameGenerator();
+            var fileNameGenerator = new FileNameGenerator(_creatorConfig.PrefixFileName);
             var fileNames = fileNameGenerator.GenerateFileNames();
 
             var masterTemplateCreator = new MasterTemplateCreator();
@@ -92,7 +92,7 @@ namespace Apim.Arm.Creator.Creator.Models
                 foreach (var apiTemplate in apiTemplates)
                 {
                     var apiResource = apiTemplate.Resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource; // todo
-                    string apiFileName = new FileNameGenerator().GenerateCreatorAPIFileName(apiConfiguration.name, true, apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
+                    string apiFileName = new FileNameGenerator(_creatorConfig.PrefixFileName).GenerateCreatorAPIFileName(apiConfiguration.name, true, apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
                     
                     var path = Path.Combine(_creatorConfig.OutputLocation, apiFileName);
                     SaveTemplate(path, apiTemplate);
