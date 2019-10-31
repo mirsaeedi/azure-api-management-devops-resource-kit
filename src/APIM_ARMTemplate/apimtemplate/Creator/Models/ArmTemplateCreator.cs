@@ -83,11 +83,11 @@ namespace Apim.Arm.Creator.Creator.Models
         public async Task SaveApiTemplates()
         {
             var apiInformation = new List<LinkedMasterTemplateAPIInformation>();
-            var apiTemplateCreator = new ApiTemplateCreator();
+            var apiTemplateCreator = new ApiTemplateCreator(_creatorConfig.Products);
 
             foreach (var apiConfiguration in _creatorConfig.Apis)
             {
-                var apiTemplates = await apiTemplateCreator.CreateAPITemplatesAsync(apiConfiguration);
+                var apiTemplates = await apiTemplateCreator.CreateApiTemplatesAsync(apiConfiguration);
 
                 foreach (var apiTemplate in apiTemplates)
                 {

@@ -13,5 +13,6 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
         public int? SubscriptionsLimit { get; set; }
         public string State { get; set; }
         public string DisplayName { get; set; }
-    }
+		public string Id { get; set; }
+	}
 }

@@ -73,7 +73,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             PolicyTemplateResource policyTemplateResource = policyTemplateCreator.CreateProductPolicyTemplateResource(product, dependsOn);
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.DisplayName}/policy')]", policyTemplateResource.Name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Id}/policy')]", policyTemplateResource.Name);
             Assert.Equal("rawxml-link", policyTemplateResource.properties.format);
             Assert.Equal(product.Policy, policyTemplateResource.properties.value);
             Assert.Equal(dependsOn, policyTemplateResource.DependsOn);

@@ -10,19 +10,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     public class ApiTemplateCreator : TemplateCreator
     {
         private PolicyTemplateCreator _policyTemplateCreator;
-        private ProductAPITemplateCreator _productAPITemplateCreator;
+        private ProductAPITemplateCreator _productApiTemplateCreator;
         private DiagnosticTemplateCreator _diagnosticTemplateCreator;
         private ReleaseTemplateCreator _releaseTemplateCreator;
+		private IEnumerable<ProductConfig> _products;
 
-        public ApiTemplateCreator()
+		public ApiTemplateCreator(IEnumerable<ProductConfig> products)
         {
             _policyTemplateCreator = new PolicyTemplateCreator();
-            _productAPITemplateCreator = new ProductAPITemplateCreator() ;
+            _productApiTemplateCreator = new ProductAPITemplateCreator(products) ;
             _diagnosticTemplateCreator = new DiagnosticTemplateCreator();
             _releaseTemplateCreator = new ReleaseTemplateCreator();
-        }
+		}
 
-        public async Task<List<Template>> CreateAPITemplatesAsync(ApiConfiguration api)
+        public async Task<List<Template>> CreateApiTemplatesAsync(ApiConfiguration api)
         {
             // update api name if necessary (apiRevision > 1 and isCurrent = true) 
             if (int.TryParse(api.apiRevision, out var revisionNumber))
@@ -78,7 +79,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             if (api.products != null)
             {
-                resources.AddRange(this._productAPITemplateCreator.CreateProductAPITemplateResources(api, dependsOn));
+                resources.AddRange(this._productApiTemplateCreator.CreateProductAPITemplateResources(api, dependsOn));
             }
 
             if (api.diagnostic != null)

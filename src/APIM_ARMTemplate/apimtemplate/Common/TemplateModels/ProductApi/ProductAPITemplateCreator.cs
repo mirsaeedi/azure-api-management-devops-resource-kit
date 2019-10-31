@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 
@@ -6,27 +7,36 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class ProductAPITemplateCreator
     {
-        private ProductAPITemplateResource CreateProductAPITemplateResource(string productID, string apiName, string[] dependsOn)
+		private IEnumerable<ProductConfig> _products;
+
+		public ProductAPITemplateCreator(IEnumerable<ProductConfig> products)
+		{
+			_products = products;
+		}
+
+		private ProductApoTemplateResource CreateProductApiemplateResource(string productId, string apiName, string[] dependsOn)
         {
             // create products/apis resource with properties
-            ProductAPITemplateResource productAPITemplateResource = new ProductAPITemplateResource()
+            ProductApoTemplateResource productAPITemplateResource = new ProductApoTemplateResource()
             {
-                Name = $"[concat(parameters('ApimServiceName'), '/{productID}/{apiName}')]",
+                Name = $"[concat(parameters('ApimServiceName'), '/{productId}/{apiName}')]",
                 Properties = new ProductAPITemplateProperties(),
                 DependsOn = dependsOn
             };
             return productAPITemplateResource;
         }
 
-        public List<ProductAPITemplateResource> CreateProductAPITemplateResources(ApiConfiguration api, string[] dependsOn)
+        public List<ProductApoTemplateResource> CreateProductAPITemplateResources(ApiConfiguration api, string[] dependsOn)
         {
             // create a products/apis association resource for each product provided in the config file
-            List<ProductAPITemplateResource> productAPITemplates = new List<ProductAPITemplateResource>();
+            List<ProductApoTemplateResource> productAPITemplates = new List<ProductApoTemplateResource>();
             // products is comma separated list of productIds
-            string[] productIDs = api.products.Split(", ");
-            foreach (string productID in productIDs)
+            var productDisplayNames = api.products.Split(",").Select(p=>p.Trim());
+            foreach (string productDisplayName in productDisplayNames)
             {
-                ProductAPITemplateResource productAPITemplate = this.CreateProductAPITemplateResource(productID, api.name, dependsOn);
+				var product = _products.Single(q => q.DisplayName == productDisplayName);
+
+                ProductApoTemplateResource productAPITemplate = this.CreateProductApiemplateResource(product.Id, api.name, dependsOn);
                 productAPITemplates.Add(productAPITemplate);
             }
             return productAPITemplates;

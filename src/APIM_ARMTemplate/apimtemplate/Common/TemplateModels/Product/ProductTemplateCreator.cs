@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 // create product resource with properties
                 var productsTemplateResource = new ProductsTemplateResource()
                 {
-                    Name = $"[concat(parameters('ApimServiceName'), '/{product.DisplayName}')]",
+                    Name = $"[concat(parameters('ApimServiceName'), '/{product.Id}')]",
                     Properties = new ProductsProperties()
                     {
                         Description = product.Description,
@@ -44,7 +44,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 // create product policy resource that depends on the product, if provided
                 if (product.Policy != null)
                 {
-                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.DisplayName}')]" };
+                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Id}')]" };
                     var productPolicy = await CreateProductPolicyTemplateResource(product, dependsOn);
                     resources.Add(productPolicy);
                 }
@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             
             var policyTemplateResource = new PolicyTemplateResource(ResourceType.ProductPolicy)
             {
-                Name = $"[concat(parameters('ApimServiceName'), '/{product.DisplayName}/policy')]",
+                Name = $"[concat(parameters('ApimServiceName'), '/{product.Id}/policy')]",
                 Properties = new PolicyProperties()
                 {
                     Format = isUrl ? "rawxml-link" : "rawxml",
