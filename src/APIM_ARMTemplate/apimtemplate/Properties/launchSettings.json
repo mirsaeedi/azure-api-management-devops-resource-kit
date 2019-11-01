@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "create --configFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\valid.yml\" --replacementFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\replace.yml\""
+      "commandLineArgs": "create --configFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\healthcheck_apim_definition.yml\" --replacementFile \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\replace.yml\""
     }
   }
 }

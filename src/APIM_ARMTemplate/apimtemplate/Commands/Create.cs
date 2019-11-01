@@ -3,6 +3,7 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.Models;
 using System.Linq;
+using Apim.DevOps.Toolkit;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
@@ -48,15 +49,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
         private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile,CommandOption replacementFile, CommandOption replacementVars,CommandOption prefixFileName)
         {
-            var fileReader = new FileReader();
+			var fileReader = new FileReader();
 
-            var replacementVariablesFromFile = await fileReader.GetReplacementVariablesFromYaml(replacementFile.Value());
+			await VariableReplacer.Instance.LoadFromFile(replacementFile.Value());
 
-            var replacementVariablesFromCommandLine = !replacementVars.HasValue() ? new string[0] : replacementVars.Value().Split(";");
+			VariableReplacer.Instance.Load(replacementVars.Value());
 
-            var vars = replacementVariablesFromFile.Concat(replacementVariablesFromCommandLine);
-
-            var creatorConfig = await fileReader.GetCreatorConfigFromYaml(configFile.Value(), vars);
+            var creatorConfig = await fileReader.GetCreatorConfigFromYaml(configFile.Value());
 
             creatorConfig.PrefixFileName = prefixFileName.Value();
 
