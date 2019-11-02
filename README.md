@@ -116,7 +116,7 @@ In practice we need to have customization and flexibility in place to cover a wi
 
 The following yml sample shows how we can have a customizeable deployment.
 
-```
+```yml
 version: 0.0.1
 apimServiceName: $(apimInstanceName)
 
