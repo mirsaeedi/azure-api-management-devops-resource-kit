@@ -110,6 +110,12 @@ Having the ARM templates uploaded, we are ready to start the deployment. We can 
 az group deployment create --resource-group your-resource-group --template-file "c:\apim\output\master.template.json" --parameters "c:\apim\output\parameters.json"
 ```
 
+## Variables
+
+## Customizing the Name of Generated ARM templates
+
+
+
 ## License
 
 This project is licensed under [the MIT License](LICENSE).
