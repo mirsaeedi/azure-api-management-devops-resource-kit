@@ -220,7 +220,7 @@ linkedTemplatesBaseUrl : $(uploadLocation)
 
 Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Each key value is separated using a semicolon. The values are only applied to their associated policy. 
 
-## Customizing the Name of Generated ARM templates
+## Customizing The Name of Generated ARM Templates
 
 Another customization that you can apply is to the name of generated ARM templates.
 
