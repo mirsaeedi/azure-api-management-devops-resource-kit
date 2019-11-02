@@ -188,12 +188,38 @@ Another way which can be more flexible in CI/CD pipeline is passing variables th
 dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
 ```
 
-You can pass the variables through a file and string simultaneously.
+You can pass global variables through a file and string simultaneously.
 
 ### Passing Local Variables
 
+By Having the previous exaple in mind, let's say we want to have similar policy for both operations **add_pet** and **delete_pet** while we want to set the backend variable **$(BackendUrl)** to different values in these operaions. We can achieve this using local variables.
 
+```yml
+version: 0.0.1
+apimServiceName: $(apimInstanceName)
 
+apis:
+    - name: myApi
+      type: http
+      description: myFirstApi
+      serviceUrl: $(serviceUrl)
+      openApiSpec: $(openApiPath)
+      policy: C:\apim\apiPolicyHeaders.xml
+      suffix: conf
+      subscriptionRequired: true
+      isCurrent: true
+      apiRevision: 1
+      operations:
+        addPet:
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com
+        deletePet:
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com
+
+outputLocation: $(apimFolder)\output
+linkedTemplatesBaseUrl : $(uploadLocation)
+```
+
+Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax. Each key value is separated using a semicolon. The values are only applied to their associated policy. 
 
 ## Customizing the Name of Generated ARM templates
 
