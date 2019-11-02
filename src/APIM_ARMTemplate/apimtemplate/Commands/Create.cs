@@ -22,11 +22,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             var prefixFileName = Option("--prefix <prefix>", "prefix of generated files", CommandOptionType.SingleValue);
 
-            this.HelpOption();
+			var masterFileName = Option("--masterFileName <linkedFileName>", "name of the master template", CommandOptionType.SingleValue);
+
+			this.HelpOption();
 
             this.OnExecuteAsync(async (cancellationToken) =>
             {
-                var creatorConfig = await GetCreatorConfig(configFile, replacementFile, replacementVars, prefixFileName);
+                var creatorConfig = await GetCreatorConfig(configFile, replacementFile, replacementVars, prefixFileName, masterFileName);
 
                 var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
 
@@ -47,7 +49,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return isValidCreatorConfig;
         }
 
-        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile,CommandOption replacementFile, CommandOption replacementVars,CommandOption prefixFileName)
+        private async Task<CreatorConfig> GetCreatorConfig(CommandOption configFile, 
+			CommandOption replacementFile, 
+			CommandOption replacementVars, 
+			CommandOption prefixFileName, 
+			CommandOption masterTemplateName)
         {
 			var fileReader = new FileReader();
 
@@ -59,7 +65,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             creatorConfig.PrefixFileName = prefixFileName.Value();
 
-            return creatorConfig;
+			creatorConfig.MasterTemplateName =  masterTemplateName.Value();
+
+			return creatorConfig;
         }
     }
 }

@@ -5,10 +5,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileNameGenerator
     {
-        private string _prefix;
-        public FileNameGenerator(string prefix)
+		private string _masterTemplateName;
+		private string _prefix;
+        public FileNameGenerator(string prefix, string masterTemplateName)
         {
-            _prefix = string.IsNullOrEmpty(prefix) ? "" : prefix.Replace("$datetime", DateTime.Now.ToString("yyyyMMdd-HHmm")) + "-";
+			_masterTemplateName = string.IsNullOrEmpty(masterTemplateName) ? "master.template" : masterTemplateName;
+			_prefix = string.IsNullOrEmpty(prefix) ? "" : prefix;
         }
 
         public FileNames GenerateFileNames()
@@ -23,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
                 namedValues = $@"{_prefix}namedValues.template.json",
                 products = $@"{_prefix}products.template.json",
                 parameters = $@"{_prefix}parameters.json",
-                linkedMaster = $@"{_prefix}master.template.json"
+                linkedMaster = $@"{_prefix}{_masterTemplateName}.json"
             };
         }
 
