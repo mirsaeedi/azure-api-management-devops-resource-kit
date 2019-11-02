@@ -74,12 +74,12 @@ linkedTemplatesBaseUrl : https://mystorageaccount.blob.core.windows.net/mycontai
 
 The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided here. Few things to note that are:
 
-* _apimServiceName_: Specifies the name of your apim. All entities inside this yml file are deployed to this instance.
-* _OpenApiSpec_: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
-* _Policy_: Takes a local path or url which refers to an XML file that contains the policy.
-* _operations_: Under this node, operation-specific policies are defined. Takes a local path or url which refers to an XML file that contains the policy. In this sample, **addPet** and **deletePet** are OperationIds defined in the OpenApi spec file.
-* _outputLocation_: Refers to the place that tool output the generated ARM templates.
-* _linkedTemplatesBaseUrl_: The address of the blob storage account you want to upload the ARM templates to. You have to upload all templates to a place accessible by Azure Resource Manager. This [limitation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) is imposed by Azure.
+* **_apimServiceName_**: Specifies the name of your apim. All entities inside this yml file are deployed to this instance.
+* **_openApiSpec_**: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
+* **_policy_**: Takes a local path or url which refers to an XML file that contains the policy.
+* **_operations_**: Under this node, operation-specific policies are defined. Takes a local path or url which refers to an XML file that contains the policy. In this sample, **addPet** and **deletePet** are OperationIds defined in the OpenApi spec file.
+* **_outputLocation_**: Refers to the place that tool output the generated ARM templates.
+* **_linkedTemplatesBaseUrl_**: The address of the blob storage account you want to upload the ARM templates to. You have to upload all templates to a place accessible by Azure Resource Manager. This [limitation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) is imposed by Azure.
 
 ## License
 
