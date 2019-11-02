@@ -52,7 +52,7 @@ version: 0.0.1
 apimServiceName: myAPIMService
 
 apis:
-    - name: myPpi
+    - name: myApi
       type: http
       description: myFirstApi
       serviceUrl: http://myApiBackendUrl.com
@@ -111,6 +111,56 @@ az group deployment create --resource-group your-resource-group --template-file 
 ```
 
 ## Variables
+
+In practice we need to have customization and flexibility in place to cover a wide range of deployment scenarios. Global and Local variables can be define to customize the yml file and policies according to requirements imposed by environment or other conditions.
+
+The following yml sample shows how we can have a customizeable deployment.
+
+```
+version: 0.0.1
+apimServiceName: $(apimInstanceName)
+
+apis:
+    - name: myApi
+      type: http
+      description: myFirstApi
+      serviceUrl: $(serviceUrl)
+      openApiSpec: $(openApiPath)
+      policy: C:\apim\apiPolicyHeaders.xml:::
+      suffix: conf
+      subscriptionRequired: true
+      isCurrent: true
+      apiRevision: 1
+      operations:
+        addPet:
+          policy: C:\apim\operationRateLimit.xml
+        deletePet:
+          policy: C:\apim\operationRateLimit.xml
+
+outputLocation: $(apimFolder)\output
+linkedTemplatesBaseUrl : $(uploadLocation)
+```
+
+```xml
+<!--this is C:\apim\operationRateLimit.xml-->
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service base-url="$(BackendUrl)" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
+```
+
+In the yml file, global variables are defined using the **$(variableName)** syntax. You can define whatever variable you like in everywhere, even the referenced policies. There variables are defined by you in the document and their corresponding values are set when you run dotnet-apim.
 
 ## Customizing the Name of Generated ARM templates
 
