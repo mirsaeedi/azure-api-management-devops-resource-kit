@@ -20,7 +20,7 @@ In one sentence this approach is going from **yml/openapi** to **ARM Templates**
 
 ## Deviation from Microsoft's Approach: dotnet-apim
 
-While Microsoft's approach to the problem is solid on paper, we found that there are some issues in the implementation that need to be addressed for having it integrated into a CI/CD pipeline.   
+While Microsoft's approach to the problem is solid on paper, we found that there are some issues in the implementation that need to be addressed:  
 
 
 * The official toolkit is actually a C# project which you need to build/run manually, near impossible to have it in your ci/cd pipeline. 
