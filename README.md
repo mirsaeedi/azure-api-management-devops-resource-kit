@@ -29,6 +29,15 @@ While Microsoft's approach to the problem is solid on paper, we found that there
 
 To address these fundemental issues, we have re-written the source code from the ground up. Bugs are eliminated and source code is much more in line with best practices. A cross-platform dotnet global tool, **dotnet-apim** is at your hand to streamline your APIM deployment by integrating in into CI/CD pipelines. Furthermore, new functionalities have been added such as Global/Local variables.
 
+## Install [dotnet-apim](https://www.nuget.org/packages/Apim.DevOps.Toolkit/)
+
+dotnet-apim is a cross-platform dotnet global tool that you can easily install from the command-line of your choice. Make sure you have the awesome [.NET Core](https://dotnet.microsoft.com/download) installed on your machine and then run the following command to install the tool.
+
+```powershell
+dotnet tool install --global Apim.DevOps.Toolkit
+```
+
+
 found that are dotnet-apim is a cross-platform dotnet tool that you can easily install on your dev machine or ci/cd system. Using dotnet-apim is straigtforward and consists of 4 steps.
 
 1. [install dotnet-apim] on your machine.
