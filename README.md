@@ -91,11 +91,24 @@ dotnet-apim create --configFile "c:/apim/definition.yml"
 
 You can find the generated files in the location defined by **_outputLocation_**.
 
+Among all generated templates, following two files have a fundemntal role in the whole scenario:
+
+**Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. Has links to all other templates. 
+**Patameter Template**: By default named parameters.json, contains the parametes required for Master template.
+
 ### Uploading Generated ARM Templates.
 
 A known limitation of the ARM Templates is that they [need to get uploaded](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) to a location accessible to Azure Resource Manager. 
 
 Azure Blob Storage could be a good option for most users. For test purposes, you can use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) to manually upload files in a drag and drop manner. You can also use [Azure CLI](https://docs.microsoft.com/en-us/azure/storage/common/storage-azure-cli), [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10), or [Azure File Copy](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-file-copy?view=azure-devops) task in Azure Pipeline to upload your files according to your needs.
+
+### Deploying ARM Templates into APIM
+
+Having the ARM templates uploaded, we are ready to start the deployment. We can use [Azure Cli](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli) or [Azure Resource Group Deployment](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment?view=azure-devops) in Azure Pipeline.
+
+```powershell
+az group deployment create --resource-group your-resource-group --template-file "c:\apim\output\master.template.json" --parameters "c:\apim\output\parameters.json"
+```
 
 ## License
 
