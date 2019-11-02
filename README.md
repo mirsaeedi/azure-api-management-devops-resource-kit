@@ -183,7 +183,6 @@ dotnet-apim create --configFile "c:/apim/definition.yml" --replacementFile "c:/a
 
 Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string key-values should be separated using semicolon.
 
-
 ```powershell
 dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
 ```
@@ -219,11 +218,19 @@ outputLocation: $(apimFolder)\output
 linkedTemplatesBaseUrl : $(uploadLocation)
 ```
 
-Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax. Each key value is separated using a semicolon. The values are only applied to their associated policy. 
+Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Each key value is separated using a semicolon. The values are only applied to their associated policy. 
 
 ## Customizing the Name of Generated ARM templates
 
+Another customization that you can apply is to the name of generated ARM templates.
 
+1. Specify a prefix for all generated ARM files using the **--prefix** argument. Uses to tag files to categorize based on APIM instance, date, etc
+2. Specify the name of the **Master Template** using the **--masterFileName** argument.
+
+
+```powershell
+dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" --prefix current-date-time" --masterFileName "master.file"
+```
 
 ## License
 
