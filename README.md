@@ -81,6 +81,22 @@ The above yml definition has the minimum properties required for defining an API
 * **_outputLocation_**: Refers to the place that tool output the generated ARM templates.
 * **_linkedTemplatesBaseUrl_**: The address of the blob storage account you want to upload the ARM templates to. You have to upload all templates to a place accessible by Azure Resource Manager. This [limitation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) is imposed by Azure.
 
+## Run dotnet-apim
+
+After having the yml file ready, it's time to running the dotnet-apim to generate the corresponding ARM templates.
+
+```powershell
+dotnet-apim create --configFile "c:/apim/definition.yml" 
+```
+
+You can find the generated files in the location defined by **_outputLocation_**.
+
+### Uploading Generated ARM Templates.
+
+A known limitation of the ARM Templates is that they [need to get uploaded](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) to a location accessible to Azure Resource Manager. 
+
+Azure Blob Storage could be a good option for most users. For test purposes, you can use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) to manually upload files in a drag and drop manner. You can also use [Azure CLI](https://docs.microsoft.com/en-us/azure/storage/common/storage-azure-cli), [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10), or [Azure File Copy](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-file-copy?view=azure-devops) task in Azure Pipeline to upload your files according to your needs.
+
 ## License
 
 This project is licensed under [the MIT License](LICENSE).
