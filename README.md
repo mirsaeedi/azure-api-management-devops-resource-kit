@@ -39,13 +39,11 @@ dotnet tool install --global Apim.DevOps.Toolkit
 
 ## YML Structure.
 
-dotnet-apim use the same [yml structure](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/APIM_ARMTemplate/README.md#create-the-config-file) defined in the Microsoft's toolkit. In this yaml file you define the structure of your APIM and its entities such as apis and products. This YML structure tries to mirror the APIM ARM templates of [APIs](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apis), [API Version Sets](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apiversionsets), [Products](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Backends](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Authorization Servers](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/authorizationservers), [Policies](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/policies), etc. 
-
-The yml structure supports a wide array of entities and configuration. A simple one could be like below:
+dotnet-apim use the same [yml structure](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/APIM_ARMTemplate/README.md#create-the-config-file) defined by the Microsoft's toolkit. In this yaml file you define the structure of your APIM and its entities such as apis, products, and backends. This YML structure tries to mirror the reference APIM ARM templates of [APIs](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apis), [API Version Sets](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apiversionsets), [Products](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Backends](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Authorization Servers](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/authorizationservers), [Policies](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/policies), etc. 
 
 ### Sample Config File
 
-The following is a full config.yml file with each property listed:
+The provided yml structure supports a wide array of entities and configuration. A simple one could be like below:
 
 ```yml
 version: 0.0.1
@@ -72,7 +70,7 @@ outputLocation: C:\apim\output
 linkedTemplatesBaseUrl : https://mystorageaccount.blob.core.windows.net/mycontainer
 ```
 
-The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided here. Few things to note that are:
+The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided [here](). Few things to note here are:
 
 * **_apimServiceName_**: Specifies the name of your apim. All entities inside this yml file are deployed to this instance.
 * **_openApiSpec_**: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
@@ -83,7 +81,7 @@ The above yml definition has the minimum properties required for defining an API
 
 ## Run dotnet-apim
 
-After having the yml file ready, it's time to running the dotnet-apim to generate the corresponding ARM templates.
+After having the yml file ready, it's time to running the dotnet-apim for generating the corresponding ARM templates.
 
 ```powershell
 dotnet-apim create --configFile "c:/apim/definition.yml" 
@@ -91,10 +89,10 @@ dotnet-apim create --configFile "c:/apim/definition.yml"
 
 You can find the generated files in the location defined by **_outputLocation_**.
 
-Among all generated templates, following two files have a fundemntal role in the whole scenario:
+Among all generated templates, following two files play a fundemntal role in the whole scenario:
 
 **Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. Has links to all other templates. 
-**Patameter Template**: By default named parameters.json, contains the parametes required for Master template.
+**Patameter Template**: By default named parameters.json, contains the parametes required for executing Master template.
 
 ### Uploading Generated ARM Templates.
 
@@ -112,20 +110,20 @@ az group deployment create --resource-group your-resource-group --template-file 
 
 ## Variables
 
-In practice we need to have customization and flexibility in place to cover a wide range of deployment scenarios. Global and Local variables can be define to customize the yml file and policies according to requirements imposed by environment or other conditions.
+In practice, a great degree of customization and flexibility is required to cover a wide range of deployment scenarios. Global and Local variables can be define to customize the yml file and policies according to requirements imposed by environment or other conditions.
 
-The following yml sample shows how we can have a customizeable deployment.
+The following yml sample shows how we can have a customizeable deployment definition by replacing raw values with a user-defined variable.
 
 ```yml
 version: 0.0.1
-apimServiceName: $(apimInstanceName)
+apimServiceName: $(apimInstanceName)  # global variable
 
 apis:
     - name: myApi
       type: http
       description: myFirstApi
-      serviceUrl: $(serviceUrl)
-      openApiSpec: $(openApiPath)
+      serviceUrl: $(serviceUrl)  # global variable
+      openApiSpec: $(openApiPath)  # global variable
       policy: C:\apim\apiPolicyHeaders.xml
       suffix: conf
       subscriptionRequired: true
@@ -137,8 +135,8 @@ apis:
         deletePet:
           policy: C:\apim\operationRateLimit.xml
 
-outputLocation: $(apimFolder)\output
-linkedTemplatesBaseUrl : $(uploadLocation)
+outputLocation: $(apimFolder)\output  # global variable
+linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 ```
 
 ```xml
@@ -160,11 +158,13 @@ linkedTemplatesBaseUrl : $(uploadLocation)
 </policies>
 ```
 
-In the yml file, global variables are defined using the **$(variableName)** syntax. You can define whatever variable you like in everywhere, even the referenced policies. There variables are defined by you in the document and their corresponding values are set when you run dotnet-apim.
+In the yml file, global variables are defined using the **$(variableName)** syntax. You can define whatever variable you like in everywhere, even the referenced policies. There is no built-in variable, they are all user defined.
+
+The next step is to inform dotnet-apim of these variables.
 
 ### Passing Global Variables
 
-The variable file is simply a yml file that defines the variables like below.
+The variable file is simply a yml file that defines the variables.
 
 ```yml
 - "apimInstanceName=your-apim-name"
@@ -181,7 +181,9 @@ Assuming the above file is located at _c:/apim/replace.yml_, we pass the file to
 dotnet-apim create --configFile "c:/apim/definition.yml" --replacementFile "c:/apim/replace.yml"
 ```
 
-Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string key-values should be separated using semicolon.
+By executing this command, dotnet-apim replaces all variables with their corresponding value before staring to generate the ARM templates. 
+
+Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string, key-values should be separated using semicolon.
 
 ```powershell
 dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
@@ -191,18 +193,18 @@ You can pass global variables through a file and string simultaneously.
 
 ### Passing Local Variables
 
-By Having the previous exaple in mind, let's say we want to have similar policy for both operations **add_pet** and **delete_pet** while we want to set the backend variable **$(BackendUrl)** to different values in these operaions. We can achieve this using local variables.
+By Having the previous example in mind, let's say we want to have similar policy for both operations **add_pet** and **delete_pet** while we want to set the backend variable **$(BackendUrl)** to different values in these operaions. We can achieve this using local variables.
 
 ```yml
 version: 0.0.1
-apimServiceName: $(apimInstanceName)
+apimServiceName: $(apimInstanceName) # global variable
 
 apis:
     - name: myApi
       type: http
       description: myFirstApi
-      serviceUrl: $(serviceUrl)
-      openApiSpec: $(openApiPath)
+      serviceUrl: $(serviceUrl)  # global variable
+      openApiSpec: $(openApiPath)  # global variable
       policy: C:\apim\apiPolicyHeaders.xml
       suffix: conf
       subscriptionRequired: true
@@ -210,22 +212,22 @@ apis:
       apiRevision: 1
       operations:
         addPet:
-          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com         # local variable
         deletePet:
-          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com         # local variable
 
-outputLocation: $(apimFolder)\output
-linkedTemplatesBaseUrl : $(uploadLocation)
+outputLocation: $(apimFolder)\output  # global variable
+linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 ```
 
-Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Each key value is separated using a semicolon. The values are only applied to their associated policy. 
+Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Key=Value pairs are separated using a semicolon. The local variables are only applied to their associated policy and override the global variables in case of name collision.
 
 ## Customizing The Name of Generated ARM Templates
 
-Another customization that you can apply is to the name of generated ARM templates.
+Another customization that can be applied is changing the the name of generated ARM templates.
 
-1. Specify a prefix for all generated ARM files using the **--prefix** argument. Uses to tag files to categorize based on APIM instance, date, etc
-2. Specify the name of the **Master Template** using the **--masterFileName** argument.
+1. Specify a prefix for all generated ARM files using the **--prefix** argument. Used to tag files to categorize each deployment based on APIM instance, date, etc
+2. Specify the name of **Master Template** using the **--masterFileName** argument.
 
 
 ```powershell
