@@ -1,12 +1,19 @@
-[![Build Status](https://dev.azure.com/apim-devops/ARM-template-generator/_apis/build/status/Master%20-%20Quality%20Gate?branchName=master)](https://dev.azure.com/apim-devops/ARM-template-generator/_build/latest?definitionId=1?branchName=master)
+# dotnet-apim
 
-# Azure API Management DevOps Resource Kit
+dotnet-apim is a cross-platform dotnet tool that you can easily install on your dev machine or ci/cd system. Using dotnet-apim is straigtforward and consists of 4 steps.
 
-APIs have become mundane. They have become the de facto standard for connecting apps, data, and services. In the larger picture, APIs are driving digital transformation in organizations.
+1. [install dotnet-apim] on your machine.
+2. Define a yml to the entities of your APIM instance. A wide array of resouces are supported such as API Version Sets, APIs, Policies, Products, Backend, Authorization, etc.
+3. Execute dotnet-apim which generates a set of ARM templates according to yml definitions.
+4. Deploy the arm templates into Azure Api Management.
 
-With the strategic value of APIs, a continuous integration (CI) and continuous deployment (CD) pipeline has become an important aspect of API development. It allows organizations to automate deployment of API changes without error-prone manual steps, detect issues earlier, and ultimately deliver value to end users faster.
 
-This repository provides [guidance](./README.md), [examples](./example/), and [tools](./src/APIM_ARMTemplate/README.md) to help you achieve API DevOps with Azure API Management.
+**Note**: This repository is forked from the official [API Management Devops Resource Kit](https://github.com/Azure/azure-api-management-devops-resource-kit). While there are similarities in the approach, dotnet-apim offers wide range of advantages not available in the official toolkit.
+
+1. dotnet-apim is a ready-to-use dotnet tool which is easy to incorporate into the ci/cd the process. On the other hand, the official repo is just a C# project which you need to build/run manually, near impossible to have it in your ci/cd pipeline. 
+2. Several bugs have been eliminated.
+3. Source code is rewritten and restructured to be in comply with C# best practices and design patters. This makes maintenance and contribution easier for the community.
+4. New functionalities have been added such as Global/Local variables. 
 
 ## The Problem
 
