@@ -47,7 +47,7 @@ The yml structure supports a wide array of entities and configuration. A simple 
 
 The following is a full config.yml file with each property listed:
 
-```
+```yml
 version: 0.0.1
 apimServiceName: myAPIMService
 
@@ -126,7 +126,7 @@ apis:
       description: myFirstApi
       serviceUrl: $(serviceUrl)
       openApiSpec: $(openApiPath)
-      policy: C:\apim\apiPolicyHeaders.xml:::
+      policy: C:\apim\apiPolicyHeaders.xml
       suffix: conf
       subscriptionRequired: true
       isCurrent: true
@@ -161,6 +161,39 @@ linkedTemplatesBaseUrl : $(uploadLocation)
 ```
 
 In the yml file, global variables are defined using the **$(variableName)** syntax. You can define whatever variable you like in everywhere, even the referenced policies. There variables are defined by you in the document and their corresponding values are set when you run dotnet-apim.
+
+### Passing Global Variables
+
+The variable file is simply a yml file that defines the variables like below.
+
+```yml
+- "apimInstanceName=your-apim-name"
+- "apimFolder=C:\\apim"
+- "uploadLocation=url-to-your-blob-storage"
+- "openApiPath=path-to-the-open-api-spec" 
+- "BackendUrl=backend-absolute-url"
+- "serviceUrl=api-service-url"
+```
+
+Assuming the above file is located at _c:/apim/replace.yml_, we pass the file to dotnet-apim using the **--replacementFile** argument.
+
+```powershell
+dotnet-apim create --configFile "c:/apim/definition.yml" --replacementFile "c:/apim/replace.yml"
+```
+
+Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string key-values should be separated using semicolon.
+
+
+```powershell
+dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
+```
+
+You can pass the variables through a file and string simultaneously.
+
+### Passing Local Variables
+
+
+
 
 ## Customizing the Name of Generated ARM templates
 
