@@ -41,6 +41,46 @@ dotnet tool install --global Apim.DevOps.Toolkit
 
 dotnet-apim use the same [yml structure](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/APIM_ARMTemplate/README.md#create-the-config-file) defined in the Microsoft's toolkit. In this yaml file you define the structure of your APIM and its entities such as apis and products. This YML structure tries to mirror the APIM ARM templates of [APIs](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apis), [API Version Sets](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apiversionsets), [Products](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Backends](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Authorization Servers](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/authorizationservers), [Policies](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/policies), etc. 
 
+The yml structure supports a wide array of entities and configuration. A simple one could be like below:
+
+### Sample Config File
+
+The following is a full config.yml file with each property listed:
+
+```
+version: 0.0.1
+apimServiceName: myAPIMService
+
+apis:
+    - name: myPpi
+      type: http
+      description: myFirstApi
+      serviceUrl: http://myApiBackendUrl.com
+      openApiSpec: C:\apim\swaggerPetstore.json
+      policy: C:\apim\apiPolicyHeaders.xml
+      suffix: conf
+      subscriptionRequired: true
+      isCurrent: true
+      apiRevision: 1
+      operations:
+        addPet:
+          policy: C:\apim\operationRateLimit.xml
+        deletePet:
+          policy: C:\apim\operationRateLimit.xml
+
+outputLocation: C:\apim\output
+linkedTemplatesBaseUrl : https://mystorageaccount.blob.core.windows.net/mycontainer
+```
+
+The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided here. Few things to note that are:
+
+* _apimServiceName_: Specifies the name of your apim. All entities inside this yml file are deployed to this instance.
+* _OpenApiSpec_: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
+* _Policy_: Takes a local path or url which refers to an XML file that contains the policy.
+* _operations_: Under this node, operation-specific policies are defined. Takes a local path or url which refers to an XML file that contains the policy. In this sample, **addPet** and **deletePet** are OperationIds defined in the OpenApi spec file.
+* _outputLocation_: Refers to the place that tool output the generated ARM templates.
+* _linkedTemplatesBaseUrl_: The address of the blob storage account you want to upload the ARM templates to. You have to upload all templates to a place accessible by Azure Resource Manager. This [limitation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) is imposed by Azure.
+
 ## License
 
 This project is licensed under [the MIT License](LICENSE).
