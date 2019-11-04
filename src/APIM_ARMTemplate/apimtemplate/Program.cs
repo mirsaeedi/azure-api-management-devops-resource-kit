@@ -1,42 +1,41 @@
 ﻿using System;
-using Colors.Net;
-using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System.Collections.Generic;
+using CommandLine;
+using Apim.DevOps.Toolkit.CommandLine;
+using System.Threading.Tasks;
+using Apim.DevOps.Toolkit;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            var app = ConfigureApplication();
-            app.Execute(args);
+			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
+
+			result.MapResult(
+				async option => await ProcessCommand(option), 
+				async errors => await ProcessError(errors));
+
+			return Task.CompletedTask;
         }
 
-        private static CommandLineApplication ConfigureApplication()
-        {
-			var context = new Dictionary<string,string>();
+		private static Task ProcessError(IEnumerable<Error> errors)
+		{
+			foreach (var error in errors)
+			{
+				Console.WriteLine(error);
+			}
 
-			var x = $"api/{context.GetValueOrDefault("api-version", "v1")}/HealthCheck";
-            var app = new CommandLineApplication()
-            {
-                Name = GlobalConstants.AppShortName,
-                FullName = GlobalConstants.AppLongName,
-                Description = GlobalConstants.AppDescription
-            };
+			return Task.CompletedTask;
+		}
 
-            app.HelpOption(inherited: true);
-            app.Commands.Add(new CreateCommand());
-
-            app.OnExecute(() =>
-            {
-                ColoredConsole.Error.WriteLine("No commands specified, please specify a command");
-                app.ShowHelp();
-                return 1;
-            });
-            return app;
-        }
+		private static async Task ProcessCommand(CommandLineOption option)
+		{
+			var createCommand = new CreateCommand();
+			await createCommand.Process(option);
+		}
     }
 }

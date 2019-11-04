@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			return await response.Content.ReadAsStringAsync();
 		}
 
-		private static CreatorConfig GetCreatorConfig(string yamlContent)
+		private CreatorConfig GetCreatorConfig(string yamlContent)
         {
             var deserializer = new Deserializer();
             object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
@@ -73,9 +73,19 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             {
                 jsonSerializer.Serialize(writer, deserializedYaml);
                 string jsonText = writer.ToString();
-                var yamlObject = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
-                return yamlObject;
+                var creatorConfig = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
+
+				var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
+
+				return creatorConfig;
             }
         }
-    }
+
+		private bool IsCreatorConfigValid(CreatorConfig creatorConfig)
+		{
+			var creatorConfigurationValidator = new ConfigurationValidator();
+			bool isValidCreatorConfig = creatorConfigurationValidator.Validate(creatorConfig);
+			return isValidCreatorConfig;
+		}
+	}
 }

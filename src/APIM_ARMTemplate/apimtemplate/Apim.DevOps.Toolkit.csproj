@@ -7,11 +7,11 @@
     <ToolCommandName>dotnet-apim</ToolCommandName>
     <ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
     <PackageId>Apim.DevOps.Toolkit</PackageId>
-    <Version>0.9.9</Version>
+    <Version>1.0.0</Version>
     <Authors>Ehsan Mirsaeedi</Authors>
     <Company />
-    <Product>Apim DevOps Toolkit</Product>
-    <Description>Apim DevOps Toolkit helps with the CI/CD.</Description>
+    <Product>dotnet-apim DevOps Toolkit</Product>
+    <Description>dotnet-apim is a cross-platform dotnet tool which streamlines the CI/CD process of deploying APIs into Azure API Management.</Description>
     <RepositoryUrl>https://github.com/mirsaeedi/azure-api-management-devops-resource-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>apim; devops; cicd; toolkit; azure</PackageTags>
@@ -30,14 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Colors.Net" Version="1.1.0" />
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.5" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="Microsoft.Azure.Management.ApiManagement" Version="4.0.6-preview" />
     <PackageReference Include="Microsoft.Azure.Management.Authorization" Version="2.9.0-preview" />
     <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.27.2" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Colors.Net" Version="1.1.0" />
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="YamlDotNet" Version="8.0.0" />
   </ItemGroup>
