@@ -84,7 +84,12 @@ The above yml definition has the minimum properties required for defining an API
 After having the yml file ready, it's time to running the dotnet-apim for generating the corresponding ARM templates.
 
 ```powershell
-dotnet-apim create --configFile "c:/apim/definition.yml" 
+dotnet-apim --yamlConfig "c:/apim/definition.yml" 
+```
+
+
+```powershell
+dotnet-apim -c "c:/apim/definition.yml" 
 ```
 
 You can find the generated files in the location defined by **_outputLocation_**.
@@ -178,7 +183,12 @@ The variable file is simply a yml file that defines the variables.
 Assuming the above file is located at _c:/apim/replace.yml_, we pass the file to dotnet-apim using the **--replacementFile** argument.
 
 ```powershell
-dotnet-apim create --configFile "c:/apim/definition.yml" --replacementFile "c:/apim/replace.yml"
+dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableFile "c:/apim/replace.yml"
+```
+
+
+```powershell
+dotnet-apim -c "c:/apim/definition.yml" -f "c:/apim/replace.yml"
 ```
 
 By executing this command, dotnet-apim replaces all variables with their corresponding value before staring to generate the ARM templates. 
@@ -186,7 +196,11 @@ By executing this command, dotnet-apim replaces all variables with their corresp
 Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string, key-values should be separated using semicolon.
 
 ```powershell
-dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
+dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableString "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
+```
+
+```powershell
+dotnet-apim -c "c:/apim/definition.yml" -s "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
 ```
 
 You can pass global variables through a file and string simultaneously.
@@ -231,7 +245,12 @@ Another customization that can be applied is changing the the name of generated 
 
 
 ```powershell
-dotnet-apim create --configFile "c:/apim/definition.yml" --replacementVars "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" --prefix "current-date-time" --masterFileName "master.file"
+dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableString "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" --armPrefix "current-date-time" --master "master.file"
+```
+
+
+```powershell
+dotnet-apim -c "c:/apim/definition.yml" -s "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" -p "current-date-time" -m "master.file"
 ```
 
 ## License
