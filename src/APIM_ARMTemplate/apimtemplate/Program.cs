@@ -11,16 +11,16 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 {
     class Program
     {
-        public static Task Main(string[] args)
-        {
+		public static Task Main(string[] args)
+		{
 			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
 
 			result.MapResult(
-				async option => await ProcessCommand(option), 
+				async option => await ProcessCommand(option),
 				async errors => await ProcessError(errors));
 
 			return Task.CompletedTask;
-        }
+		}
 
 		private static Task ProcessError(IEnumerable<Error> errors)
 		{
@@ -34,8 +34,15 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 
 		private static async Task ProcessCommand(CommandLineOption option)
 		{
-			var createCommand = new CreateCommand();
-			await createCommand.Process(option);
+			try
+			{
+				var createCommand = new CreateCommand();
+				await createCommand.Process(option);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.ToString());
+			}
 		}
     }
 }
