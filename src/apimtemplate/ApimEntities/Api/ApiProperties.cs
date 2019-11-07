@@ -7,27 +7,26 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 
     public class ApiProperties
     {
-        public string description { get; set; }
+        public string Description { get; set; }
         public APITemplateAuthenticationSettings AuthenticationSettings { get; set; }
-        public APiTemplateSubscriptionKeyParameterNames subscriptionKeyParameterNames { get; set; }
-        public string type { get; set; }
-        public string apiRevision { get; set; }
-        public string apiVersion { get; set; }
-        public bool? isCurrent { get; set; }
-        public string apiRevisionDescription { get; set; }
-        public string apiVersionDescription { get; set; }
+        public APiTemplateSubscriptionKeyParameterNames SubscriptionKeyParameterNames { get; set; }
+        public string Type { get; set; }
+        public string ApiRevision { get; set; }
+        public string ApiVersion { get; set; }
+        public bool? IsCurrent { get; set; }
+        public string ApiRevisionDescription { get; set; }
+        public string ApiVersionDescription { get; set; }
         public string ApiVersionSetId { get; set; }
-        public Nullable<bool> subscriptionRequired { get; set; }
-        public string sourceApiId { get; set; }
-        public string displayName { get; set; }
-        public string serviceUrl { get; set; }
-        public string path { get; set; }
-        public string[] protocols { get; set; }
-        public APITemplateAPIVersionSet apiVersionSet { get; set; }
-        public string value { get; set; }
-        public string format { get; set; }
-        public APITemplateWSDLSelector wsdlSelector { get; set; }
-        public string apiType { get; set; }
+        public bool? SubscriptionRequired { get; set; }
+        public string SourceApiId { get; set; }
+        public string DisplayName { get; set; }
+        public string ServiceUrl { get; set; }
+        public string Path { get; set; }
+        public string[] Protocols { get; set; }
+        public string Value { get; set; }
+        public string Format { get; set; }
+        public APITemplateWSDLSelector WsdlSelector { get; set; }
+        public string ApiType { get; set; }
     }
 
     public class APITemplateAuthenticationSettings
@@ -40,16 +39,7 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
     public class APiTemplateSubscriptionKeyParameterNames
     {
         public string header { get; set; }
-        public string query { get; set; }
-    }
-
-    public class APITemplateVersionSet
-    {
-        public string id { get; set; }
-        public string description { get; set; }
-        public string versioningScheme { get; set; }
-        public string versionQueryName { get; set; }
-        public string versionHeaderName { get; set; }
+        public string Query { get; set; }
     }
 
     public class APITemplateWSDLSelector
@@ -68,15 +58,5 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
     {
         public string openidProviderId { get; set; }
         public string[] bearerTokenSendingMethods { get; set; }
-    }
-
-    public class APITemplateAPIVersionSet
-    {
-        public string id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string versionQueryName { get; set; }
-        public string versionHeaderName { get; set; }
-        public string versioningScheme { get; set; }
     }
 }

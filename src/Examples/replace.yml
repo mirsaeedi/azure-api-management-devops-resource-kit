@@ -1,0 +1,6 @@
+- "apimInstanceName=your-apim-instance-name"
+- "serviceUrl=your-api-service-url"
+- "openApiPath=path-to-openapi-doc"
+- "apimFolder=path-to-output-folder"
+- "uploadLocation=path-blob-storage"
+- "policyFolder=path-to-policyFolder"

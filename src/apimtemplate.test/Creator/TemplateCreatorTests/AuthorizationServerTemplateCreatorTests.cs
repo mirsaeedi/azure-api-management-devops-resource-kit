@@ -12,7 +12,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             AuthorizationServerTemplateCreator authorizationServerTemplateCreator = new AuthorizationServerTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { AuthorizationServers = new List<AuthorizationServerTemplateProperties>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { AuthorizationServers = new List<AuthorizationServerTemplateProperties>() };
             AuthorizationServerTemplateProperties authorizationServer = new AuthorizationServerTemplateProperties()
             {
                 Description = "description",

@@ -12,10 +12,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             DiagnosticTemplateCreator diagnosticTemplateCreator = new DiagnosticTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
-                diagnostic = new DiagnosticConfig()
+                diagnostic = new DiagnosticDeploymentDefinition()
                 {
                     Name = "applicationinsights",
                     AlwaysLog = "alwaysLog",

@@ -12,10 +12,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APIVersionSetTemplateCreator apiVersionSetTemplateCreator = new APIVersionSetTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { ApiVersionSets = new List<APIVersionSetConfig>() };
-            APIVersionSetConfig apiVersionSet = new APIVersionSetConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApiVersionSets = new List<ApiVersionSetDeploymentDefinition>() };
+            ApiVersionSetDeploymentDefinition apiVersionSet = new ApiVersionSetDeploymentDefinition()
             {
-                id = "id",
+                Name = "id",
                 Description = "description",
                 DisplayName = "displayName",
                 VersionHeaderName = "versionHeaderName",
@@ -41,8 +41,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APIVersionSetTemplateCreator apiVersionSetTemplateCreator = new APIVersionSetTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { ApiVersionSets = new List<APIVersionSetConfig>() };
-            APIVersionSetConfig apiVersionSet = new APIVersionSetConfig();
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApiVersionSets = new List<ApiVersionSetDeploymentDefinition>() };
+            ApiVersionSetDeploymentDefinition apiVersionSet = new ApiVersionSetDeploymentDefinition();
             creatorConfig.ApiVersionSets.Add(apiVersionSet);
 
             // act
@@ -58,10 +58,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APIVersionSetTemplateCreator apiVersionSetTemplateCreator = new APIVersionSetTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { ApiVersionSets = new List<APIVersionSetConfig>() };
-            APIVersionSetConfig apiVersionSet = new APIVersionSetConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApiVersionSets = new List<ApiVersionSetDeploymentDefinition>() };
+            ApiVersionSetDeploymentDefinition apiVersionSet = new ApiVersionSetDeploymentDefinition()
             {
-                id = "id"
+                Name = "id"
             };
             creatorConfig.ApiVersionSets.Add(apiVersionSet);
 
@@ -70,7 +70,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             APIVersionSetTemplateResource apiVersionSetTemplateResource = (APIVersionSetTemplateResource)versionSetTemplate.Resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{apiVersionSet.id}')]", apiVersionSetTemplateResource.Name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{apiVersionSet.Name}')]", apiVersionSetTemplateResource.Name);
         }
     }
 }

@@ -8,13 +8,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class LoggerTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var template = EmptyTemplate;
             template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
             var resources = new List<TemplateResource>();
-            foreach (LoggerConfig logger in creatorConfig.Loggers)
+            foreach (LoggerDeploymentDefinition logger in creatorConfig.Loggers)
             {
                 var loggerTemplateResource = new LoggerTemplateResource()
                 {

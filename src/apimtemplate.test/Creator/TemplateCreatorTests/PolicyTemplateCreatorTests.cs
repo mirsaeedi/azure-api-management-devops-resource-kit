@@ -12,7 +12,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             PolicyTemplateCreator policyTemplateCreator = PolicyTemplateCreatorFactory.GeneratePolicyTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Policy = "http://someurl.com" };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Policy = "http://someurl.com" };
 
             // act
             Template policyTemplate = policyTemplateCreator.CreateGlobalServicePolicyTemplate(creatorConfig);
@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             PolicyTemplateCreator policyTemplateCreator = PolicyTemplateCreatorFactory.GeneratePolicyTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -53,8 +53,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             PolicyTemplateCreator policyTemplateCreator = PolicyTemplateCreatorFactory.GeneratePolicyTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Products = new List<ProductConfig>() };
-            ProductConfig product = new ProductConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Products = new List<ProductDeploymentDefinition>() };
+            ProductDeploymentDefinition product = new ProductDeploymentDefinition()
             {
                 DisplayName = "displayName",
                 Description = "description",
@@ -73,7 +73,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             PolicyTemplateResource policyTemplateResource = policyTemplateCreator.CreateProductPolicyTemplateResource(product, dependsOn);
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Id}/policy')]", policyTemplateResource.Name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Name}/policy')]", policyTemplateResource.Name);
             Assert.Equal("rawxml-link", policyTemplateResource.properties.format);
             Assert.Equal(product.Policy, policyTemplateResource.properties.value);
             Assert.Equal(dependsOn, policyTemplateResource.DependsOn);
@@ -84,7 +84,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             PolicyTemplateCreator policyTemplateCreator = PolicyTemplateCreatorFactory.GeneratePolicyTemplateCreator();
-            KeyValuePair<string, OperationsConfig> policyPair = new KeyValuePair<string, OperationsConfig>("key", new OperationsConfig() { Policy = "http://someurl.com" });
+            KeyValuePair<string, OperationsDeploymentDefinition> policyPair = new KeyValuePair<string, OperationsDeploymentDefinition>("key", new OperationsDeploymentDefinition() { Policy = "http://someurl.com" });
             string apiName = "apiName";
             string[] dependsOn = new string[] { "dependsOn" };
 

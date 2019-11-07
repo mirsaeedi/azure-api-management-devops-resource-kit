@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ProductAPITemplateCreator productAPITemplateCreator = new ProductAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig();
+            DeploymentDefinition creatorConfig = new DeploymentDefinition();
             APIConfig api = new APIConfig()
             {
                 products = "1, 2, 3"

@@ -13,7 +13,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -74,7 +74,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -96,7 +96,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",
@@ -159,7 +159,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             APITemplateCreator apiTemplateCreator = APITemplateCreatorFactory.GenerateAPITemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Apis = new List<APIConfig>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Apis = new List<APIConfig>() };
             APIConfig api = new APIConfig()
             {
                 name = "name",

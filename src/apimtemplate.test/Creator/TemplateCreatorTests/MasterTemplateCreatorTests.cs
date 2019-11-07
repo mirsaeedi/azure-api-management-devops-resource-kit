@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         public void ShouldCreateCorrectNumberOfDeploymentResources()
         {
             // arrange
-            CreatorConfig creatorConfig = new CreatorConfig() { ApimServiceName = "apimService", Linked = true };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApimServiceName = "apimService", Linked = true };
             MasterTemplateCreator masterTemplateCreator = new MasterTemplateCreator();
             Template apiVersionSetsTemplate = new Template();
             Template globalServicePolicyTemplate = new Template();
@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             MasterTemplateCreator masterTemplateCreator = new MasterTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition()
             {
                 ApimServiceName = "apimServiceName",
                 Linked = true,
@@ -56,7 +56,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         public void ShouldCreateCorrectNumberOfParametersWhenUnlinked()
         {
             // arrange
-            CreatorConfig creatorConfig = new CreatorConfig() { ApimServiceName = "apimService", Linked = false };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApimServiceName = "apimService", Linked = false };
             MasterTemplateCreator masterTemplateCreator = new MasterTemplateCreator();
             // unlinked templates result in 1 value
             int count = 1;
@@ -91,7 +91,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             MasterTemplateCreator masterTemplateCreator = new MasterTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { ApimServiceName = "apimService", Linked = true, LinkedTemplatesBaseUrl = "http://someurl.com", LinkedTemplatesUrlQueryString = "?param=1" };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { ApimServiceName = "apimService", Linked = true, LinkedTemplatesBaseUrl = "http://someurl.com", LinkedTemplatesUrlQueryString = "?param=1" };
             string apiVersionSetFileName = "/versionSet1-apiVersionSets.template.json";
 
             // act

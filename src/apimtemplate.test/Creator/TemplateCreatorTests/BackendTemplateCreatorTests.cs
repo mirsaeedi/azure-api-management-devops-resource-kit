@@ -12,7 +12,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             BackendTemplateCreator backendTemplateCreator = new BackendTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Backends = new List<BackendTemplateProperties>() };
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Backends = new List<BackendTemplateProperties>() };
             BackendTemplateProperties backend = new BackendTemplateProperties()
             {
                 Title = "title",

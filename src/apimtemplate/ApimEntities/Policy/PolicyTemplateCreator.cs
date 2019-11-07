@@ -16,7 +16,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             _fileReader = new FileReader();
         }
 
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var template = EmptyTemplate;
             template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
@@ -29,9 +29,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return await Task.FromResult(template);
         }
 
-        public Task<PolicyTemplateResource> CreateAPIPolicyTemplateResource(ApiConfiguration api, string[] dependsOn)
+        public Task<PolicyTemplateResource> CreateApiPolicyTemplateResource(ApiDeploymentDefinition api, string[] dependsOn)
         {
-            return CreateOperationPolicyTemplateResource(ResourceType.ApiPolicy, api.policy, $"{api.name}/policy", dependsOn);  
+            return CreateOperationPolicyTemplateResource(ResourceType.ApiPolicy, api.Policy, $"{api.Name}/policy", dependsOn);  
         }
 
         public async Task<PolicyTemplateResource> CreateOperationPolicyTemplateResource(string policyType ,string policy, string name, string[] dependsOn)
@@ -52,13 +52,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return policyTemplateResource;
         }
 
-        public async Task<List<PolicyTemplateResource>> CreateOperationPolicyTemplateResources(ApiConfiguration api, string[] dependsOn)
+        public async Task<List<PolicyTemplateResource>> CreateOperationPolicyTemplateResources(ApiDeploymentDefinition api, string[] dependsOn)
         {
             // create a policy resource for each policy listed in the config file and its associated provided xml file
             List<PolicyTemplateResource> policyTemplateResources = new List<PolicyTemplateResource>();
-            foreach (KeyValuePair<string, OperationsConfig> pair in api.operations)
+            foreach (KeyValuePair<string, OperationsDeploymentDefinition> pair in api.Operations)
             {
-                policyTemplateResources.Add(await CreateOperationPolicyTemplateResource(ResourceType.ApiOperationPolicy, pair.Value.Policy, $"{api.name}/{pair.Key}/policy", dependsOn));
+                policyTemplateResources.Add(await CreateOperationPolicyTemplateResource(ResourceType.ApiOperationPolicy, pair.Value.Policy, $"{api.Name}/{pair.Key}/policy", dependsOn));
             }
             return policyTemplateResources;
         }

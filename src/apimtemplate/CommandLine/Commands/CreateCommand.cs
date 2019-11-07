@@ -18,13 +18,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			await CreateTemplates(creatorConfig);
 		}
 
-		private async Task CreateTemplates(CreatorConfig creatorConfig)
+		private async Task CreateTemplates(DeploymentDefinition creatorConfig)
 		{
 			var armTemplateCreator = new ArmTemplateCreator(creatorConfig);
 			await armTemplateCreator.Create();
 		}
 
-		private async Task<CreatorConfig> GetCreatorConfig(CommandLineOption option)
+		private async Task<DeploymentDefinition> GetCreatorConfig(CommandLineOption option)
 		{
 			var fileReader = new FileReader();
 

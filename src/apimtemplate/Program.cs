@@ -32,17 +32,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 			return Task.CompletedTask;
 		}
 
-		private static async Task ProcessCommand(CommandLineOption option)
+		private static Task ProcessCommand(CommandLineOption option)
 		{
 			try
 			{
 				var createCommand = new CreateCommand();
-				await createCommand.Process(option);
+				createCommand.Process(option).Wait();
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e.ToString());
 			}
+
+			return Task.CompletedTask;
+			
 		}
     }
 }

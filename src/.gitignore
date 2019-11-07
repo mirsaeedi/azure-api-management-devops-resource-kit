@@ -40,3 +40,8 @@ msbuild.wrn
 
 # Local Testing
 *validTesting.yml
+
+# Examples
+
+Examples/Output
+Examples/replace_dont_track.yml

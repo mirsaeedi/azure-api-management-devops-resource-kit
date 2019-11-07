@@ -9,7 +9,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     public class AuthorizationServerTemplateCreator : TemplateCreator, ITemplateCreator
     {
 
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var authorizationTemplate = EmptyTemplate;
             authorizationTemplate.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);

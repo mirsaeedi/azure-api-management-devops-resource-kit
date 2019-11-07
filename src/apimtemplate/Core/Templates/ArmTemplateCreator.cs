@@ -1,4 +1,5 @@
 ﻿using Apim.Arm.Creator.Creator.TemplateCreators;
+using Apim.DevOps.Toolkit.ApimEntities.Tag;
 using Apim.DevOps.Toolkit.ArmTemplates;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
@@ -13,10 +14,10 @@ namespace Apim.Arm.Creator.Creator.Models
 {
 	public class ArmTemplateCreator
 	{
-		private CreatorConfig _creatorConfig;
+		private DeploymentDefinition _creatorConfig;
 		private FileWriter _fileWriter;
 
-		public ArmTemplateCreator(CreatorConfig creatorConfig)
+		public ArmTemplateCreator(DeploymentDefinition creatorConfig)
 		{
 			_creatorConfig = creatorConfig;
 			_fileWriter = new FileWriter();
@@ -29,27 +30,31 @@ namespace Apim.Arm.Creator.Creator.Models
 
 			Console.WriteLine("Creating global service policy template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<PolicyTemplateCreator>(fileNames.globalServicePolicy, c => c.Policy != null);
+			await SaveTemplate<PolicyTemplateCreator>(fileNames.GlobalServicePolicy, c => c.Policy != null);
 
 			Console.WriteLine("Creating api version sets template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<APIVersionSetTemplateCreator>(fileNames.apiVersionSets, c => c.ApiVersionSets != null);
+			await SaveTemplate<APIVersionSetTemplateCreator>(fileNames.ApiVersionSets, c => c.ApiVersionSets != null);
 
 			Console.WriteLine("Creating products template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<ProductTemplateCreator>(fileNames.products, c => c.Products != null);
+			await SaveTemplate<ProductTemplateCreator>(fileNames.Products, c => c.Products != null);
+
+			Console.WriteLine("Creating tags template");
+			Console.WriteLine("------------------------------------------");
+			await SaveTemplate<TagTemplateCreator>(fileNames.Tags, c => c.Tags != null);
 
 			Console.WriteLine("Creating loggers template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<LoggerTemplateCreator>(fileNames.loggers, c => c.Loggers != null);
+			await SaveTemplate<LoggerTemplateCreator>(fileNames.Loggers, c => c.Loggers != null);
 
 			Console.WriteLine("Creating backeds template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<BackendTemplateCreator>(fileNames.backends, c => c.Backends != null);
+			await SaveTemplate<BackendTemplateCreator>(fileNames.Backends, c => c.Backends != null);
 
 			Console.WriteLine("Creating authorization servers template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<AuthorizationServerTemplateCreator>(fileNames.authorizationServers, c => c.AuthorizationServers != null);
+			await SaveTemplate<AuthorizationServerTemplateCreator>(fileNames.AuthorizationServers, c => c.AuthorizationServers != null);
 
 			Console.WriteLine("Creating api templates");
 			Console.WriteLine("------------------------------------------");
@@ -69,21 +74,16 @@ namespace Apim.Arm.Creator.Creator.Models
 
 			var masterTemplateCreator = new MasterTemplateCreator();
 
-			if (_creatorConfig.Linked == true)
-			{
-				var masterTemplate = await masterTemplateCreator.Create(_creatorConfig);
-				SaveTemplate(fileNames.linkedMaster, masterTemplate); //TODO
+			var masterTemplate = await masterTemplateCreator.Create(_creatorConfig);
+			SaveTemplate(fileNames.LinkedMaster, masterTemplate); //TODO
 
-				var templateParameters = masterTemplateCreator.CreateMasterTemplateParameterValues(_creatorConfig);
-				SaveTemplate(fileNames.parameters, templateParameters); //TODO
-			}
-
+			var templateParameters = masterTemplateCreator.CreateMasterTemplateParameterValues(_creatorConfig);
+			SaveTemplate(fileNames.Parameters, templateParameters); //TODO
 		}
 
 		public async Task SaveApiTemplates()
 		{
-			var apiInformation = new List<LinkedMasterTemplateAPIInformation>();
-			var apiTemplateCreator = new ApiTemplateCreator(_creatorConfig.Products);
+			var apiTemplateCreator = new ApiTemplateCreator(_creatorConfig.Products, _creatorConfig.Tags);
 
 			foreach (var apiConfiguration in _creatorConfig.Apis)
 			{
@@ -93,7 +93,7 @@ namespace Apim.Arm.Creator.Creator.Models
 				{
 					var apiResource = apiTemplate.Resources.FirstOrDefault(resource => resource.Type == ResourceType.Api) as ApiTemplateResource; // todo
 					string apiFileName = new FileNameGenerator(_creatorConfig.PrefixFileName, _creatorConfig.MasterTemplateName)
-						.GenerateCreatorAPIFileName(apiConfiguration.name, true, apiResource.Properties.value != null, _creatorConfig.ApimServiceName);
+						.GenerateCreatorAPIFileName(apiConfiguration.Name, true, apiResource.Properties.Value != null, _creatorConfig.ApimServiceName);
 
 					var path = Path.Combine(_creatorConfig.OutputLocation, apiFileName);
 					SaveTemplate(path, apiTemplate);
@@ -101,7 +101,7 @@ namespace Apim.Arm.Creator.Creator.Models
 			}
 		}
 
-		private async Task SaveTemplate<TemplateCreator>(string fileName, Predicate<CreatorConfig> hasTemplatePredicate, params object[] constructorArgs) where TemplateCreator : ITemplateCreator
+		private async Task SaveTemplate<TemplateCreator>(string fileName, Predicate<DeploymentDefinition> hasTemplatePredicate, params object[] constructorArgs) where TemplateCreator : ITemplateCreator
 		{
 			var templateCreator = (TemplateCreator)Activator.CreateInstance(typeof(TemplateCreator), constructorArgs);
 

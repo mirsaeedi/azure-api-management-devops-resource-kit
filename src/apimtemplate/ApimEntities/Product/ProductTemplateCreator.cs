@@ -9,23 +9,19 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class ProductTemplateCreator : TemplateCreator,ITemplateCreator
     {
-        public ProductTemplateCreator()
-        {
-        }
-
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var template = EmptyTemplate;
-            template.Parameters.Add(ApiServiceNameParameter.Key,ApiServiceNameParameter.Value);
+            template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
 
             var resources = new List<TemplateResource>();
 
-            foreach (ProductConfig product in creatorConfig.Products)
+            foreach (var product in creatorConfig.Products)
             {
                 // create product resource with properties
                 var productsTemplateResource = new ProductsTemplateResource()
                 {
-                    Name = $"[concat(parameters('ApimServiceName'), '/{product.Id}')]",
+                    Name = $"[concat(parameters('ApimServiceName'), '/{product.Name}')]",
                     Properties = new ProductsProperties()
                     {
                         Description = product.Description,
@@ -44,7 +40,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 // create product policy resource that depends on the product, if provided
                 if (product.Policy != null)
                 {
-                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Id}')]" };
+                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Name}')]" };
                     var productPolicy = await CreateProductPolicyTemplateResource(product, dependsOn);
                     resources.Add(productPolicy);
                 }
@@ -54,7 +50,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return await Task.FromResult(template);
         }
 
-        public async Task<PolicyTemplateResource> CreateProductPolicyTemplateResource(ProductConfig product, string[] dependsOn)
+        private async Task<PolicyTemplateResource> CreateProductPolicyTemplateResource(ProductDeploymentDefinition product, string[] dependsOn)
         {
             var fileReader = new FileReader();
 
@@ -62,7 +58,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             
             var policyTemplateResource = new PolicyTemplateResource(ResourceType.ProductPolicy)
             {
-                Name = $"[concat(parameters('ApimServiceName'), '/{product.Id}/policy')]",
+                Name = $"[concat(parameters('ApimServiceName'), '/{product.Name}/policy')]",
                 Properties = new PolicyProperties()
                 {
                     Format = isUrl ? "rawxml-link" : "rawxml",

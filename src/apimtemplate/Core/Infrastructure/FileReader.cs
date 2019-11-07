@@ -13,7 +13,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class FileReader
     {
-        private static HttpClient _httpClient = new HttpClient();
+        private HttpClient _httpClient = new HttpClient();
 
         public async Task<string[]> GetReplacementVariablesFromYaml(string replacementVariablesFilePath)
         {
@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             return replacementVariables;
         }
 
-        public async Task<CreatorConfig> GetCreatorConfigFromYaml(string configFilePath)
+        public async Task<DeploymentDefinition> GetCreatorConfigFromYaml(string configFilePath)
         {
             var content = await RetrieveFileContentsAsync(configFilePath);
 
@@ -48,11 +48,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			if (!isUrl)
 			{
 				var localVariables = parts.Length == 2 ? parts[1] : null; 
-				var content = File.ReadAllText(fileLocation);
+				var content = await File.ReadAllTextAsync(fileLocation);
 				return VariableReplacer.Instance.ReplaceVariablesWithValues(content,localVariables);
 			}
 
-			var response = await _httpClient.GetAsync(uriResult);
+			var response = await _httpClient.GetAsync(uriResult).ConfigureAwait(false);
 
 			if (!response.IsSuccessStatusCode)
 			{
@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			return await response.Content.ReadAsStringAsync();
 		}
 
-		private CreatorConfig GetCreatorConfig(string yamlContent)
+		private DeploymentDefinition GetCreatorConfig(string yamlContent)
         {
             var deserializer = new Deserializer();
             object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
@@ -73,7 +73,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             {
                 jsonSerializer.Serialize(writer, deserializedYaml);
                 string jsonText = writer.ToString();
-                var creatorConfig = JsonConvert.DeserializeObject<CreatorConfig>(jsonText);
+                var creatorConfig = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
 
 				var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
 
@@ -81,7 +81,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             }
         }
 
-		private bool IsCreatorConfigValid(CreatorConfig creatorConfig)
+		private bool IsCreatorConfigValid(DeploymentDefinition creatorConfig)
 		{
 			var creatorConfigurationValidator = new ConfigurationValidator();
 			bool isValidCreatorConfig = creatorConfigurationValidator.Validate(creatorConfig);

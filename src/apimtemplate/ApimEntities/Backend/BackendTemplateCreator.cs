@@ -8,7 +8,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class BackendTemplateCreator : TemplateCreator, ITemplateCreator
     {
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var template = EmptyTemplate;
             template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);

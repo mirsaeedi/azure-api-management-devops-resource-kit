@@ -12,8 +12,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             LoggerTemplateCreator loggerTemplateCreator = new LoggerTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Loggers = new List<LoggerConfig>() };
-            LoggerConfig logger = new LoggerConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Loggers = new List<LoggerDeploymentDefinition>() };
+            LoggerDeploymentDefinition logger = new LoggerDeploymentDefinition()
             {
                 Name = "name",
                 LoggerType = "applicationinsights",

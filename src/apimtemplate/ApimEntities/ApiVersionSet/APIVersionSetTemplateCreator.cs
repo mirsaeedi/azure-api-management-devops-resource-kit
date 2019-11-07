@@ -8,7 +8,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class APIVersionSetTemplateCreator : TemplateCreator,ITemplateCreator
     {
-        public async Task<Template> Create(CreatorConfig creatorConfig)
+        public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
             var template = EmptyTemplate;
             template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
@@ -19,7 +19,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             {
                 // create apiVersionSet resource with properties
                 // default version set id to version set if id is not provided
-                string versionSetId = (apiVersionSet != null && apiVersionSet.id != null) ? apiVersionSet.id : "versionset";
+                string versionSetId = (apiVersionSet != null && apiVersionSet.Name != null) ? apiVersionSet.Name : "versionset";
                 
                 var apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
                 {

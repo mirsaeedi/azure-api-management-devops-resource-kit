@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Apim.DevOps.Toolkit.Extensions
@@ -19,11 +20,11 @@ namespace Apim.DevOps.Toolkit.Extensions
                 return false;
             }
         }
-        public static string[] GetItem(this string content, string[] defaultItems)
+        public static string[] GetItems(this string content, string[] defaultItems)
         {
             if (content != null)
             {
-                return content.Split(", ");
+                return content.Split(",").Select(q => q.Trim()).ToArray();
             }
             else
             {

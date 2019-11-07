@@ -1,0 +1,27 @@
+version: 0.0.1
+apimServiceName: $(apimInstanceName) # global variable
+
+apis:
+    - name: myApi
+      type: http
+      description: myFirstApi
+      serviceUrl: $(serviceUrl)  # global variable
+      openApiSpec: $(openApiPath)  # global variable
+      policy: $(policyFolder)\sample.xml
+      suffix: conf
+      subscriptionRequired: true
+      isCurrent: true
+      apiRevision: 1
+      tags: ehsan
+      operations:
+        addPet:
+          policy: $(policyFolder)\sample.xml:::BackendUrl=http://server1.com         # local variable
+        deletePet:
+          policy: $(policyFolder)\sample.xml:::BackendUrl=http://server2.com         # local variable
+          
+tags:
+    - name: ehsan
+      displayName: ehsan
+
+outputLocation: $(apimFolder)\output  # global variable
+linkedTemplatesBaseUrl : $(uploadLocation)  # global variable

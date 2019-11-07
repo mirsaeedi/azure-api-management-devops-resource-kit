@@ -23,13 +23,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
                    "YAMLConfigs", Path.DirectorySeparatorChar, "valid.yml");
 
             // act
-            CreatorConfig creatorConfig = await fileReader.GetCreatorConfigFromYaml(fileLocation);
+            DeploymentDefinition creatorConfig = await fileReader.GetCreatorConfigFromYaml(fileLocation);
 
             // assert
             Assert.Equal("0.0.1", creatorConfig.Version);
             Assert.Equal("myAPIMService", creatorConfig.ApimServiceName);
             Assert.Equal(@"C:\Users\myUsername\GeneratedTemplates", creatorConfig.OutputLocation);
-            Assert.Equal("myAPI", creatorConfig.Apis[0].name);
+            Assert.Equal("myAPI", creatorConfig.Apis[0].Name);
         }
 
         [Fact]

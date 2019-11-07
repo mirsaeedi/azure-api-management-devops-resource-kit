@@ -9,7 +9,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		{
 		}
 
-		public bool Validate(CreatorConfig creatorConfig)
+		public bool Validate(DeploymentDefinition creatorConfig)
 		{
 			// ensure required parameters have been passed in
 
@@ -22,7 +22,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				&& ValidateBackends(creatorConfig);
 		}
 
-		private bool ValidateProducts(CreatorConfig creatorConfig)
+		private bool ValidateProducts(DeploymentDefinition creatorConfig)
 		{
 			if (creatorConfig.Products != null)
 			{
@@ -38,12 +38,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateLoggers(CreatorConfig creatorConfig)
+		private bool ValidateLoggers(DeploymentDefinition creatorConfig)
 		{
 			
 			if (creatorConfig.Loggers != null)
 			{
-				foreach (LoggerConfig logger in creatorConfig.Loggers)
+				foreach (LoggerDeploymentDefinition logger in creatorConfig.Loggers)
 				{
 					if (logger.Name == null)
 					{
@@ -55,7 +55,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateBackends(CreatorConfig creatorConfig)
+		private bool ValidateBackends(DeploymentDefinition creatorConfig)
 		{
 			
 			if (creatorConfig.Backends != null)
@@ -72,7 +72,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateAuthorizationServers(CreatorConfig creatorConfig)
+		private bool ValidateAuthorizationServers(DeploymentDefinition creatorConfig)
 		{
 			
 			if (creatorConfig.AuthorizationServers != null)
@@ -89,7 +89,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateBaseProperties(CreatorConfig creatorConfig)
+		private bool ValidateBaseProperties(DeploymentDefinition creatorConfig)
 		{
 			
 			if (creatorConfig.OutputLocation == null)
@@ -115,33 +115,33 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateAPIs(CreatorConfig creatorConfig)
+		private bool ValidateAPIs(DeploymentDefinition creatorConfig)
 		{
 			
 			if (creatorConfig.Apis == null)
 			{
 				throw new ArgumentException("API configuration is required");
 			}
-			foreach (ApiConfiguration api in creatorConfig.Apis)
+			foreach (ApiDeploymentDefinition api in creatorConfig.Apis)
 			{
-				if (api.name == null)
+				if (api.Name == null)
 				{
 					
 					throw new ArgumentException("API name is required");
 				}
-				if (api.openApiSpec == null)
+				if (api.OpenApiSpec == null)
 				{
 					
 					throw new ArgumentException("Open API Spec is required");
 				}
-				if (api.suffix == null)
+				if (api.Path == null)
 				{
 					
-					throw new ArgumentException("API suffix is required");
+					throw new ArgumentException("API path is required");
 				}
-				if (api.operations != null)
+				if (api.Operations != null)
 				{
-					foreach (KeyValuePair<string, OperationsConfig> operation in api.operations)
+					foreach (KeyValuePair<string, OperationsDeploymentDefinition> operation in api.Operations)
 					{
 						if (operation.Value == null || operation.Value.Policy == null)
 						{
@@ -150,7 +150,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 						}
 					}
 				}
-				if (api.diagnostic != null && api.diagnostic.LoggerId == null)
+				if (api.Diagnostic != null && api.Diagnostic.LoggerId == null)
 				{
 					
 					throw new ArgumentException("LoggerId is required if an API diagnostic is provided");
@@ -159,12 +159,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return true;
 		}
 
-		private bool ValidateAPIVersionSets(CreatorConfig creatorConfig)
+		private bool ValidateAPIVersionSets(DeploymentDefinition creatorConfig)
 		{
 
 			if (creatorConfig.ApiVersionSets != null)
 			{
-				foreach (APIVersionSetConfig apiVersionSet in creatorConfig.ApiVersionSets)
+				foreach (ApiVersionSetDeploymentDefinition apiVersionSet in creatorConfig.ApiVersionSets)
 				{
 					if (apiVersionSet != null && apiVersionSet.DisplayName == null)
 					{

@@ -9,6 +9,6 @@ namespace Apim.Arm.Creator.Creator.TemplateCreators
 {
     interface ITemplateCreator
     {
-        Task<Template> Create(CreatorConfig creatorConfig);
+        Task<Template> Create(DeploymentDefinition creatorConfig);
     }
 }

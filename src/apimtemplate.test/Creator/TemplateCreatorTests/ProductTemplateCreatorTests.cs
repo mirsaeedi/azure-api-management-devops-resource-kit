@@ -12,8 +12,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ProductTemplateCreator productTemplateCreator = ProductTemplateCreatorFactory.GenerateProductTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Products = new List<ProductConfig>() };
-            ProductConfig product = new ProductConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Products = new List<ProductDeploymentDefinition>() };
+            ProductDeploymentDefinition product = new ProductDeploymentDefinition()
             {
                 DisplayName = "displayName",
                 Description = "description",
@@ -30,7 +30,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.Resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Id}')]", productsTemplateResource.Name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Name}')]", productsTemplateResource.Name);
             Assert.Equal(product.DisplayName, productsTemplateResource.properties.displayName);
             Assert.Equal(product.Description, productsTemplateResource.properties.description);
             Assert.Equal(product.Terms, productsTemplateResource.properties.terms);
@@ -45,8 +45,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
         {
             // arrange
             ProductTemplateCreator productTemplateCreator = ProductTemplateCreatorFactory.GenerateProductTemplateCreator();
-            CreatorConfig creatorConfig = new CreatorConfig() { Products = new List<ProductConfig>() };
-            ProductConfig product = new ProductConfig()
+            DeploymentDefinition creatorConfig = new DeploymentDefinition() { Products = new List<ProductDeploymentDefinition>() };
+            ProductDeploymentDefinition product = new ProductDeploymentDefinition()
             {
                 DisplayName = "displayName",
                 Description = "description",
@@ -63,7 +63,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Test
             ProductsTemplateResource productsTemplateResource = (ProductsTemplateResource)productTemplate.Resources[0];
 
             // assert
-            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Id}')]", productsTemplateResource.Name);
+            Assert.Equal($"[concat(parameters('ApimServiceName'), '/{product.Name}')]", productsTemplateResource.Name);
             Assert.Equal(product.DisplayName, productsTemplateResource.properties.displayName);
             Assert.Equal(product.Description, productsTemplateResource.properties.description);
             Assert.Equal(product.Terms, productsTemplateResource.properties.terms);

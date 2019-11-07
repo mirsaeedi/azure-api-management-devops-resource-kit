@@ -16,10 +16,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public const string Backend = "Microsoft.ApiManagement/service/backends";
         public const string GlobalServicePolicy = "Microsoft.ApiManagement/service/policies";
         public const string Logger = "Microsoft.ApiManagement/service/loggers";
-        public const string ProductAPI = "Microsoft.ApiManagement/service/products/apis";
+        public const string ProductApi = "Microsoft.ApiManagement/service/products/apis";
         public const string Product = "Microsoft.ApiManagement/service/products";
         public const string ProductPolicy = "Microsoft.ApiManagement/service/products/policies";
         public const string Property = "Microsoft.ApiManagement/service/properties";
         public const string Deployment = "Microsoft.Resources/deployments";
-    }
+		public const string Tag = "Microsoft.ApiManagement/service/tags";
+		public static string TagApi = "Microsoft.ApiManagement/service/apis/tags";
+	}
 }

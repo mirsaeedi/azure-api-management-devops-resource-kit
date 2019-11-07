@@ -17,15 +17,16 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         {
             return new FileNames()
             {
-                apiVersionSets = $@"{_prefix}apiVersionSets.template.json",
-                authorizationServers = $@"{_prefix}authorizationServers.template.json",
-                backends = $@"{_prefix}backends.template.json",
-                globalServicePolicy = $@"{_prefix}globalServicePolicy.template.json",
-                loggers = $@"{_prefix}loggers.template.json",
-                namedValues = $@"{_prefix}namedValues.template.json",
-                products = $@"{_prefix}products.template.json",
-                parameters = $@"{_prefix}parameters.json",
-                linkedMaster = $@"{_prefix}{_masterTemplateName}.json"
+                ApiVersionSets = $@"{_prefix}apiVersionSets.template.json",
+                AuthorizationServers = $@"{_prefix}authorizationServers.template.json",
+                Backends = $@"{_prefix}backends.template.json",
+                GlobalServicePolicy = $@"{_prefix}globalServicePolicy.template.json",
+                Loggers = $@"{_prefix}loggers.template.json",
+                NamedValues = $@"{_prefix}namedValues.template.json",
+				Products = $@"{_prefix}products.template.json",
+				Tags = $@"{_prefix}tags.template.json",
+                Parameters = $@"{_prefix}parameters.json",
+                LinkedMaster = $@"{_prefix}{_masterTemplateName}.json"
             };
         }
 
@@ -53,15 +54,16 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
     public class FileNames
     {
-        public string apiVersionSets { get; set; }
-        public string authorizationServers { get; set; }
-        public string backends { get; set; }
-        public string globalServicePolicy { get; set; }
-        public string loggers { get; set; }
-        public string namedValues { get; set; }
-        public string products { get; set; }
-        public string parameters { get; set; }
+        public string ApiVersionSets { get; set; }
+        public string AuthorizationServers { get; set; }
+        public string Backends { get; set; }
+        public string GlobalServicePolicy { get; set; }
+        public string Loggers { get; set; }
+        public string NamedValues { get; set; }
+        public string Products { get; set; }
+		public string Tags { get; set; }
+		public string Parameters { get; set; }
         // linked property outputs 1 master template
-        public string linkedMaster { get; set; }
+        public string LinkedMaster { get; set; }
     }
 }
