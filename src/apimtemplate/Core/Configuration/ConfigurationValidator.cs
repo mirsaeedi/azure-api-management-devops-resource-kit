@@ -32,6 +32,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 					{
 						throw new ArgumentException("Display name is required if an Product is provided");
 					}
+
+					if (product.Name == null)
+					{
+						throw new ArgumentException("Name is required if an Product is provided");
+					}
 				}
 			}
 
