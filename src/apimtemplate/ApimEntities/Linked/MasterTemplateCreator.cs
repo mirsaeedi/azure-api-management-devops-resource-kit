@@ -131,12 +131,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'tagsTemplate')]");
 			}
 
-			if (await api.IsDependOnLogger(fileReader))
+			if (await api.IsDependOnLogger(fileReader) && creatorConfig.Loggers != null)
             {
                 apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'loggersTemplate')]");
             }
 
-            if (await api.IsDependOnBackend(fileReader))
+            if (await api.IsDependOnBackend(fileReader) && creatorConfig.Backends!=null)
             {
                 apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'backendsTemplate')]");
             }
