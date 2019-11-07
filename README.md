@@ -130,7 +130,7 @@ apis:
       serviceUrl: $(serviceUrl)  # global variable
       openApiSpec: $(openApiPath)  # global variable
       policy: C:\apim\apiPolicyHeaders.xml
-      suffix: conf
+      path: api
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1
