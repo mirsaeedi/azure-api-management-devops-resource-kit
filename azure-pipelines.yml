@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   
 steps:
-- script: dotnet restore
+- script: dotnet restore ~/src/apimtemplat/Apim.DevOps.Toolkit.csproj
   displayName: 'dotnet restore'
 - task: DotNetCoreCLI@2
   inputs:
