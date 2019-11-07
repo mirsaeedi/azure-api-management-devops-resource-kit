@@ -16,5 +16,5 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
+    projects: 'src/apimtemplat/Apim.DevOps.Toolkit.csproj'
     outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
