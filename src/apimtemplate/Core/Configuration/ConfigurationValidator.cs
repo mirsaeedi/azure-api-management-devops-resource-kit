@@ -168,8 +168,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				{
 					if (apiVersionSet != null && apiVersionSet.DisplayName == null)
 					{
-
 						throw new ArgumentException("Display name is required if an API Version Set is provided");
+					}
+
+					if (apiVersionSet != null && apiVersionSet.Name == null)
+					{
+						throw new ArgumentException("Name is required if an API Version Set is provided");
 					}
 				}
 			}

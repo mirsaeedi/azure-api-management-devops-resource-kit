@@ -133,8 +133,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 apiTemplateResource.Properties.AuthenticationSettings = api.AuthenticationSettings;
                 apiTemplateResource.Properties.Path = api.Path;
                 apiTemplateResource.Properties.IsCurrent = api.IsCurrent;
-                apiTemplateResource.Properties.DisplayName = api.Name;
-                apiTemplateResource.Properties.SubscriptionKeyParameterNames = api.SubscriptionKeyParameterNames;
+                apiTemplateResource.Properties.DisplayName = api.DisplayName;
+				apiTemplateResource.Properties.SubscriptionKeyParameterNames = api.SubscriptionKeyParameterNames;
                 apiTemplateResource.Properties.Protocols = api.Protocols.GetItems(new[] { "https"});
                 
                 if (api.ApiVersionSetId != null)

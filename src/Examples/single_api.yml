@@ -1,6 +1,13 @@
 version: 0.0.1
 apimServiceName: $(apimInstanceName) # global variable
 
+apiVersionSets:
+      
+    - name: AttachmentAPISet
+      displayName: Attachment API
+      description: Contains the Attachment APIs.
+      versioningScheme: Segment
+
 apis:
     - name: myApi
       type: http
@@ -8,7 +15,7 @@ apis:
       serviceUrl: $(serviceUrl)  # global variable
       openApiSpec: $(openApiPath)  # global variable
       policy: $(policyFolder)\sample.xml
-      suffix: conf
+      path: conf
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1

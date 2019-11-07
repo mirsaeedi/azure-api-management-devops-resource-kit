@@ -16,14 +16,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             var resources = new List<TemplateResource>();
 
             foreach(var apiVersionSet in creatorConfig.ApiVersionSets)
-            {
-                // create apiVersionSet resource with properties
-                // default version set id to version set if id is not provided
-                string versionSetId = (apiVersionSet != null && apiVersionSet.Name != null) ? apiVersionSet.Name : "versionset";
-                
+            {   
                 var apiVersionSetTemplateResource = new APIVersionSetTemplateResource()
                 {
-                    Name = $"[concat(parameters('ApimServiceName'), '/{versionSetId}')]",
+                    Name = $"[concat(parameters('ApimServiceName'), '/{apiVersionSet.Name}')]",
                     Properties = new ApiVersionSetProperties()
                     {
                         DisplayName = apiVersionSet.DisplayName,
