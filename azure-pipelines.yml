@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   
 steps:
-- script: dotnet restore ~/src/apimtemplat/Apim.DevOps.Toolkit.csproj
+- script: dotnet restore ~/src/apimtemplate/Apim.DevOps.Toolkit.csproj
   displayName: 'dotnet restore'
 - task: DotNetCoreCLI@2
   inputs:
@@ -16,5 +16,5 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'src/apimtemplat/Apim.DevOps.Toolkit.csproj'
+    projects: 'src/apimtemplate/Apim.DevOps.Toolkit.csproj'
     outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
