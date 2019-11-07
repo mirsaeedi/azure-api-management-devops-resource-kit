@@ -13,8 +13,5 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
     projects: 'src/apimtemplate/Apim.DevOps.Toolkit.csproj'
     outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
