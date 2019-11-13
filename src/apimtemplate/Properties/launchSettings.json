@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "-c \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\business_apim_definition.yml\" -f \"C:\\Users\\u6104652\\source\\repos\\azure-api-management-devops-resource-kit\\src\\Examples\\replace_dont_track.yml\" -m esi -p test"
+      "commandLineArgs": "-c \"C:\\Users\\u6104652\\source\\repos\\EBillingHub\\EBillingHub\\EBillingHub.Deployment.AzureDeploy\\Apim\\healthcheck_apim_definition.yml\" -f \"C:\\Users\\u6104652\\source\\repos\\azure-api-management-devops-resource-kit\\src\\Examples\\replace_dont_track.yml\" -m esi -p healthcheck."
     }
   }
 }

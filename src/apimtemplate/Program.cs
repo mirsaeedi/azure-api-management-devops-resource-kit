@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 {
     class Program
     {
-		public static Task Main(string[] args)
+		public static Task<int> Main(string[] args)
 		{
 			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
 
@@ -19,7 +19,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 				async option => await ProcessCommand(option),
 				async errors => await ProcessError(errors));
 
-			return Task.CompletedTask;
+			return Task.FromResult(0);
 		}
 
 		private static Task ProcessError(IEnumerable<Error> errors)

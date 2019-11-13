@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
 		public ProductApiTemplateCreator(IEnumerable<ProductDeploymentDefinition> products)
 		{
-			_products = products;
+			_products = products ?? new ProductDeploymentDefinition[0];
 		}
 
         public List<ProductApiTemplateResource> CreateProductApiTemplateResources(ApiDeploymentDefinition api, string[] dependsOn)
@@ -21,19 +21,34 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			var productDisplayNames = api.ProductList;
 
             foreach(string productDisplayName in productDisplayNames)
-            {
-				var product = _products.Single(q => q.DisplayName == productDisplayName);
+			{
+				var productName = GetProductName(productDisplayName);
 
 				var productApiTemplate = new ProductApiTemplateResource()
 				{
-					Name = $"[concat(parameters('ApimServiceName'), '/{product.Name}/{api.Name}')]",
+					Name = $"[concat(parameters('ApimServiceName'), '/{productName}/{api.Name}')]",
 					Properties = new ProductApiTemplateProperties(),
 					DependsOn = dependsOn
-				}; 
+				};
 
-                productApiTemplates.Add(productApiTemplate);
-            }
-            return productApiTemplates;
+				productApiTemplates.Add(productApiTemplate);
+			}
+			return productApiTemplates;
         }
-    }
+
+		private string GetProductName(string name)
+		{
+			var productName = _products.SingleOrDefault(q => q.DisplayName == name)?.Name;
+
+			if (productName == null)
+			{
+				productName = _products.SingleOrDefault(q => q.Name == name)?.Name;
+			}
+
+			if (productName == null)
+				return name;
+
+			return productName;
+		}
+	}
 }

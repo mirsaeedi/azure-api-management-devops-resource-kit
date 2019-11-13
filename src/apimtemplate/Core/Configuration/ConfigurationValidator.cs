@@ -112,7 +112,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				
 				throw new ArgumentException("APIM service name is required");
 			}
-			if (creatorConfig.Linked == true && creatorConfig.LinkedTemplatesBaseUrl == null)
+			if (creatorConfig.LinkedTemplatesBaseUrl == null)
 			{
 				
 				throw new ArgumentException("LinkTemplatesBaseUrl is required for linked templates");

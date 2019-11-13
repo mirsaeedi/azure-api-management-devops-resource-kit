@@ -11,7 +11,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
 		public TagApiTemplateCreator(IEnumerable<TagDeploymentDefinition> tags)
 		{
-			_tags = tags;
+			_tags = tags ?? new TagDeploymentDefinition[0];
 		}
 
         public List<TagApiTemplateResource> CreateTagApiTemplateResources(ApiDeploymentDefinition api, string[] dependsOn)
@@ -22,11 +22,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             foreach(string tagDisplayName in tagDisplayNames)
             {
-				var tag = _tags.Single(q => q.DisplayName == tagDisplayName);
+				var tagName = GetTagName(tagDisplayName);
 
 				var tagApiTemplate = new TagApiTemplateResource()
 				{
-					Name = $"[concat(parameters('ApimServiceName'), '/{api.Name}/{tag.Name}')]",
+					Name = $"[concat(parameters('ApimServiceName'), '/{api.Name}/{tagName}')]",
 					Properties = new TagApiTemplateProperties(),
 					DependsOn = dependsOn
 				}; 
@@ -35,5 +35,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             }
             return tagApiTemplates;
         }
-    }
+
+		private string GetTagName(string name)
+		{
+			var tagName = _tags.SingleOrDefault(q => q.DisplayName == name)?.Name;
+
+			if (tagName == null)
+			{
+				tagName = _tags.SingleOrDefault(q => q.Name == name)?.Name;
+			}
+
+			if (tagName == null)
+				return name;
+
+			return tagName;
+		}
+	}
 }

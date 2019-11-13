@@ -7,7 +7,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 	{
 		public string Version { get; set; }
 		public string ApimServiceName { get; set; }
-		// policy file location (local or url)
+		
+		/// <summary>
+		/// local path or url to global policy
+		/// </summary>
 		public string Policy { get; set; }
 		public List<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; }
 		public List<ApiDeploymentDefinition> Apis { get; set; }
@@ -17,7 +20,6 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		public List<AuthorizationServerProperties> AuthorizationServers { get; set; }
 		public List<BackendProperties> Backends { get; set; }
 		public string OutputLocation { get; set; }
-		public bool Linked { get; set; }
 		public string LinkedTemplatesBaseUrl { get; set; }
 		public string LinkedTemplatesUrlQueryString { get; set; }
 		public string PrefixFileName { get; set; }

@@ -121,7 +121,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'versionSetTemplate')]");
             }
 
-            if (api.IsDependOnProducts())
+            if (api.IsDependOnProducts() && creatorConfig.Products?.Count>0)
             {
                 apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'productsTemplate')]");
             }
@@ -189,32 +189,32 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 type = "string"
             };
             parameters.Add("ApimServiceName", apimServiceNameProperties);
-            // add remote location of template files for linked option
-            if (creatorConfig.Linked == true)
-            {
-                TemplateParameterProperties linkedTemplatesBaseUrlProperties = new TemplateParameterProperties()
-                {
-                    metadata = new TemplateParameterMetadata()
-                    {
-                        description = "Base URL of the repository"
-                    },
-                    type = "string"
-                };
-                parameters.Add("LinkedTemplatesBaseUrl", linkedTemplatesBaseUrlProperties);
-                if (creatorConfig.LinkedTemplatesUrlQueryString != null)
-                {
-                    TemplateParameterProperties linkedTemplatesUrlQueryStringProperties = new TemplateParameterProperties()
-                    {
-                        metadata = new TemplateParameterMetadata()
-                        {
-                            description = "Query string for the URL of the repository"
-                        },
-                        type = "string"
-                    };
-                    parameters.Add("LinkedTemplatesUrlQueryString", linkedTemplatesUrlQueryStringProperties);
-                }
-            }
-            return parameters;
+			// add remote location of template files for linked option
+
+			TemplateParameterProperties linkedTemplatesBaseUrlProperties = new TemplateParameterProperties()
+			{
+				metadata = new TemplateParameterMetadata()
+				{
+					description = "Base URL of the repository"
+				},
+				type = "string"
+			};
+			parameters.Add("LinkedTemplatesBaseUrl", linkedTemplatesBaseUrlProperties);
+
+			if (creatorConfig.LinkedTemplatesUrlQueryString != null)
+			{
+				TemplateParameterProperties linkedTemplatesUrlQueryStringProperties = new TemplateParameterProperties()
+				{
+					metadata = new TemplateParameterMetadata()
+					{
+						description = "Query string for the URL of the repository"
+					},
+					type = "string"
+				};
+				parameters.Add("LinkedTemplatesUrlQueryString", linkedTemplatesUrlQueryStringProperties);
+			}
+
+			return parameters;
         }
 
         public Template CreateMasterTemplateParameterValues(DeploymentDefinition creatorConfig)
@@ -228,23 +228,24 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 value = creatorConfig.ApimServiceName
             };
             parameters.Add("ApimServiceName", apimServiceNameProperties);
-            if (creatorConfig.Linked == true)
-            {
-                TemplateParameterProperties linkedTemplatesBaseUrlProperties = new TemplateParameterProperties()
-                {
-                    value = creatorConfig.LinkedTemplatesBaseUrl
-                };
-                parameters.Add("LinkedTemplatesBaseUrl", linkedTemplatesBaseUrlProperties);
-                if (creatorConfig.LinkedTemplatesUrlQueryString != null)
-                {
-                    TemplateParameterProperties linkedTemplatesUrlQueryStringProperties = new TemplateParameterProperties()
-                    {
-                        value = creatorConfig.LinkedTemplatesUrlQueryString
-                    };
-                    parameters.Add("LinkedTemplatesUrlQueryString", linkedTemplatesUrlQueryStringProperties);
-                }
-            }
-            masterTemplate.Parameters = parameters;
+
+			TemplateParameterProperties linkedTemplatesBaseUrlProperties = new TemplateParameterProperties()
+			{
+				value = creatorConfig.LinkedTemplatesBaseUrl
+			};
+			parameters.Add("LinkedTemplatesBaseUrl", linkedTemplatesBaseUrlProperties);
+
+			if (creatorConfig.LinkedTemplatesUrlQueryString != null)
+			{
+				TemplateParameterProperties linkedTemplatesUrlQueryStringProperties = new TemplateParameterProperties()
+				{
+					value = creatorConfig.LinkedTemplatesUrlQueryString
+				};
+				parameters.Add("LinkedTemplatesUrlQueryString", linkedTemplatesUrlQueryStringProperties);
+			}
+
+
+			masterTemplate.Parameters = parameters;
             return masterTemplate;
         }
         private string GenerateLinkedTemplateUri(DeploymentDefinition creatorConfig, string fileName)
