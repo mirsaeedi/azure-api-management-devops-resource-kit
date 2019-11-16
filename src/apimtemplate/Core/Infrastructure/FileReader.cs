@@ -8,6 +8,7 @@ using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using Apim.DevOps.Toolkit.Extensions;
 using System.Collections.Generic;
 using Apim.DevOps.Toolkit;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
@@ -49,7 +50,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			{
 				var localVariables = parts.Length == 2 ? parts[1] : null; 
 				var content = await File.ReadAllTextAsync(fileLocation);
-				return VariableReplacer.Instance.ReplaceVariablesWithValues(content,localVariables);
+				var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content,localVariables);
+				var interpretedContent = EvaluateExpressions(replacedContent);
+				
+				return interpretedContent;
 			}
 
 			var response = await _httpClient.GetAsync(uriResult).ConfigureAwait(false);
@@ -60,6 +64,65 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			}
 
 			return await response.Content.ReadAsStringAsync();
+		}
+
+		private string EvaluateExpressions(string replacedContent)
+		{
+			var lines = replacedContent.Split(Environment.NewLine);
+			var evaluatedLines = new List<string>();
+			var stackIf = new Stack<bool>();
+			stackIf.Push(true);
+
+			foreach (var line in lines)
+			{
+				var shouldInclude = stackIf.Peek();
+
+				if (Regex.IsMatch(line, @"^((\s)*#if(\s)+true(\s)*)$"))
+				{
+					stackIf.Push(true);
+				}
+				else if (Regex.IsMatch(line, @"^((\s)*#if(\s)+false(\s)*)$"))
+				{
+					stackIf.Push(false);
+				}
+				else if (Regex.IsMatch(line, @"^((\s)*#endif(\s)*)$"))
+				{
+					stackIf.Pop();
+				}
+				else if(shouldInclude)
+				{
+					var evaluatedLine = EvaluateLine(line);
+					evaluatedLines.Add(evaluatedLine);
+				}
+			}
+
+			var sb = new System.Text.StringBuilder();
+
+			foreach(var line in evaluatedLines)
+			{
+				sb.AppendLine(line);
+			}
+
+			return sb.ToString();
+		}
+
+		private string EvaluateLine(string line)
+		{
+			var matchCollectionTrue = Regex.Matches(line, @"#if(\s)+true(\s)+(?<content>\w+)(\s)+#endif");
+
+			foreach (Match match in matchCollectionTrue)
+			{
+				line = line.Replace(match.Groups[0].Value, match.Groups["content"].Value);
+			}
+
+			var matchCollectionFalse = Regex.Matches(line, @"#if(\s)+false(\s)+(?<content>\w+)(\s)+#endif");
+
+			foreach (Match match in matchCollectionFalse)
+			{
+				line = line.Replace(match.Groups[0].Value, "");
+			}
+
+			return line;
 		}
 
 		private DeploymentDefinition GetCreatorConfig(string yamlContent)

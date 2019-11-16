@@ -13,6 +13,8 @@ namespace Apim.DevOps.Toolkit.ApimEntities.Tag
 		public async Task<Template> Create(DeploymentDefinition creatorConfig)
 		{
 			var template = EmptyTemplate;
+			template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
+
 			var resources = new List<TemplateResource>();
 
 			foreach (var tag in creatorConfig.Tags)

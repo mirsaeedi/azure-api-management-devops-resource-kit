@@ -126,7 +126,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'productsTemplate')]");
             }
 
-			if (api.IsDependOnTags())
+			if (api.IsDependOnTags() && creatorConfig.Tags?.Count > 0)
 			{
 				apiDependsOn.Add("[resourceId('Microsoft.Resources/deployments', 'tagsTemplate')]");
 			}

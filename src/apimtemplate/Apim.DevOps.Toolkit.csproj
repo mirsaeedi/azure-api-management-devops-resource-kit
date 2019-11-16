@@ -7,7 +7,7 @@
     <ToolCommandName>dotnet-apim</ToolCommandName>
     <ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
     <PackageId>Apim.DevOps.Toolkit</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.1.1</Version>
     <Authors>Ehsan Mirsaeedi</Authors>
     <Company />
     <Product>dotnet-apim DevOps Toolkit</Product>

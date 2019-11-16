@@ -24,7 +24,7 @@ namespace Apim.DevOps.Toolkit.Extensions
         {
             if (content != null)
             {
-                return content.Split(",").Select(q => q.Trim()).ToArray();
+                return content.Split(",").Select(q => q.Trim()).Where(q=>!string.IsNullOrWhiteSpace(q)).ToArray();
             }
             else
             {
