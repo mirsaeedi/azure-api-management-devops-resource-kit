@@ -94,10 +94,10 @@ dotnet-apim -c "c:/apim/definition.yml"
 
 You can find the generated files in the location defined by **_outputLocation_**.
 
-Among all generated templates, following two files play a fundemntal role in the whole scenario:
+Among all generated templates, the following two files play a fundamental role in the whole scenario:
 
-**Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. Has links to all other templates. 
-**Patameter Template**: By default named parameters.json, contains the parametes required for executing Master template.
+**Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. It consists of links to all other templates. 
+**Parameter Template**: By default named parameters.json, contains the parameters required for executing the Master template.
 
 ### Uploading Generated ARM Templates
 
