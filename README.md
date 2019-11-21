@@ -107,7 +107,7 @@ Azure Blob Storage could be a good option for most users. For test purposes, you
 
 ### Deploying ARM Templates into APIM
 
-Having the ARM templates uploaded, we are ready to start the deployment. We can use [Azure Cli](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli) or [Azure Resource Group Deployment](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment?view=azure-devops) in Azure Pipeline.
+Having the ARM templates uploaded, we are ready to start the deployment. We can use [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli) or [Azure Resource Group Deployment](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment?view=azure-devops) in Azure Pipeline.
 
 ```powershell
 az group deployment create --resource-group your-resource-group --template-file "c:\apim\output\master.template.json" --parameters "c:\apim\output\parameters.json"
