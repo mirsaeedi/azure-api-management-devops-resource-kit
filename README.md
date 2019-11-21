@@ -207,7 +207,7 @@ You can pass global variables through a file and string simultaneously.
 
 ### Passing Local Variables
 
-By Having the previous example in mind, let's say we want to have similar policy for both operations **add_pet** and **delete_pet** while we want to set the backend variable **$(BackendUrl)** to different values in these operaions. We can achieve this using local variables.
+By Having the previous example in mind, let's say we want to have a similar policy for both operations **add_pet** and **delete_pet** while we want to set the backend variable **$(BackendUrl)** to different values in these operaions. We can achieve this using local variables.
 
 ```yml
 version: 0.0.1
