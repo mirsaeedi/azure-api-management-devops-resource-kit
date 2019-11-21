@@ -25,7 +25,7 @@ While Microsoft's approach to the problem is solid on paper, we found that there
 
 * The official toolkit is actually a C# project which you need to build/run manually, near impossible to have it in your ci/cd pipeline. 
 * It has some bugs and flaws in generating the arm templates.
-* The source code is not in comply with C# best practices and design patterns. This makes maintenance and contribution more difficult for the community.
+* The source code is not in comliance with C# best practices and design patterns. This makes maintenance and contribution more difficult for the community.
 
 To address these fundamental issues, we have re-written the source code from the ground up. Bugs are eliminated and source code is much more in line with best practices. A cross-platform dotnet global tool, **dotnet-apim** is at your hand to streamline your APIM deployment by integrating it into CI/CD pipelines. Furthermore, new functionalities have been added such as Global/Local variables.
 
