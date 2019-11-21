@@ -81,7 +81,7 @@ The above yml definition has the minimum properties required for defining an API
 
 ## Run dotnet-apim
 
-After having the yml file ready, it's time to running the dotnet-apim for generating the corresponding ARM templates.
+After having the yml file ready, it's time for running dotnet-apim for generating the corresponding ARM templates.
 
 ```powershell
 dotnet-apim --yamlConfig "c:/apim/definition.yml" 
@@ -92,7 +92,7 @@ dotnet-apim --yamlConfig "c:/apim/definition.yml"
 dotnet-apim -c "c:/apim/definition.yml" 
 ```
 
-You can find the generated files in the location defined by **_outputLocation_**.
+The command creates ARM templates for the defined products, tags,, APIs, etc accordingly. You can find the generated files in the location defined by **_outputLocation_**. 
 
 Among all generated templates, the following two files play a fundamental role in the whole scenario:
 
