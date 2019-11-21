@@ -193,7 +193,7 @@ dotnet-apim -c "c:/apim/definition.yml" -f "c:/apim/replace.yml"
 
 By executing this command, dotnet-apim replaces all variables with their corresponding value before staring to generate the ARM templates. 
 
-Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string, key-values should be separated using semicolon.
+Another way which can be more flexible in CI/CD pipeline is passing variables through a string. In this string, key-values should be separated using a semicolon.
 
 ```powershell
 dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableString "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3"
