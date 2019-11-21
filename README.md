@@ -226,9 +226,9 @@ apis:
       apiRevision: 1
       operations:
         addPet:
-          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com         # local variable
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server1.com 
         deletePet:
-          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com         # local variable
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server2.com 
 
 outputLocation: $(apimFolder)\output  # global variable
 linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
