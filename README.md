@@ -115,9 +115,9 @@ az group deployment create --resource-group your-resource-group --template-file 
 
 ## Variables
 
-In practice, a great degree of customization and flexibility is required to cover a wide range of deployment scenarios. Global and Local variables can be defined to customize the yml file and policies according to requirements imposed by environment or other conditions.
+In practice, a great degree of customization and flexibility is required to cover a wide range of deployment scenarios. Global and Local variables can be defined to customize the yml file and policies according to requirements imposed by the environment or other conditions.
 
-The following yml sample shows how we can have a customizeable deployment definition by replacing raw values with a user-defined variable.
+The following yml sample shows how we can have a customizable deployment definition by replacing raw values with a user-defined variable.
 
 ```yml
 version: 0.0.1
