@@ -4,7 +4,7 @@ Organizations today normally have multiple deployment environments (e.g., Develo
 
 As a result, Azure API Management users often deal with the following challenges:
 
-* How to automate deployment of APIs into API Management?
+* How to automate the deployment of APIs into API Management?
 * How to migrate configurations from one environment to another?
 * How to avoid interference between different development teams who share the same API Management instance?
 
