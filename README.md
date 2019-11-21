@@ -37,7 +37,7 @@ dotnet-apim is a cross-platform dotnet global tool that you can easily install f
 dotnet tool install --global Apim.DevOps.Toolkit
 ```
 
-## YML Structure.
+## YML Structure
 
 dotnet-apim use the same [yml structure](https://github.com/Azure/azure-api-management-devops-resource-kit/blob/master/src/APIM_ARMTemplate/README.md#create-the-config-file) defined by the Microsoft's toolkit. In this yaml file you define the structure of your APIM and its entities such as apis, products, and backends. This YML structure tries to mirror the reference APIM ARM templates of [APIs](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apis), [API Version Sets](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/apiversionsets), [Products](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Backends](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/backends), [Authorization Servers](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/authorizationservers), [Policies](https://docs.microsoft.com/en-us/azure/templates/microsoft.apimanagement/2019-01-01/service/policies), etc. 
 
@@ -99,7 +99,7 @@ Among all generated templates, following two files play a fundemntal role in the
 **Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. Has links to all other templates. 
 **Patameter Template**: By default named parameters.json, contains the parametes required for executing Master template.
 
-### Uploading Generated ARM Templates.
+### Uploading Generated ARM Templates
 
 A known limitation of the ARM Templates is that they [need to get uploaded](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) to a location accessible to Azure Resource Manager. 
 
