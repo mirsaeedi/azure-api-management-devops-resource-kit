@@ -236,6 +236,63 @@ linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 
 Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Key=Value pairs are separated using a semicolon. The local variables are only applied to their associated policy and override the global variables in case of name collision.
 
+## Conditional Statements
+In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines will be considered by dotnet-apim otherwise they are ignored. 
+
+```yml
+version: 0.0.1
+apimServiceName: $(apimInstanceName) # global variable
+
+apis:
+    - name: myApi
+      type: http
+      description: myFirstApi
+      serviceUrl: $(serviceUrl)  # global variable
+      openApiSpec: $(openApiPath)  # global variable
+      policy: C:\apim\apiPolicyHeaders.xml
+      suffix: conf
+      subscriptionRequired: true
+      isCurrent: true
+      apiRevision: 1
+      operations:
+        addPet:
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server1.com 
+        deletePet:
+          policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server2.com 
+          
+products:
+
+    #if $(includeProductA)
+
+    - name: productA
+      displayName: productA
+      description: Product A
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: $(productALimit)
+      state: published
+      policy: $(apimBasePath)\Products\ProductA\policy.xml
+    
+    #endif
+
+    #if $(includeProductB)
+
+    - name: productB
+      displayName: productB
+      description: Product B
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: $(productBLimit)
+      state: published
+      policy: $(apimBasePath)\Products\ProductB\policy.xml
+      
+    #endif
+
+
+outputLocation: $(apimFolder)\output  # global variable
+linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
+```
+
 ## Customizing The Name of Generated ARM Templates
 
 Another customization that can be applied is changing the name of generated ARM templates.
