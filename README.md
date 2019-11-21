@@ -238,7 +238,7 @@ Local variables are defined using **:::variableName1=value1;variableName2=value2
 
 ## Customizing The Name of Generated ARM Templates
 
-Another customization that can be applied is changing the the name of generated ARM templates.
+Another customization that can be applied is changing the name of generated ARM templates.
 
 1. Specify a prefix for all generated ARM files using the **--prefix** argument. Used to tag files to categorize each deployment based on APIM instance, date, etc
 2. Specify the name of **Master Template** using the **--masterFileName** argument.
