@@ -9,7 +9,7 @@ As a result, Azure API Management users often deal with the following challenges
 * How to avoid interference between different development teams who share the same API Management instance?
 
 
-## The Microsoft's Solution: APIM DevOps Toolkit
+## Microsoft's Solution: APIM DevOps Toolkit
 
 Microsoft has provided an [effective approach and toolkit](https://github.com/Azure/azure-api-management-devops-resource-kit) for taking care of these challenges. You can read the thorough [explanation](https://github.com/Azure/azure-api-management-devops-resource-kit) here and also there is a [video by Miao Jiang](https://www.youtube.com/watch?v=4Sp2Qvmg6j8) which demonstrates the approach through a sample. 
 
