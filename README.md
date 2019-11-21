@@ -237,7 +237,7 @@ linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Key=Value pairs are separated using a semicolon. The local variables are only applied to their associated policy and override the global variables in case of name collision.
 
 ## Conditional Statements
-In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines will be considered by dotnet-apim otherwise they are ignored. 
+In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines in between will be interpreted by dotnet-apim otherwise they are ignored. 
 
 ```yml
 version: 0.0.1
@@ -254,6 +254,7 @@ apis:
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1
+      products: ProductMain, #if $(includeProductA) ProductA #endif, #if $(includeProductB) ProductB #endif     #inline if
       operations:
         addPet:
           policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server1.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server1.com 
@@ -261,6 +262,15 @@ apis:
           policy: C:\apim\operationRateLimit.xml:::BackendUrl=http://server2.com         # All occurances of $(BackendUrl) inside operationRateLimit.xml will be replaced by http://server2.com 
           
 products:
+
+    - name: productMain
+      displayName: productMain
+      description: Product Main
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: $(productMainLimit)
+      state: published
+      policy: $(apimBasePath)\Products\ProductMain\policy.xml
 
     #if $(includeProductA)
 
