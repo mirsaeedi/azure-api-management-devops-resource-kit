@@ -237,7 +237,9 @@ linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Key=Value pairs are separated using a semicolon. The local variables are only applied to their associated policy and override the global variables in case of name collision.
 
 ## Conditional Statements
-In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines in between will be interpreted by dotnet-apim otherwise they are ignored. 
+In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines in between will be interpreted by dotnet-apim otherwise they are ignored. The tool supports nested if statements too.
+
+The following sample shows how we can include/exclude products based on a condition imposed by our CI/CD pipeline through a variable.
 
 ```yml
 version: 0.0.1
