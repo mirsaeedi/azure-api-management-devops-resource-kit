@@ -163,7 +163,7 @@ linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 </policies>
 ```
 
-In the yml file, global variables are defined using the **$(variableName)** syntax. You can define any variable you like in any place, even the referenced policies. There is no built-in variable, they are all user defined.
+In the yml file, global variables are defined using the **$(variableName)** syntax. You can define any variable you like in any place, even in the referenced policies. There is no built-in variable, they are all user-defined.
 
 The next step is to inform dotnet-apim of these variables.
 
