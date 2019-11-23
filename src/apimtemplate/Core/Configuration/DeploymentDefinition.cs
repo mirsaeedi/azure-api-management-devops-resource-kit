@@ -14,6 +14,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		public string Policy { get; set; }
 		public List<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; }
 		public List<ApiDeploymentDefinition> Apis { get; set; }
+		public List<CertificateDeploymentDefinition> Certificates { get; set; }
+		public List<SubscriptionDeploymentDefinition> Subscriptions { get; set; }
+		public List<UserDeploymentDefinition> Users { get; set; }
 		public List<ProductDeploymentDefinition> Products { get; set; }
 		public List<TagDeploymentDefinition> Tags { get; set; }
 		public List<LoggerDeploymentDefinition> Loggers { get; set; }

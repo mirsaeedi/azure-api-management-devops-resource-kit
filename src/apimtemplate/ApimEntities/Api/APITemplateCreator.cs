@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             _releaseTemplateCreator = new ReleaseTemplateCreator();
 		}
 
-        public async Task<List<Template>> CreateApiTemplatesAsync(ApiDeploymentDefinition api)
+        public async Task<(Template InitialApiTemplate, Template SubsequentApiTemplate)> CreateApiTemplatesAsync(ApiDeploymentDefinition api)
         {
             // update api name if necessary (apiRevision > 1 and isCurrent = true) 
             if (int.TryParse(api.ApiRevision, out var revisionNumber))
@@ -36,14 +36,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 }
             }
 
-            List<Template> apiTemplates = new List<Template>();
-            apiTemplates.Add(await CreateApiTemplateAsync(api, true));
-            apiTemplates.Add(await CreateApiTemplateAsync(api, false));
+            var initial = await CreateApiTemplateAsync(api, true);
+            var subsequent = await CreateApiTemplateAsync(api, false);
 
-            return apiTemplates;
+            return (initial,subsequent);
         }
 
-        public async Task<Template> CreateApiTemplateAsync(ApiDeploymentDefinition api, bool isInitial)
+        private async Task<Template> CreateApiTemplateAsync(ApiDeploymentDefinition api, bool isInitial)
         {
             var template = EmptyTemplate;
             template.Parameters.Add(ApiServiceNameParameter.Key, ApiServiceNameParameter.Value);
@@ -63,7 +62,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return await Task.FromResult(template);
         }
 
-        public async Task<List<TemplateResource>> CreateChildResourceTemplates(ApiDeploymentDefinition api)
+        private async Task<List<TemplateResource>> CreateChildResourceTemplates(ApiDeploymentDefinition api)
         {
             var resources = new List<TemplateResource>();
             
@@ -102,7 +101,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             return resources;
         }
 
-        public async Task<ApiTemplateResource> CreateApiTemplateResourceAsync(ApiDeploymentDefinition api, bool isInitial)
+        private async Task<ApiTemplateResource> CreateApiTemplateResourceAsync(ApiDeploymentDefinition api, bool isInitial)
         {
             ApiTemplateResource apiTemplateResource = new ApiTemplateResource()
             {

@@ -39,8 +39,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
             return GetCreatorConfig(content);
         }
 
-		public async Task<string> RetrieveFileContentsAsync(string fileLocation)
+		public async Task<string> RetrieveFileContentsAsync(string fileLocation, bool convertToBase64=false)
 		{
+			string result = null;
+
 			var parts = fileLocation.Split(":::");
 			fileLocation = parts[0];
 
@@ -52,18 +54,33 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 				var content = await File.ReadAllTextAsync(fileLocation);
 				var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content,localVariables);
 				var interpretedContent = EvaluateExpressions(replacedContent);
-				
-				return interpretedContent;
+
+				result =  interpretedContent;
 			}
-
-			var response = await _httpClient.GetAsync(uriResult).ConfigureAwait(false);
-
-			if (!response.IsSuccessStatusCode)
+			else
 			{
-				throw new Exception($"Unable to fetch remote file - {fileLocation}");
+				var response = await _httpClient.GetAsync(uriResult).ConfigureAwait(false);
+
+				if (!response.IsSuccessStatusCode)
+				{
+					throw new Exception($"Unable to fetch remote file - {fileLocation}");
+				}
+
+				result = await response.Content.ReadAsStringAsync();
 			}
 
-			return await response.Content.ReadAsStringAsync();
+			if (convertToBase64)
+			{
+				result = GetBase64(result);
+			}
+
+			return result;
+		}
+
+		private string GetBase64(string content)
+		{
+			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(content);
+			return Convert.ToBase64String(plainTextBytes);
 		}
 
 		private string EvaluateExpressions(string replacedContent)

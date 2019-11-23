@@ -3,7 +3,9 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public static class ResourceType
     {
-        public const string Certificate = "Microsoft.ApiManagement/service/certificates";
+		public const string Subscription = "Microsoft.ApiManagement/service/subscriptions";
+		public const string User = "Microsoft.ApiManagement/service/users";
+		public const string Certificate = "Microsoft.ApiManagement/service/certificates";
         public const string Api = "Microsoft.ApiManagement/service/apis";
         public const string ApiVersionSet = "Microsoft.ApiManagement/service/apiVersionSets";
         public const string ApiDiagnostic = "Microsoft.ApiManagement/service/apis/diagnostics";
@@ -22,6 +24,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public const string Property = "Microsoft.ApiManagement/service/properties";
         public const string Deployment = "Microsoft.Resources/deployments";
 		public const string Tag = "Microsoft.ApiManagement/service/tags";
-		public static string TagApi = "Microsoft.ApiManagement/service/apis/tags";
+		public const string TagApi = "Microsoft.ApiManagement/service/apis/tags";
+
+		public const string TagProduct = "Microsoft.ApiManagement/service/products/tags";
 	}
 }
