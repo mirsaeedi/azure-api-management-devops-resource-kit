@@ -10,27 +10,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class MasterTemplateCreator : TemplateCreator, ITemplateCreator 
     {
-        private readonly PolicyTemplateCreator _policyTemplateCreator;
-        private readonly APIVersionSetTemplateCreator _apiVersionSetTemplateCreator;
 		private readonly NestedTemplateName _nestedTemplateName;
 		private readonly TemplateFileName _templateFileNames;
-		private readonly CertificateTemplateCreator _backendTemplateCreator;
-        private readonly LoggerTemplateCreator _loggerTemplateCreator;
-        private readonly AuthorizationServerTemplateCreator _authorizationServerTemplateCreator;
-        private readonly ProductTemplateCreator _productsTemplateCreator;
-        private readonly FileReader _fileReader;
 
         public MasterTemplateCreator(TemplateFileName templateFileNames)
         {
-            _fileReader = new FileReader();
-            _policyTemplateCreator = new PolicyTemplateCreator();
-            _apiVersionSetTemplateCreator = new APIVersionSetTemplateCreator();
-            _backendTemplateCreator = new CertificateTemplateCreator();
-            _loggerTemplateCreator = new LoggerTemplateCreator();
-            _authorizationServerTemplateCreator = new AuthorizationServerTemplateCreator();
-            _productsTemplateCreator = new ProductTemplateCreator();
-            _apiVersionSetTemplateCreator = new APIVersionSetTemplateCreator();
-
 			_nestedTemplateName = new NestedTemplateName();
 			_templateFileNames = templateFileNames;
 
