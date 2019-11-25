@@ -1,0 +1,18 @@
+<policies>
+    <inbound>
+        <base />
+		<authentication-certificate thumbprint="$(certThumbprint)" />
+        <set-header name="Provider" exists-action="override">
+            <value>TestHeader</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

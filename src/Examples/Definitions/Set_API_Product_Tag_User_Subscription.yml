@@ -1,0 +1,96 @@
+version: 0.0.1   # Required
+apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+
+
+apiVersionSets:
+      
+    - name: ApiVersionSetE
+      displayName: API Version Set E
+      description: Contains the APIs.
+      versioningScheme: Segment
+
+apis:
+
+    - name: ApiE1
+      tags: TagE1, TagE2
+      displayName: API E v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      path: $(prefix)/E/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetE
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      products: ProductE1, ProductE2
+        
+tags:
+
+     - name: TagE1
+       displayName: Tag E 1
+       
+     - name: TagE2
+       displayName: Tag E 2
+        
+         
+products:
+        
+    - name: ProductE1
+      displayName: Product E1
+      description: Product for E1
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      
+      
+    - name: ProductE2
+      displayName: Product E2
+      description: Product for E2
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+
+    
+certificates:
+      
+      - name: cert
+        filePath: $(apimBasePath)\Cert\cert.pfx
+        password: $(certPass)   
+
+users: 
+
+     - name: userE
+       state: active
+       firstName: Ehsan  
+       lastName: Mirsaeedi
+       email: mirsaeedi@outlook.com
+       note: esi palang
+        
+subscriptions:
+
+
+       - name: subscriptionE1
+         scope: /apis
+         displayName: subcription E1
+         ownerId: /users/userE
+         
+         
+       - name: subscriptionE2
+         scope: /products/ProductE2
+         displayName:  subcription E2
+         ownerId: /users/userE
+         
+       - name: subscriptionE3
+         scope: /apis/ApiE1
+         displayName:  subcription E3
+         ownerId: /users/userE        
+  
+outputLocation: $(apimBasePath)\output 
+linked: true
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true

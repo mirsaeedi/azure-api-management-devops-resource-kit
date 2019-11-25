@@ -1,0 +1,71 @@
+version: 0.0.1   # Required
+apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+
+
+apiVersionSets:
+      
+    - name: ApiVersionSetD
+      displayName: API Version Set D
+      description: Contains the APIs.
+      versioningScheme: Segment
+
+apis:
+
+    - name: ApiD1
+      tags: TagD1, TagD2
+      displayName: API D v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      path: $(prefix)/D/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetD
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      products: ProductD1, ProductD2
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey 
+        
+tags:
+
+     - name: TagD1
+       displayName: Tag D 1
+       
+     - name: TagD2
+       displayName: Tag D 2
+        
+         
+products:
+        
+    - name: ProductD1
+      displayName: Product D1
+      description: Product for D1
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      
+      
+    - name: ProductD2
+      displayName: Product D2
+      description: Product for D2
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+
+    
+certificates:
+      
+      - name: cert
+        filePath: $(apimBasePath)\Cert\cert.pfx
+        password: 123    
+  
+outputLocation: $(apimBasePath)\output 
+linked: true
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true

@@ -1,0 +1,66 @@
+version: 0.0.1   # Required
+apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+
+
+apiVersionSets:
+      
+    - name: ApiVersionSetC
+      displayName: API Version Set C
+      description: Contains the APIs.
+      versioningScheme: Segment
+
+apis:
+
+    - name: ApiC1
+      tags: TagA1, TagC2
+      displayName: API C v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
+      path: $(prefix)/C/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetC
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      products: ProductC1, ProductC2
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey 
+        
+tags:
+
+     - name: TagC1
+       displayName: Tag C 1
+       
+     - name: TagC2
+       displayName: Tag C 2
+        
+         
+products:
+        
+    - name: ProductC1
+      displayName: Product C1
+      description: Product for C1
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\ProductPolicy.xml
+      
+      
+    - name: ProductC2
+      displayName: Product C2
+      description: Product for C2
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\ProductPolicy.xml
+
+            
+  
+outputLocation: $(apimBasePath)\output 
+linked: true
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true

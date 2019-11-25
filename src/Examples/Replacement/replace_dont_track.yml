@@ -1,0 +1,7 @@
+- "apimServiceName=test-apim"
+- "apimBasePath="
+- "ApiServiceURL=http://google.net"
+- "linkedTemplatesBaseUrl=https://esitestaccount.blob.core.windows.net/apimarm"
+- "include=true"
+- "prefix=test"
+- "certThumbprint="

@@ -1,6 +1,9 @@
 <policies>
     <inbound>
         <base />
+        <set-header name="Provider" exists-action="override">
+            <value>TestHeader</value>
+        </set-header>
     </inbound>
     <backend>
         <base />

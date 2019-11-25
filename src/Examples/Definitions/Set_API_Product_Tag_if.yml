@@ -1,0 +1,84 @@
+version: 0.0.1   # Required
+apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+
+
+apiVersionSets:
+      
+    - name: ApiVersionSetF
+      displayName: API Version Set F
+      description: Contains the APIs.
+      versioningScheme: Segment
+
+apis:
+
+    - name: ApiF1
+      tags: TagF1, #if $(include) TagF2 #endif, TagF3
+      displayName: API F v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      path: $(prefix)/F/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetF
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      products: ProductF1, ProductF2
+      
+      #if $(include)
+      
+    - name: ApiE1
+      tags: TagE1, TagE2
+      displayName: API E v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      path: $(prefix)/E/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetE
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      products: ProductE1, ProductE2
+      
+      #endif
+        
+tags:
+
+     - name: TagF1
+       displayName: Tag F 1
+       
+       #if $(include)
+       
+     - name: TagF2
+       displayName: Tag F 2
+        
+       #endif 
+       
+     - name: TagF3
+       displayName: Tag F 3
+         
+products:
+        
+    - name: ProductF1
+      displayName: Product F1
+      description: Product for F1
+      subscriptionRequired: true
+      approvalRequired: true
+      subscriptionsLimit: 1
+      state: published
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      
+    
+certificates:
+      
+      - name: cert
+        filePath: C:\Users\u6104652\Desktop\apim\esicert.pfx
+        password: 123   
+       
+  
+outputLocation: $(apimBasePath)\output 
+linked: true
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true

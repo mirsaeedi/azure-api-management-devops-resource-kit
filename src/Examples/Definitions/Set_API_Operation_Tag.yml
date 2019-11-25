@@ -1,0 +1,43 @@
+version: 0.0.1   # Required
+apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+
+apiVersionSets:
+      
+    - name: ApiVersionSetA
+      displayName: API Version Set A
+      description: Contains the APIs.
+      versioningScheme: Segment
+
+apis:
+
+    - name: ApiA1
+      tags: TagA1, TagA2
+      displayName: API A v1
+      serviceUrl: $(ApiServiceURL)
+      openApiSpec: $(apimBasePath)\OpenApi.json
+      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
+      path: $(prefix)/a/api
+      apiVersion: v1
+      apiVersionSetId: ApiVersionSetA
+      apiRevision: 1
+      protocols: https
+      subscriptionRequired: true
+      isCurrent: true
+      operations:
+        findPetsByStatus: $(apimBasePath)\Policies\OperationPolicy.xml 
+      subscriptionKeyParameterNames: 
+         header: ProviderKey
+         query: ProviderKey 
+        
+tags:
+
+     - name: TagA1
+       displayName: Tag A 1
+       
+       
+     - name: TagA2
+       displayName: Tag A 2
+  
+outputLocation: $(apimBasePath)\output 
+linked: true
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
