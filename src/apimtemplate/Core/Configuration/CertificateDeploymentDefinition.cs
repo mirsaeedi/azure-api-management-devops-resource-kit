@@ -1,5 +1,6 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Tag;
 using Apim.DevOps.Toolkit.ArmTemplates;
+using Newtonsoft.Json;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {

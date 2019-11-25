@@ -49,7 +49,7 @@ namespace Apim.Arm.Creator.Creator.Models
 
 			Console.WriteLine("Creating products template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<ProductTemplateCreator>(_templateFileNames.Products(), c => c.Products != null);
+			await SaveTemplate<ProductTemplateCreator>(_templateFileNames.Products(), c => c.Products != null, _creatorConfig.Tags);
 
 			Console.WriteLine("Creating tags template");
 			Console.WriteLine("------------------------------------------");
@@ -100,9 +100,8 @@ namespace Apim.Arm.Creator.Creator.Models
 				var path = Path.Combine(_creatorConfig.OutputLocation, _templateFileNames.ApiInitial(apiConfiguration.Name));
 				SaveTemplate(path, apiTemplates.InitialApiTemplate);
 
-
 				path = Path.Combine(_creatorConfig.OutputLocation, _templateFileNames.ApiSubsequent(apiConfiguration.Name));
-				SaveTemplate(path, apiTemplates.InitialApiTemplate);
+				SaveTemplate(path, apiTemplates.SubsequentApiTemplate);
 			}
 		}
 

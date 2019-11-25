@@ -25,7 +25,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 var certificateTemplateResource = new CertificateTemplateResource()
                 {
                     Name = $"[concat(parameters('ApimServiceName'), '/{certificateTemplatePropeties.Name}')]",
-                    Properties = certificateTemplatePropeties,
+                    Properties = new CertificateProperties()
+					{
+						Data = certificateTemplatePropeties.Data,
+						Password = certificateTemplatePropeties.Password
+					},
                     DependsOn = new string[] { }
                 };
                 resources.Add(certificateTemplateResource);

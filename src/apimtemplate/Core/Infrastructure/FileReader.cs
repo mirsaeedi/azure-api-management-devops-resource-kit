@@ -41,21 +41,26 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
 		public async Task<string> RetrieveFileContentsAsync(string fileLocation, bool convertToBase64=false)
 		{
-			string result = null;
-
 			var parts = fileLocation.Split(":::");
 			fileLocation = parts[0];
 
 			var isUrl = fileLocation.IsUri(out var uriResult);
 
+			string result;
 			if (!isUrl)
 			{
-				var localVariables = parts.Length == 2 ? parts[1] : null; 
+				var localVariables = parts.Length == 2 ? parts[1] : null;
+
+				if (convertToBase64)
+				{
+					return GetBase64(await File.ReadAllBytesAsync(fileLocation));
+				}
+
 				var content = await File.ReadAllTextAsync(fileLocation);
-				var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content,localVariables);
+				var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content, localVariables);
 				var interpretedContent = EvaluateExpressions(replacedContent);
 
-				result =  interpretedContent;
+				result = interpretedContent;
 			}
 			else
 			{
@@ -69,18 +74,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 				result = await response.Content.ReadAsStringAsync();
 			}
 
-			if (convertToBase64)
-			{
-				result = GetBase64(result);
-			}
-
 			return result;
 		}
 
-		private string GetBase64(string content)
+		private string GetBase64(byte[] content)
 		{
-			var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(content);
-			return Convert.ToBase64String(plainTextBytes);
+			return Convert.ToBase64String(content);
 		}
 
 		private string EvaluateExpressions(string replacedContent)

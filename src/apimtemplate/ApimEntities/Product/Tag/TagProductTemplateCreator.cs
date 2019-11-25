@@ -14,7 +14,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			_tags = tags ?? new TagDeploymentDefinition[0];
 		}
 
-        public List<TagProductTemplateResource> CreateTagProductTemplateResources(ProductDeploymentDefinition product, string[] dependsOn)
+        public List<TagProductTemplateResource> Create(ProductDeploymentDefinition product, string[] dependsOn)
         {
             var tagProductTemplates = new List<TagProductTemplateResource>();
 
@@ -27,7 +27,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				var tagProductTemplate = new TagProductTemplateResource()
 				{
 					Name = $"[concat(parameters('ApimServiceName'), '/{product.Name}/{tagName}')]",
-					Properties = new TagApiTemplateProperties(),
+					Properties = new TagProductTemplateProperties(),
 					DependsOn = dependsOn
 				};
 

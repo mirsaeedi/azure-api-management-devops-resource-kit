@@ -124,7 +124,21 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		private void CreateProductResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)
 		{
 			if (creatorConfig.Products != null)
-				CreateResource(resources, creatorConfig, _templateFileNames.Products(), _nestedTemplateName.Products());
+			{
+				var dependencies = new List<string>();
+
+				if (creatorConfig.Tags != null && creatorConfig.Products.Any(q => q.IsDependOnTags()))
+				{
+					dependencies.Add(DependsOn(_nestedTemplateName.Tags()));
+				}
+
+				if (creatorConfig.Certificates != null)
+				{
+					dependencies.Add(DependsOn(_nestedTemplateName.Certificates()));
+				}
+
+				CreateResource(resources, creatorConfig, _templateFileNames.Products(), _nestedTemplateName.Products(),dependencies);
+			}
 		}
 
 		private void CreateTagResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)

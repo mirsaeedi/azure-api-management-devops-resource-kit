@@ -8,7 +8,7 @@
 
         public string ApiVersionSets()
 		{
-			return "versionSetTemplate";
+			return "versionSetsTemplate";
 		}
 		public string AuthorizationServers()
 		{
@@ -42,11 +42,11 @@
 		}
 		public string Subscriptions()
 		{
-			return "subscriptionTemplate";
+			return "subscriptionsTemplate";
 		}
 		public string Certificates()
 		{
-			return "certificateTemplate";
+			return "certificatesTemplate";
 		}
 
 		public string ApiInitial(string apiName)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,11 +15,16 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		/// <summary>
 		/// Scope like /products/{productId} or /apis or /apis/{apiId}.
 		/// </summary>
+		 
+		[JsonProperty(Required = Required.Always)]
 		public string Scope { get; set; }
+
 
 		/// <summary>
 		/// Subscription name.
 		/// </summary>
+	
+		[JsonProperty(Required = Required.Always)]
 		public string DisplayName { get; set; }
 
 		/// <summary>
@@ -39,12 +45,12 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		/// or administrator, * expired – the subscription reached its expiration date and was deactivated. - suspended, active, expired, 
 		/// submitted, rejected, cancelled
 		/// </summary>
-		public SubscriptionState State { get; set; }
+		public SubscriptionState? State { get; set; }
 
 		/// <summary>
 		/// Determines whether tracing can be enabled
 		/// </summary>
-		public bool AllowTracing { get; set; }
+		public bool? AllowTracing { get; set; }
 	}
 
 	public enum SubscriptionState

@@ -9,7 +9,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
     public class ApiTemplateCreator : TemplateCreator
     {
-        private PolicyTemplateCreator _policyTemplateCreator;
+		private ApiOperationPolicyTemplateCreator _apiOperationPolicyTemplateCreator;
+		private ApiPolicyTemplateCreator _apiPolicyTemplateCreator;
         private ProductApiTemplateCreator _productApiTemplateCreator;
 		private TagApiTemplateCreator _tagApiTemplateCreator;
 		private DiagnosticTemplateCreator _diagnosticTemplateCreator;
@@ -18,7 +19,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
 		public ApiTemplateCreator(IEnumerable<ProductDeploymentDefinition> products,IEnumerable<TagDeploymentDefinition> tags)
         {
-            _policyTemplateCreator = new PolicyTemplateCreator();
+			_apiOperationPolicyTemplateCreator = new ApiOperationPolicyTemplateCreator();
+			_apiPolicyTemplateCreator = new ApiPolicyTemplateCreator();
             _productApiTemplateCreator = new ProductApiTemplateCreator(products);
 			_tagApiTemplateCreator = new TagApiTemplateCreator(tags);
 			_diagnosticTemplateCreator = new DiagnosticTemplateCreator();
@@ -51,7 +53,6 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             var apiTemplateResource = await CreateApiTemplateResourceAsync(api, isInitial);
             resources.Add(apiTemplateResource);
 
-            // add the api child resources (api policies, diagnostics, etc) if this is the unified or subsequent template
             if (!isInitial)
             {
                 resources.AddRange(await CreateChildResourceTemplates(api));
@@ -70,20 +71,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 
             if (api.Policy != null)
             {
-                resources.Add(await _policyTemplateCreator.CreateApiPolicyTemplateResource(api, dependsOn));
+                resources.Add(await _apiPolicyTemplateCreator.Create(api, dependsOn));
             }
 
             if (api.Operations != null)
             {
-                resources.AddRange(await _policyTemplateCreator.CreateOperationPolicyTemplateResources(api, dependsOn));
+                resources.AddRange(await _apiOperationPolicyTemplateCreator.Create(api, dependsOn));
             }
 
-            if (api.Products != null)
+            if (api.IsDependOnProducts())
             {
                 resources.AddRange(this._productApiTemplateCreator.CreateProductApiTemplateResources(api, dependsOn));
             }
 
-			if (api.Tags != null)
+			if (api.IsDependOnTags())
 			{
 				resources.AddRange(this._tagApiTemplateCreator.CreateTagApiTemplateResources(api, dependsOn));
 			}

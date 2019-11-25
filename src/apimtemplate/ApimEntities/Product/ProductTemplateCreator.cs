@@ -10,10 +10,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
     public class ProductTemplateCreator : TemplateCreator,ITemplateCreator
     {
 		private TagProductTemplateCreator _tagProductTemplateCreator;
+		private PolicyProductTemplateCreator _policyProductTemplateCreator;
 
 		public ProductTemplateCreator(IEnumerable<TagDeploymentDefinition> tags)
 		{
 			_tagProductTemplateCreator = new TagProductTemplateCreator(tags);
+			_policyProductTemplateCreator = new PolicyProductTemplateCreator();
 		}
 		public async Task<Template> Create(DeploymentDefinition creatorConfig)
         {
@@ -38,25 +40,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                         State = product.State,
                         DisplayName = product.DisplayName
                     },
-                    DependsOn = new string[] { }
+                    DependsOn =  new string[] { }
                 };
 
                 resources.Add(productsTemplateResource);
 
 				resources.AddRange(await CreateChildResourceTemplates(product));
-
-				if (product.Policy != null)
-                {
-                    string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Name}')]" };
-                    var productPolicy = await CreateProductPolicyTemplateResource(product, dependsOn);
-                    resources.Add(productPolicy);
-                }
-
-				if (product.Tags != null)
-				{
-					string[] dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Name}')]" };
-					resources.AddRange(_tagProductTemplateCreator.CreateTagProductTemplateResources(product,dependsOn));
-				}
 			}
 
             template.Resources = resources.ToArray();
@@ -67,39 +56,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		{
 			var resources = new List<TemplateResource>();
 
-			var dependsOn = new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{product.Name}')]" };
+			var dependsOn = new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{product.Name}')]" };
 
 			if (product.IsDependOnPolicy())
 			{
-				resources.Add(await CreateProductPolicyTemplateResource(product, dependsOn));
+				resources.Add(await _policyProductTemplateCreator.Create(product, dependsOn));
 			}
 
 			if (product.IsDependOnTags())
 			{
-				resources.AddRange(_tagProductTemplateCreator.CreateTagProductTemplateResources(product, dependsOn));
+				resources.AddRange(_tagProductTemplateCreator.Create(product, dependsOn));
 			}
 
 			return resources;
 		}
 
-		private async Task<PolicyTemplateResource> CreateProductPolicyTemplateResource(ProductDeploymentDefinition product, string[] dependsOn)
-        {
-            var fileReader = new FileReader();
-
-            bool isUrl = Uri.TryCreate(product.Policy, UriKind.Absolute, out var uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-            
-            var policyTemplateResource = new PolicyTemplateResource(ResourceType.ProductPolicy)
-            {
-                Name = $"[concat(parameters('ApimServiceName'), '/{product.Name}/policy')]",
-                Properties = new PolicyProperties()
-                {
-                    Format = isUrl ? "rawxml-link" : "rawxml",
-                    Value = isUrl ? product.Policy : await fileReader.RetrieveFileContentsAsync(product.Policy)
-                },
-                DependsOn = dependsOn
-            };
-
-            return policyTemplateResource;
-        }
 	}
 }

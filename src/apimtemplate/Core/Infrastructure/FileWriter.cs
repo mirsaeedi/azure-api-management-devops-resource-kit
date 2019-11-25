@@ -9,15 +9,17 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
     {
         public void WriteJson<T>(T template, string filePath)
         {
+
             var jsonString = JsonConvert.SerializeObject(template,
                             Formatting.Indented,
-                            new JsonSerializerSettings
+							new JsonSerializerSettings
                             {
                                 ContractResolver = new DefaultContractResolver
                                 {
                                     NamingStrategy = new CamelCaseNamingStrategy()
                                 },
-                                NullValueHandling = NullValueHandling.Ignore
+                                NullValueHandling = NullValueHandling.Ignore,
+								Converters = { new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy())}
                             });
 
             var fileInfo = new FileInfo(filePath);
