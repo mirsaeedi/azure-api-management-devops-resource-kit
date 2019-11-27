@@ -71,7 +71,7 @@ outputLocation: C:\apim\output
 linkedTemplatesBaseUrl : https://mystorageaccount.blob.core.windows.net/mycontainer
 ```
 
-The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided [here](). Few things to note here are:
+The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided [here](https://github.com/mirsaeedi/dotnet-apim/tree/master/src/Examples/Definitions). Few things to note here are:
 
 * **_apimServiceName_**: Specifies the name of your apim. All entities inside this yml file are deployed to this instance.
 * **_openApiSpec_**: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
