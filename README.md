@@ -57,7 +57,7 @@ apis:
       serviceUrl: http://myApiBackendUrl.com
       openApiSpec: C:\apim\swaggerPetstore.json
       policy: C:\apim\apiPolicyHeaders.xml
-      suffix: conf
+      path: conf
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1
@@ -221,7 +221,7 @@ apis:
       serviceUrl: $(serviceUrl)  # global variable
       openApiSpec: $(openApiPath)  # global variable
       policy: C:\apim\apiPolicyHeaders.xml
-      suffix: conf
+      path: conf
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1
@@ -253,7 +253,7 @@ apis:
       serviceUrl: $(serviceUrl)  # global variable
       openApiSpec: $(openApiPath)  # global variable
       policy: C:\apim\apiPolicyHeaders.xml
-      suffix: conf
+      path: conf
       subscriptionRequired: true
       isCurrent: true
       apiRevision: 1
