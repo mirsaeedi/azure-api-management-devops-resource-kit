@@ -12,11 +12,11 @@ apiVersionSets:
 apis:
 
     - name: ApiD1
-      tags: TagD1, TagD2
+      tags: TagD1, TagD2 # the name or displayName of Tags
       displayName: API D v1
       serviceUrl: $(ApiServiceURL)
       openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  # passing the local certThumbprint variable to the policy
       path: $(prefix)/D/api
       apiVersion: v1
       apiVersionSetId: ApiVersionSetD
@@ -24,7 +24,7 @@ apis:
       protocols: https
       subscriptionRequired: true
       isCurrent: true
-      products: ProductD1, ProductD2
+      products: ProductD1, ProductD2  # the name or displayName of Products
       subscriptionKeyParameterNames: 
          header: ProviderKey
          query: ProviderKey 
@@ -47,7 +47,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)   # passing the local certThumbprint variable to the policy 
       
       
     - name: ProductD2
@@ -57,7 +57,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)   # passing the local certThumbprint variable to the policy
 
     
 certificates:
@@ -66,6 +66,6 @@ certificates:
         filePath: $(apimBasePath)\Cert\cert.pfx
         password: 123    
   
-outputLocation: $(apimBasePath)\output 
-linked: true
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
+  
+outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

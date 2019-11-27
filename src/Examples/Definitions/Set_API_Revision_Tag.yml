@@ -53,6 +53,5 @@ tags:
      - name: Tagb2
        displayName: Tag B 2
   
-outputLocation: $(apimBasePath)\output 
-linked: true
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
+outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

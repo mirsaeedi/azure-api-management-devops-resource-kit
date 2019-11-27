@@ -12,7 +12,7 @@ apiVersionSets:
 apis:
 
     - name: ApiC1
-      tags: TagA1, TagC2
+      tags: TagA1, TagC2  # the name or displayName of Tags
       displayName: API C v1
       serviceUrl: $(ApiServiceURL)
       openApiSpec: $(apimBasePath)\OpenApi.json
@@ -24,7 +24,7 @@ apis:
       protocols: https
       subscriptionRequired: true
       isCurrent: true
-      products: ProductC1, ProductC2
+      products: ProductC1, ProductC2 # the name or displayName of Products
       subscriptionKeyParameterNames: 
          header: ProviderKey
          query: ProviderKey 
@@ -47,7 +47,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\ProductPolicy.xml
+      policy: $(apimBasePath)\Policies\ProductPolicy.xml #Policy of the Product
       
       
     - name: ProductC2
@@ -57,10 +57,9 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\ProductPolicy.xml
+      policy: $(apimBasePath)\Policies\ProductPolicy.xml #Policy of the Product
 
             
   
-outputLocation: $(apimBasePath)\output 
-linked: true
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
+outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

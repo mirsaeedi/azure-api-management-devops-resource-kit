@@ -11,14 +11,14 @@ apiVersionSets:
 apis:
 
     - name: ApiA1
-      tags: TagA1, TagA2
+      tags: TagA1, TagA2  # the name or displayName of Tags
       displayName: API A v1
       serviceUrl: $(ApiServiceURL)
       openApiSpec: $(apimBasePath)\OpenApi.json
       policy: $(apimBasePath)\Policies\ApiPolicy.xml  
       path: $(prefix)/a/api
       apiVersion: v1
-      apiVersionSetId: ApiVersionSetA
+      apiVersionSetId: ApiVersionSetA # the name of the version set
       apiRevision: 1
       protocols: https
       subscriptionRequired: true
@@ -36,6 +36,5 @@ tags:
      - name: TagA2
        displayName: Tag A 2
   
-outputLocation: $(apimBasePath)\output 
-linked: true
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
+outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

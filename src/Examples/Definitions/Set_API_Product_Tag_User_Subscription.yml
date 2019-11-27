@@ -12,19 +12,18 @@ apiVersionSets:
 apis:
 
     - name: ApiE1
-      tags: TagE1, TagE2
+      tags: TagE1, TagE2 # the name or displayName of Tags
       displayName: API E v1
       serviceUrl: $(ApiServiceURL)
       openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  # passing the local certThumbprint variable to the policy 
       path: $(prefix)/E/api
       apiVersion: v1
-      apiVersionSetId: ApiVersionSetE
+      apiVersionSetId: ApiVersionSetE # the name of the version set
       apiRevision: 1
       protocols: https
-      subscriptionRequired: true
       isCurrent: true
-      products: ProductE1, ProductE2
+      products: ProductE1, ProductE2 # the name or displayName of Products
         
 tags:
 
@@ -44,7 +43,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint) # passing the local certThumbprint variable to the policy 
       
       
     - name: ProductE2
@@ -54,7 +53,7 @@ products:
       approvalRequired: true
       subscriptionsLimit: 1
       state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)  
+      policy: $(apimBasePath)\Policies\ProductPolicy.xml  
 
     
 certificates:
@@ -76,21 +75,20 @@ subscriptions:
 
 
        - name: subscriptionE1
-         scope: /apis
+         scope: /apis # access to all APIs
          displayName: subcription E1
          ownerId: /users/userE
          
          
        - name: subscriptionE2
-         scope: /products/ProductE2
+         scope: /products/ProductE2 # access to apis definded under ProductE2
          displayName:  subcription E2
          ownerId: /users/userE
          
        - name: subscriptionE3
-         scope: /apis/ApiE1
+         scope: /apis/ApiE1 # access to ApiE1 only
          displayName:  subcription E3
          ownerId: /users/userE        
   
-outputLocation: $(apimBasePath)\output 
-linked: true
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl)  # Required if 'linked' property is set to true
+outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
+linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

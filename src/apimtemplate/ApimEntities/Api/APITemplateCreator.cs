@@ -121,7 +121,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             }
             else
             {
-                apiTemplateResource.Properties.ApiVersion = api.ApiVersion;
+				var path = api.Path.Replace("//","/");
+				if (path.StartsWith("/"))
+					path = path.Substring(1);
+
+				apiTemplateResource.Properties.ApiVersion = api.ApiVersion;
                 apiTemplateResource.Properties.ServiceUrl = api.ServiceUrl;
                 apiTemplateResource.Properties.Type = api.Type;
                 apiTemplateResource.Properties.ApiType = api.ApiType; 
@@ -131,7 +135,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
                 apiTemplateResource.Properties.ApiRevisionDescription = api.ApiRevisionDescription;
                 apiTemplateResource.Properties.ApiVersionDescription = api.ApiVersionDescription;
                 apiTemplateResource.Properties.AuthenticationSettings = api.AuthenticationSettings;
-                apiTemplateResource.Properties.Path = api.Path;
+                apiTemplateResource.Properties.Path = path;
                 apiTemplateResource.Properties.IsCurrent = api.IsCurrent;
                 apiTemplateResource.Properties.DisplayName = api.DisplayName;
 				apiTemplateResource.Properties.SubscriptionKeyParameterNames = api.SubscriptionKeyParameterNames;
