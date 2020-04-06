@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using Newtonsoft.Json.Serialization;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common

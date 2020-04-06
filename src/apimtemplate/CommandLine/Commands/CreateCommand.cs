@@ -1,14 +1,14 @@
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.Models;
-using System.Linq;
 using Apim.DevOps.Toolkit;
 using Apim.DevOps.Toolkit.CommandLine;
+using System;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
-    public class CreateCommand
-    {
+	public class CreateCommand
+	{
 		public async Task Process(CommandLineOption option)
 		{
 			await LoadGlobalVariables(option);
@@ -31,8 +31,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			var creatorConfig = await fileReader.GetCreatorConfigFromYaml(option.YamlConfigPath);
 
 			creatorConfig.PrefixFileName = option.FileNamePrefix;
-
 			creatorConfig.MasterTemplateName = option.MasterFileName;
+
 			return creatorConfig;
 		}
 
@@ -41,6 +41,16 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			await VariableReplacer.Instance.LoadFromFile(option.VariableFilePath);
 
 			VariableReplacer.Instance.Load(option.VariableString);
+
+			if (option.PrintVariables)
+			{
+				var keyValuePairs = VariableReplacer.Instance.GetVariables();
+
+				foreach (var kv	 in keyValuePairs)
+				{
+					Console.WriteLine($"{kv.Key}={kv.Value}");
+				}
+			}
 		}
-    }
+	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Apim.Arm.Creator.Creator.TemplateCreators;
 using Apim.DevOps.Toolkit.ArmTemplates;

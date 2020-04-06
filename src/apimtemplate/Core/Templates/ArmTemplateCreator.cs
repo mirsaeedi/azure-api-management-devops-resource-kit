@@ -1,13 +1,9 @@
 ﻿using Apim.Arm.Creator.Creator.TemplateCreators;
 using Apim.DevOps.Toolkit.ApimEntities.Tag;
-using Apim.DevOps.Toolkit.ArmTemplates;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Apim.Arm.Creator.Creator.Models

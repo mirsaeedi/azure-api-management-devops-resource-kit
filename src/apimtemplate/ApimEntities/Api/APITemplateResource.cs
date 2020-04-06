@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System;
 
 namespace Apim.DevOps.Toolkit.ArmTemplates
 {

@@ -12,32 +12,30 @@ using System.Text.RegularExpressions;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
-    public class FileReader
-    {
-        private HttpClient _httpClient = new HttpClient();
+	public class FileReader
+	{
+		private HttpClient _httpClient = new HttpClient();
 
-        public async Task<string[]> GetReplacementVariablesFromYaml(string replacementVariablesFilePath)
-        {
-            if (string.IsNullOrEmpty(replacementVariablesFilePath))
-            {
-                return new string[0];
-            }
+		public async Task<string[]> GetReplacementVariablesFromYaml(string replacementVariablesFilePath)
+		{
+			if (string.IsNullOrEmpty(replacementVariablesFilePath))
+			{
+				return new string[0];
+			}
 
-            var content = await RetrieveFileContentsAsync(replacementVariablesFilePath);
-            var deserializer = new Deserializer();
-            var replacementVariables = deserializer.Deserialize<string[]>(content);
+			var content = await RetrieveFileContentsAsync(replacementVariablesFilePath);
+			var deserializer = new Deserializer();
+			return deserializer.Deserialize<string[]>(content);
+		}
 
-            return replacementVariables;
-        }
-
-        public async Task<DeploymentDefinition> GetCreatorConfigFromYaml(string configFilePath)
-        {
-            var content = await RetrieveFileContentsAsync(configFilePath);
+		public async Task<DeploymentDefinition> GetCreatorConfigFromYaml(string configFilePath)
+		{
+			var content = await RetrieveFileContentsAsync(configFilePath);
 
 			content = VariableReplacer.Instance.ReplaceVariablesWithValues(content);
 
-            return GetCreatorConfig(content);
-        }
+			return GetCreatorConfig(content);
+		}
 
 		public async Task<string> RetrieveFileContentsAsync(string fileLocation, bool convertToBase64=false)
 		{
@@ -142,23 +140,23 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 		}
 
 		private DeploymentDefinition GetCreatorConfig(string yamlContent)
-        {
-            var deserializer = new Deserializer();
-            object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
-           
-            var jsonSerializer = new JsonSerializer();
+		{
+			var deserializer = new Deserializer();
+			object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
+		   
+			var jsonSerializer = new JsonSerializer();
 
-            using (var writer = new StringWriter())
-            {
-                jsonSerializer.Serialize(writer, deserializedYaml);
-                string jsonText = writer.ToString();
-                var creatorConfig = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
+			using (var writer = new StringWriter())
+			{
+				jsonSerializer.Serialize(writer, deserializedYaml);
+				string jsonText = writer.ToString();
+				var creatorConfig = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
 
 				var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
 
 				return creatorConfig;
-            }
-        }
+			}
+		}
 
 		private bool IsCreatorConfigValid(DeploymentDefinition creatorConfig)
 		{

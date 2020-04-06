@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 {
     public class DiagnosticTemplateResource : TemplateResource<DiagnosticTemplateProperties>

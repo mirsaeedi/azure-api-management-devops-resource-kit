@@ -1,6 +1,4 @@
 ﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Apim.DevOps.Toolkit.ApimEntities.Tag

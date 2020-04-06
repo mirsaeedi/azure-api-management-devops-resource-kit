@@ -1,7 +1,4 @@
 ﻿using CommandLine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Apim.DevOps.Toolkit.CommandLine
 {
@@ -25,5 +22,8 @@ namespace Apim.DevOps.Toolkit.CommandLine
 
 		[Option('m', "master", Required = false, HelpText = "Name of the master template file.")]
 		public string MasterFileName { get; set; }
+
+		[Option('v', "printVariables", Required = false, HelpText = "Print loaded variables before generating arm templates.")]
+		public bool PrintVariables { get; internal set; }
 	}
 }

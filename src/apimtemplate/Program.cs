@@ -1,16 +1,15 @@
-﻿using System;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System.Collections.Generic;
-using CommandLine;
+﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using Apim.DevOps.Toolkit.CommandLine;
 using System.Threading.Tasks;
-using Apim.DevOps.Toolkit;
+using CommandLine;
+using System.Collections.Generic;
+using System;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 {
-    class Program
-    {
+	class Program
+	{
+		private static int errorCode = 0;
 		public static Task<int> Main(string[] args)
 		{
 			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
@@ -19,7 +18,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 				async option => await ProcessCommand(option),
 				async errors => await ProcessError(errors));
 
-			return Task.FromResult(0);
+			return Task.FromResult(errorCode);
 		}
 
 		private static Task ProcessError(IEnumerable<Error> errors)
@@ -29,6 +28,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 				Console.WriteLine(error);
 			}
 
+			errorCode = -1;
 			return Task.CompletedTask;
 		}
 
@@ -41,11 +41,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 			}
 			catch (Exception e)
 			{
+				errorCode = -1;
 				Console.WriteLine(e.ToString());
 			}
 
 			return Task.CompletedTask;
 			
 		}
-    }
+	}
 }

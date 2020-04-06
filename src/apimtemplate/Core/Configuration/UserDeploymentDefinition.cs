@@ -1,5 +1,4 @@
-﻿using Apim.DevOps.Toolkit.ApimEntities.Tag;
-using Apim.DevOps.Toolkit.ArmTemplates;
+﻿using Apim.DevOps.Toolkit.ArmTemplates;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {

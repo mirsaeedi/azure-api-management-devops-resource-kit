@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Apim.DevOps.Toolkit.Extensions
 {
@@ -39,8 +38,20 @@ namespace Apim.DevOps.Toolkit.Extensions
 
         public static (string Key, string Value) CreateReplacementKeyValue(this string replacementVariable)
         {
-            var keyValue = replacementVariable.Split("=");
-            return ($"$({keyValue[0]})", keyValue[1]);
+            // pattern: key=value
+            var pattern = @"(?<key>[a-zA-Z1-9]+)=(?<value>.+)";
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            var match = regex.Match(replacementVariable);
+
+            if (!match.Success)
+            {
+                throw new ArgumentException($"the variable {replacementVariable} does not have valid format");
+            }
+
+            var key = match.Groups["key"].Value;
+            var value = match.Groups["value"].Value;
+
+            return ($"$({key})", value);
         }
     }
 }

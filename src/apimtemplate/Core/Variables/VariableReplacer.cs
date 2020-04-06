@@ -1,18 +1,19 @@
 ﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.Extensions;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
 
 namespace Apim.DevOps.Toolkit
 {
 	internal class VariableReplacer
 	{
 		private static Lazy<VariableReplacer> _instance = new Lazy<VariableReplacer>(() => new VariableReplacer());
-		private Dictionary<string,string> _varsKeyValues= new Dictionary<string,string>();
+		private readonly Dictionary<string,string> _varsKeyValues= new Dictionary<string,string>();
 
 		public static VariableReplacer Instance => _instance.Value;
+
+		private VariableReplacer() { }
 
 		public async Task LoadFromFile(string filePath)
 		{
@@ -33,7 +34,7 @@ namespace Apim.DevOps.Toolkit
 		/// </summary>
 		/// <param name="variables"></param>
 		/// <returns></returns>
-		public Dictionary<string,string> GetVariables(string variables)
+		public Dictionary<string,string> LoadFromString(string variables)
 		{
 			if (string.IsNullOrEmpty(variables))
 				return new Dictionary<string, string>();
@@ -41,6 +42,16 @@ namespace Apim.DevOps.Toolkit
 			var variableValueKeyValues = variables.Split(";");
 
 			return GetVariables(variableValueKeyValues);
+		}
+
+		/// <summary>
+		/// variables separated by ;. example: a=1;b=2;
+		/// </summary>
+		/// <param name="variables"></param>
+		/// <returns></returns>
+		public Dictionary<string, string> GetVariables()
+		{
+			return _varsKeyValues;
 		}
 
 
@@ -63,7 +74,7 @@ namespace Apim.DevOps.Toolkit
 
 		public string ReplaceVariablesWithValues(string content, string localVariables=null)
 		{
-			var localVars = GetVariables(localVariables);
+			var localVars = LoadFromString(localVariables);
 
 			var mergedVariables = MergeLocalAndGlobalVariables(localVars);
 
