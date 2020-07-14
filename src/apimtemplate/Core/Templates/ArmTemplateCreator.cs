@@ -55,9 +55,9 @@ namespace Apim.Arm.Creator.Creator.Models
 			Console.WriteLine("------------------------------------------");
 			await SaveTemplate<LoggerTemplateCreator>(_templateFileNames.Loggers(), c => c.Loggers != null);
 
-			Console.WriteLine("Creating backeds template");
+			Console.WriteLine("Creating backends template");
 			Console.WriteLine("------------------------------------------");
-			await SaveTemplate<CertificateTemplateCreator>(_templateFileNames.Backends(), c => c.Backends != null);
+			await SaveTemplate<BackendTemplateCreator>(_templateFileNames.Backends(), c => c.Backends != null);
 
 			Console.WriteLine("Creating authorization servers template");
 			Console.WriteLine("------------------------------------------");
