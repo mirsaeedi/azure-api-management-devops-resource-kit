@@ -1,58 +1,21 @@
-﻿
-using Apim.DevOps.Toolkit.ArmTemplates;
-
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
+﻿namespace Apim.DevOps.Toolkit.ApimEntities.Api.Operation
 {
-    public class OperationTemplateResource : TemplateResource<OperationTemplateProperties>
-    {
-        public PolicyTemplateResource[] resources { get; set; }
-        public override string Type => ResourceType.ApiOperation;
-    }
+	public class OperationProperties
+	{
+		public OperationParameter[] TemplateParameters { get; set; }
 
-    public class OperationTemplateProperties
-    {
-        public OperationTemplateParameter[] templateParameters { get; set; }
-        public string description { get; set; }
-        public OperationTemplateRequest request { get; set; }
-        public OperationsTemplateResponse[] responses { get; set; }
-        public string policies { get; set; }
-        public string displayName { get; set; }
-        public string method { get; set; }
-        public string urlTemplate { get; set; }
-    }
+		public string Description { get; set; }
 
-    public class OperationTemplateParameter
-    {
-        public string name { get; set; }
-        public string description { get; set; }
-        public string type { get; set; }
-        public string defaultValue { get; set; }
-        public bool required { get; set; }
-        public string[] values { get; set; }
-    }
+		public OperationRequest Request { get; set; }
 
-    public class OperationTemplateRequest
-    {
-        public string description { get; set; }
-        public OperationTemplateParameter[] queryParameters { get; set; }
-        public OperationTemplateParameter[] headers { get; set; }
-        public OperationTemplateRepresentation[] representations { get; set; }
-    }
+		public OperationsResponse[] Responses { get; set; }
 
-    public class OperationTemplateRepresentation
-    {
-        public string contentType { get; set; }
-        public string sample { get; set; }
-        public string schemaId { get; set; }
-        public string typeName { get; set; }
-        public OperationTemplateParameter[] formParameters { get; set; }
-    }
+		public string Policies { get; set; }
 
-    public class OperationsTemplateResponse
-    {
-        public int statusCode { get; set; }
-        public string description { get; set; }
-        public OperationTemplateParameter[] headers { get; set; }
-        public OperationTemplateRepresentation[] representations { get; set; }
-    }
+		public string DisplayName { get; set; }
+
+		public string Method { get; set; }
+
+		public string UrlTemplate { get; set; }
+	}
 }

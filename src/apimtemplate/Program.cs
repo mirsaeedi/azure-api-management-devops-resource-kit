@@ -1,17 +1,20 @@
-﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
-using Apim.DevOps.Toolkit.CommandLine;
+﻿using Apim.DevOps.Toolkit.CommandLine;
 using System.Threading.Tasks;
 using CommandLine;
 using System.Collections.Generic;
 using System;
+using Apim.DevOps.Toolkit.CommandLine.Commands;
+using Apim.DevOps.Toolkit.Core.Mapping;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
+namespace Apim.DevOps.Toolkit
 {
-	class Program
+	public static class Program
 	{
-		private static int errorCode = 0;
+		private static int errorCode;
 		public static Task<int> Main(string[] args)
 		{
+			MappingConfiguration.Map();
+
 			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
 
 			result.MapResult(
@@ -29,6 +32,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 			}
 
 			errorCode = -1;
+
 			return Task.CompletedTask;
 		}
 
@@ -42,11 +46,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates
 			catch (Exception e)
 			{
 				errorCode = -1;
-				Console.WriteLine(e.ToString());
+				Console.Error.WriteLine(e.ToString());
 			}
 
 			return Task.CompletedTask;
-			
 		}
 	}
 }

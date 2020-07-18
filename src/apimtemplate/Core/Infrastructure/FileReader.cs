@@ -4,63 +4,51 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
+using Apim.DevOps.Toolkit.Core.Configuration;
 using Apim.DevOps.Toolkit.Extensions;
 using System.Collections.Generic;
-using Apim.DevOps.Toolkit;
 using System.Text.RegularExpressions;
+using System.Linq;
+using Apim.DevOps.Toolkit.Core.Variables;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
+namespace Apim.DevOps.Toolkit.Core.Infrastructure
 {
 	public class FileReader
 	{
-		private HttpClient _httpClient = new HttpClient();
+		private static readonly HttpClient _httpClient = new HttpClient();
 
-		public async Task<string[]> GetReplacementVariablesFromYaml(string replacementVariablesFilePath)
+		public async Task<VariableCollection> GetVariablesFromYaml(string variablesFilePath)
 		{
-			if (string.IsNullOrEmpty(replacementVariablesFilePath))
+			if (string.IsNullOrEmpty(variablesFilePath))
 			{
-				return new string[0];
+				return new VariableCollection();
 			}
 
-			var content = await RetrieveFileContentsAsync(replacementVariablesFilePath);
+			var content = await File.ReadAllTextAsync(variablesFilePath);
 			var deserializer = new Deserializer();
-			return deserializer.Deserialize<string[]>(content);
+
+			var keyValues = deserializer.Deserialize<string[]>(content);
+			var variables = keyValues.Select(kv => Variable.FromString(kv));
+
+			return new VariableCollection(variables);
 		}
 
-		public async Task<DeploymentDefinition> GetCreatorConfigFromYaml(string configFilePath)
+		public async Task<DeploymentDefinition> GetDeploymentDefinitionFromYaml(string deploymentDefinitionFilePath)
 		{
-			var content = await RetrieveFileContentsAsync(configFilePath);
-
+			var content = await RetrieveFileContentsAsync(deploymentDefinitionFilePath);
 			content = VariableReplacer.Instance.ReplaceVariablesWithValues(content);
 
-			return GetCreatorConfig(content);
+			return GetDeploymentDefinition(content);
 		}
 
-		public async Task<string> RetrieveFileContentsAsync(string fileLocation, bool convertToBase64=false)
+		public async Task<string> RetrieveFileContentsAsync(string fileLocation, bool convertToBase64 = false)
 		{
 			var parts = fileLocation.Split(":::");
 			fileLocation = parts[0];
 
 			var isUrl = fileLocation.IsUri(out var uriResult);
 
-			string result;
-			if (!isUrl)
-			{
-				var localVariables = parts.Length == 2 ? parts[1] : null;
-
-				if (convertToBase64)
-				{
-					return GetBase64(await File.ReadAllBytesAsync(fileLocation));
-				}
-
-				var content = await File.ReadAllTextAsync(fileLocation);
-				var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content, localVariables);
-				var interpretedContent = EvaluateExpressions(replacedContent);
-
-				result = interpretedContent;
-			}
-			else
+			if (isUrl)
 			{
 				var response = await _httpClient.GetAsync(uriResult).ConfigureAwait(false);
 
@@ -69,15 +57,20 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 					throw new Exception($"Unable to fetch remote file - {fileLocation}");
 				}
 
-				result = await response.Content.ReadAsStringAsync();
+				return await response.Content.ReadAsStringAsync();
 			}
 
-			return result;
-		}
+			var localVariables = parts.Length == 2 ? parts[1] : null;
 
-		private string GetBase64(byte[] content)
-		{
-			return Convert.ToBase64String(content);
+			if (convertToBase64)
+			{
+				return Convert.ToBase64String(await File.ReadAllBytesAsync(fileLocation));
+			}
+
+			var content = await File.ReadAllTextAsync(fileLocation);
+			var replacedContent = VariableReplacer.Instance.ReplaceVariablesWithValues(content, localVariables);
+
+			return EvaluateExpressions(replacedContent);
 		}
 
 		private string EvaluateExpressions(string replacedContent)
@@ -103,7 +96,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 				{
 					stackIf.Pop();
 				}
-				else if(shouldInclude)
+				else if (shouldInclude)
 				{
 					var evaluatedLine = EvaluateLine(line);
 					evaluatedLines.Add(evaluatedLine);
@@ -112,7 +105,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 
 			var sb = new System.Text.StringBuilder();
 
-			foreach(var line in evaluatedLines)
+			foreach (var line in evaluatedLines)
 			{
 				sb.AppendLine(line);
 			}
@@ -139,30 +132,31 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			return line;
 		}
 
-		private DeploymentDefinition GetCreatorConfig(string yamlContent)
+		private DeploymentDefinition GetDeploymentDefinition(string yamlContent)
 		{
 			var deserializer = new Deserializer();
 			object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
-		   
+			object deserializedYaml2 = deserializer.Deserialize<DeploymentDefinition>(yamlContent);
+
 			var jsonSerializer = new JsonSerializer();
 
 			using (var writer = new StringWriter())
 			{
 				jsonSerializer.Serialize(writer, deserializedYaml);
 				string jsonText = writer.ToString();
-				var creatorConfig = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
+				var deploymentDefinition = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
 
-				var isConfigCreatorValid = IsCreatorConfigValid(creatorConfig);
+				var isConfigCreatorValid = IsDeploymentDefinitionValid(deploymentDefinition);
 
-				return creatorConfig;
+				return deploymentDefinition;
 			}
 		}
 
-		private bool IsCreatorConfigValid(DeploymentDefinition creatorConfig)
+		private bool IsDeploymentDefinitionValid(DeploymentDefinition deploymentDefinition)
 		{
-			var creatorConfigurationValidator = new ConfigurationValidator();
-			bool isValidCreatorConfig = creatorConfigurationValidator.Validate(creatorConfig);
-			return isValidCreatorConfig;
+			var DeploymentDefinitionValidator = new DeploymentDefinitionValidator();
+
+			return DeploymentDefinitionValidator.Validate(deploymentDefinition);
 		}
 	}
 }

@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System.Text;
 
-namespace Apim.DevOps.Toolkit.ArmTemplates
+namespace Apim.DevOps.Toolkit.ApimEntities.User
 {
-    public class UserProperties
-    {
-        public UserState? State { get; set; }
+	public class UserProperties
+	{
+		public UserState? State { get; set; }
 
-        public string Note { get; set; }
+		public string Note { get; set; }
 
 		public UserIdentityContract[] Identities { get; set; }
 
@@ -23,26 +22,5 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		public string Password { get; set; }
 
 		public UserConfirmation? Confirmation { get; set; }
-	}
-
-	public class UserIdentityContract
-	{
-		public string Provider { get; set; }
-
-		public string Id { get; set; }
-	}
-
-	public enum UserConfirmation
-	{
-		Signup,
-		Invite
-	}
-
-	public enum UserState
-	{
-		Active,
-		Blocked,
-		Pending,
-		Deleted
 	}
 }

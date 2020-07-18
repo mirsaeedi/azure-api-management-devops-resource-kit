@@ -1,54 +1,63 @@
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using System.Threading.Tasks;
-using Apim.Arm.Creator.Creator.Models;
-using Apim.DevOps.Toolkit;
-using Apim.DevOps.Toolkit.CommandLine;
+using Apim.DevOps.Toolkit.Core.Configuration;
+using Apim.DevOps.Toolkit.Core.Infrastructure;
+using Apim.DevOps.Toolkit.Core.Templates;
+using Apim.DevOps.Toolkit.Core.Variables;
 using System;
+using System.Threading.Tasks;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
+namespace Apim.DevOps.Toolkit.CommandLine.Commands
 {
 	public class CreateCommand
 	{
+		private static readonly FileReader _fileReader = new FileReader();
+
 		public async Task Process(CommandLineOption option)
 		{
 			await LoadGlobalVariables(option);
 
-			var creatorConfig = await GetCreatorConfig(option);
+			var deploymentDefinition = await GetDeploymentDefinition(option);
 
-			await CreateTemplates(creatorConfig);
+			await CreateTemplates(deploymentDefinition);
 		}
 
-		private async Task CreateTemplates(DeploymentDefinition creatorConfig)
+		private async Task CreateTemplates(DeploymentDefinition deploymentDefinition)
 		{
-			var armTemplateCreator = new ArmTemplateCreator(creatorConfig);
+			var armTemplateCreator = new ArmTemplateCreator(deploymentDefinition, null);
 			await armTemplateCreator.Create();
 		}
 
-		private async Task<DeploymentDefinition> GetCreatorConfig(CommandLineOption option)
+		private async Task<DeploymentDefinition> GetDeploymentDefinition(CommandLineOption option)
 		{
-			var fileReader = new FileReader();
+			var deploymentDefinition = await _fileReader.GetDeploymentDefinitionFromYaml(option.YamlConfigPath);
 
-			var creatorConfig = await fileReader.GetCreatorConfigFromYaml(option.YamlConfigPath);
+			deploymentDefinition.PrefixFileName = option.FileNamePrefix;
+			deploymentDefinition.MasterTemplateName = option.MasterFileName;
 
-			creatorConfig.PrefixFileName = option.FileNamePrefix;
-			creatorConfig.MasterTemplateName = option.MasterFileName;
+			foreach (var productDeploymentDefinition in deploymentDefinition.Products)
+			{
+				productDeploymentDefinition.Root = deploymentDefinition;
+			}
 
-			return creatorConfig;
+			foreach (var apiDeploymentDefinition in deploymentDefinition.Apis)
+			{
+				apiDeploymentDefinition.Root = deploymentDefinition;
+			}
+
+			// TODO: Fix hierarchy
+
+			return deploymentDefinition;
 		}
 
 		private async Task LoadGlobalVariables(CommandLineOption option)
 		{
 			await VariableReplacer.Instance.LoadFromFile(option.VariableFilePath);
-
-			VariableReplacer.Instance.Load(option.VariableString);
+			VariableReplacer.Instance.LoadFromString(option.VariableString);
 
 			if (option.PrintVariables)
 			{
-				var keyValuePairs = VariableReplacer.Instance.GetVariables();
-
-				foreach (var kv	 in keyValuePairs)
+				foreach (var variable in VariableReplacer.Instance.Variables)
 				{
-					Console.WriteLine($"{kv.Key}={kv.Value}");
+					Console.WriteLine($"variable is loaded: {variable.Key}={variable.Value}");
 				}
 			}
 		}

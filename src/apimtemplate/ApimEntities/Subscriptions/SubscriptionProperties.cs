@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System.Text;
 
-namespace Apim.DevOps.Toolkit.ArmTemplates
+namespace Apim.DevOps.Toolkit.ApimEntities.Subscription
 {
-    public class SubscriptionProperties
-    {
+	public class SubscriptionProperties
+	{
 		/// <summary>
 		/// User (user id path) for whom subscription is being created in form /users/{userId}
 		/// </summary>
@@ -13,7 +12,6 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		/// <summary>
 		/// Scope like /products/{productId} or /apis or /apis/{apiId}.
 		/// </summary>
-		 
 		[JsonProperty(Required = Required.Always)]
 		public string Scope { get; set; }
 
@@ -21,7 +19,6 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		/// <summary>
 		/// Subscription name.
 		/// </summary>
-	
 		[JsonProperty(Required = Required.Always)]
 		public string DisplayName { get; set; }
 
@@ -49,15 +46,5 @@ namespace Apim.DevOps.Toolkit.ArmTemplates
 		/// Determines whether tracing can be enabled
 		/// </summary>
 		public bool? AllowTracing { get; set; }
-	}
-
-	public enum SubscriptionState
-	{
-		Active,
-		Suspended,
-		Submitted,
-		Rejected,
-		Cancelled,
-		Expired
 	}
 }

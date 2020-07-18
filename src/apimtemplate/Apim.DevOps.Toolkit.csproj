@@ -31,13 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="Microsoft.Azure.Management.ApiManagement" Version="4.0.6-preview" />
     <PackageReference Include="Microsoft.Azure.Management.Authorization" Version="2.9.0-preview" />
     <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.27.2" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="YamlDotNet" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 
 </Project>

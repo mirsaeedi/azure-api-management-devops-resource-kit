@@ -1,26 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
+namespace Apim.DevOps.Toolkit.Core.Templates
 {
-    public class Template
-    {
-        [JsonProperty(PropertyName = "$schema")]
-        public string Schema { get; set; }
-        public string ContentVersion { get; set; }
-        public Dictionary<string, TemplateParameterProperties> Parameters { get; set; }
-        public TemplateResource[] Resources { get; set; }
-    }
+	public class Template
+	{
+		private List<TemplateResource> _resources = new List<TemplateResource>();
 
-    public class TemplateParameterProperties {
-        public string type { get; set; }
-        public TemplateParameterMetadata metadata { get; set; }
-        public string[] allowedValues { get; set; }
-        public string defaultValue { get; set; }
-        public string value { get; set; }
-    }
+		[JsonProperty(PropertyName = "$schema")]
+		public string Schema => GlobalConstants.TemplateSchema;
 
-    public class TemplateParameterMetadata {
-        public string description { get; set; }
-    }
+		public string ContentVersion => GlobalConstants.ApiVersion;
+
+		public Dictionary<string, TemplateParameter> Parameters { get; set; } = new Dictionary<string, TemplateParameter>();
+
+		public Dictionary<string, TemplateVariable> Variables { get; set; }
+
+		public IReadOnlyList<TemplateResource> Resources => _resources.AsReadOnly();
+
+		public void AddResources(IEnumerable<TemplateResource> resources)
+		{
+			foreach (var resource in resources)
+			{
+				AddResource(resource);
+			}
+		}
+
+		public void AddResource(TemplateResource resource)
+		{
+			_resources.Add(resource);
+		}
+
+		internal void AddParameter(string parameterName, TemplateParameter apimServiceNameProperties)
+		{
+			Parameters.Add(parameterName, apimServiceNameProperties);
+		}
+	}
 }

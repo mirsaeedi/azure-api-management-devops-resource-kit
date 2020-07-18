@@ -1,81 +1,72 @@
-﻿using Apim.DevOps.Toolkit.Extensions;
+﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
+using Apim.DevOps.Toolkit.Core.Infrastructure.Models;
+using Apim.DevOps.Toolkit.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
+namespace Apim.DevOps.Toolkit.Core.Infrastructure
 {
-    public class OpenAPISpecReader
-    {
-        private string _content = null;
-        private string _openApiFilePath;
-        public OpenAPISpecReader(string openApiFilePath)
-        {
-            _openApiFilePath = openApiFilePath;
-        }
-        public async Task<string> GetOpenApiVersion()
-        {
-            var contents = await GetContents();
+	public class OpenApiSpecReader
+	{
+		private readonly FileReader _fileReader = new FileReader();
+		private string _openApiFilePath;
+		public OpenApiSpecReader(string openApiFilePath)
+		{
+			_openApiFilePath = openApiFilePath;
+		}
 
-            var openAPISpecWithVersion = JsonConvert.DeserializeObject<OpenAPISpecWithVersion>(contents);
-            return openAPISpecWithVersion.Swagger != null ? openAPISpecWithVersion.Swagger : openAPISpecWithVersion.OpenApi;
-        }
+		/// <summary>
+		/// https://docs.microsoft.com/en-us/rest/api/apimanagement/2019-01-01/apis/createorupdate#contentformat
+		/// </summary>
+		/// <returns></returns>
+		public async Task<string> GetOpenApiFormat()
+		{
+			var content = await GetContent();
+			var isJson = content.IsJson();
+			var isYaml = content.IsYaml();
 
-        private async Task<string> GetContents()
-        {
-            if (_content != null)
-                return _content;
+			if (!isJson || isYaml)
+			{
+				throw new Exception("Unsupported OpenApi format. The OpenApi document should be provided in json format. Version 2 and 3 of OpenApi are supported");
+			}
 
-            var fileReader = new FileReader();
-            _content = await fileReader.RetrieveFileContentsAsync(_openApiFilePath);
-            return _content;
-        }
+			var version = this.GetOpenApiVersion(content);
 
-        /// <summary>
-        /// https://docs.microsoft.com/en-us/rest/api/apimanagement/2019-01-01/apis/createorupdate#contentformat
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> GetOpenApiFormat()
-        {
-            var contents = await GetContents();
-            var version = await GetOpenApiVersion();
-            var isUrl = _openApiFilePath.IsUri(out _);
+			var isUrl = _openApiFilePath.IsUri(out _);
 
-            if (isUrl)
-            {
-                if (contents.IsJson() && version.StartsWith("2"))
-                    return "swagger-link-json";
-                else if (contents.IsJson() && version.StartsWith("3"))
-                    return "openapi-link";
+			if (isUrl)
+			{
+				if (isJson && version.Major == 2)
+					return OpenApiContentFormat.SwaggerLinkJson;
+				else if (isJson && version.Major == 3)
+					return OpenApiContentFormat.OpenApiLink;
+			}
 
-                throw new Exception("Unsupported openapi format");
-            }
+			if (isJson && version.Major == 2)
+				return OpenApiContentFormat.SwaggerJson;
+			else if (isJson && version.Major == 3)
+				return OpenApiContentFormat.OpenApiJson;
+			else if (isYaml && version.Major == 3)
+				return OpenApiContentFormat.OpenApi;
 
-            if (contents.IsJson() && version.StartsWith("2"))
-                return "swagger-json";
-            else if (contents.IsJson() && version.StartsWith("3"))
-                return "openapi+json";
+			throw new Exception("Unsupported OpenApi format. The OpenApi document should be provided in json format. Version 2 and 3 of OpenApi are supported");
+		}
 
-            return "openapi";
-        }
+		public async Task<string> GetValue()
+		{
+			return _openApiFilePath.IsUri(out _) ? _openApiFilePath : await GetContent();
+		}
 
-        internal async Task<string> GetValue()
-        {
-            return _openApiFilePath.IsUri(out _) ? _openApiFilePath : await GetContents();
-        }
-    }
+		private async Task<string> GetContent()
+		{
+			return await _fileReader.RetrieveFileContentsAsync(_openApiFilePath);
+		}
 
-    /// <summary>
-    /// https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#fixed-fields
-    /// </summary>
-    public class OpenAPISpecWithVersion
-    {
-        // OASv2 has the property 'swagger'
-        [JsonProperty(PropertyName = "swagger")]
-        public string Swagger { get; set; }
-        // OASv3 has the property 'openapi'
-        [JsonProperty(PropertyName = "openapi")]
-        public string OpenApi { get; set; }
-    }
-
+		private SemanticVersion GetOpenApiVersion(string openApiDocument)
+		{
+			var openAPISpecWithVersion = JsonConvert.DeserializeObject<OpenAPIVersion>(openApiDocument);
+			return SemanticVersion.FromString(openAPISpecWithVersion.Swagger != null ? openAPISpecWithVersion.Swagger : openAPISpecWithVersion.OpenApi);
+		}
+	}
 }

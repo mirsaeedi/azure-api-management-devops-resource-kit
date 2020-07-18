@@ -1,17 +1,21 @@
-﻿using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using Apim.DevOps.Toolkit.Extensions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using Apim.DevOps.Toolkit.Core.Infrastructure;
 
-namespace Apim.DevOps.Toolkit
+namespace Apim.DevOps.Toolkit.Core.Variables
 {
 	internal class VariableReplacer
 	{
+		private static string _variableKeyRegexPattern = @"\$\([a-zA-Z][a-zA-Z0-9]+\)";
 		private static Lazy<VariableReplacer> _instance = new Lazy<VariableReplacer>(() => new VariableReplacer());
-		private readonly Dictionary<string,string> _varsKeyValues= new Dictionary<string,string>();
+		private readonly FileReader _fileReader = new FileReader();
+		private readonly VariableCollection _variableCollection = new VariableCollection();
 
 		public static VariableReplacer Instance => _instance.Value;
+		public IReadOnlyCollection<Variable> Variables => this._variableCollection.Variables;
 
 		private VariableReplacer() { }
 
@@ -20,13 +24,8 @@ namespace Apim.DevOps.Toolkit
 			if (string.IsNullOrEmpty(filePath))
 				return;
 
-			var fileReader = new FileReader();
-
-			var variableValueKeyValues = await fileReader.GetReplacementVariablesFromYaml(filePath);
-
-			var varsDic = GetVariables(variableValueKeyValues);
-
-			AddVariables(varsDic);
+			var variableCollection = await _fileReader.GetVariablesFromYaml(filePath);
+			_variableCollection.Merge(variableCollection);
 		}
 
 		/// <summary>
@@ -34,89 +33,60 @@ namespace Apim.DevOps.Toolkit
 		/// </summary>
 		/// <param name="variables"></param>
 		/// <returns></returns>
-		public Dictionary<string,string> LoadFromString(string variables)
+		public void LoadFromString(string variables)
+		{
+			var variableCollection = GetFromString(variables);
+			this._variableCollection.Merge(variableCollection);
+		}
+
+		/// <summary>
+		/// variables separated by ;. example: a=1;b=2;
+		/// </summary>
+		/// <param name="variables"></param>
+		/// <returns></returns>
+		public VariableCollection GetFromString(string variables)
 		{
 			if (string.IsNullOrEmpty(variables))
-				return new Dictionary<string, string>();
+				return new VariableCollection();
 
-			var variableValueKeyValues = variables.Split(";");
-
-			return GetVariables(variableValueKeyValues);
+			return new VariableCollection(variables.Split(";").Select(Variable.FromString));
 		}
 
-		/// <summary>
-		/// variables separated by ;. example: a=1;b=2;
-		/// </summary>
-		/// <param name="variables"></param>
-		/// <returns></returns>
-		public Dictionary<string, string> GetVariables()
+		public string ReplaceVariablesWithValues(string content, string localVariables = null)
 		{
-			return _varsKeyValues;
-		}
+			var localVariableCollection = GetFromString(localVariables);
 
+			var overridenVariableCollection = this._variableCollection.Merge(localVariableCollection);
 
-		/// <summary>
-		/// variables separated by ;. example: a=1;b=2;
-		/// </summary>
-		/// <param name="variables"></param>
-		/// <returns></returns>
-		public void Load(string variables)
-		{
-			if (string.IsNullOrEmpty(variables))
-				return;
+			Validate(content, overridenVariableCollection);
 
-			var variableValueKeyValues = variables.Split(";");
-
-			var varsDic = GetVariables(variableValueKeyValues);
-
-			AddVariables(varsDic);
-		}
-
-		public string ReplaceVariablesWithValues(string content, string localVariables=null)
-		{
-			var localVars = LoadFromString(localVariables);
-
-			var mergedVariables = MergeLocalAndGlobalVariables(localVars);
-
-			foreach (var kv in mergedVariables)
+			foreach (var variable in overridenVariableCollection.Variables)
 			{
-				content = content.Replace(kv.Key, kv.Value);
+				content = content.Replace(variable.Key, variable.Value);
 			}
 
 			return content;
 		}
 
-		private Dictionary<string,string> MergeLocalAndGlobalVariables(Dictionary<string,string> localVariables)
+		private void Validate(string content, VariableCollection overridenVariableCollection)
 		{
-			var mergedVariables = new Dictionary<string, string>(_varsKeyValues);
+			var variableKeyMatches = Regex.Matches(content, _variableKeyRegexPattern);
 
-			foreach (var kv in localVariables)
+			var validationFailed = false;
+			foreach (Match variableKeyMatch in variableKeyMatches)
 			{
-				mergedVariables[kv.Key] =  kv.Value;
+				var variableKey = variableKeyMatch.Value;
+				if (!overridenVariableCollection.ContainsKey(variableKey))
+				{
+					validationFailed = true;
+					Console.Error.WriteLine($"There is no value defined for the variable {variableKey}");
+				}
 			}
 
-			return mergedVariables;
-		}
-
-		private void AddVariables(Dictionary<string, string> varsDic)
-		{
-			foreach (var kv in varsDic)
+			if (validationFailed)
 			{
-				_varsKeyValues[kv.Key] = kv.Value;
+				throw new InvalidOperationException("There should be a value assigned to all variables");
 			}
-		}
-
-		private Dictionary<string,string> GetVariables(string[] variableValueKeyValues)
-		{
-			var result = new Dictionary<string,string>();
-
-			foreach (var variableValueKeyValue in variableValueKeyValues)
-			{
-				var keyVal = variableValueKeyValue.CreateReplacementKeyValue();
-				result[keyVal.Key] = keyVal.Value;
-			}
-
-			return result;
 		}
 	}
 }
