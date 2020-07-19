@@ -10,7 +10,6 @@ namespace Apim.DevOps.Toolkit.Core.Mapping
 			{
 				ApiPolicyMapper.Map(cfg);
 				ApiMapper.Map(cfg);
-				ApiInitialMapper.Map(cfg);
 				PolicyMapper.Map(cfg);
 				ApiVersionSetMapper.Map(cfg);
 				AuthorizationServerMapper.Map(cfg);

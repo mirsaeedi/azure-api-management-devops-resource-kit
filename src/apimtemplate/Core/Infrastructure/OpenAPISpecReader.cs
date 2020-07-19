@@ -3,6 +3,7 @@ using Apim.DevOps.Toolkit.Core.Infrastructure.Models;
 using Apim.DevOps.Toolkit.Extensions;
 using Newtonsoft.Json;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Apim.DevOps.Toolkit.Core.Infrastructure
@@ -53,9 +54,13 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 			throw new Exception("Unsupported OpenApi format. The OpenApi document should be provided in json format. Version 2 and 3 of OpenApi are supported");
 		}
 
-		public async Task<string> GetValue()
+		public async Task<string> GetValue(string apiTitle)
 		{
-			return _openApiFilePath.IsUri(out _) ? _openApiFilePath : await GetContent();
+			var swaggerJson = await GetContent();
+
+			var swagger = JsonConvert.DeserializeObject<dynamic>(swaggerJson);
+			swagger.info.title = apiTitle;
+			return JsonConvert.SerializeObject(swagger);
 		}
 
 		private async Task<string> GetContent()

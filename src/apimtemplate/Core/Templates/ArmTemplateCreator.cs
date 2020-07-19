@@ -83,7 +83,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 			AddDependency<PolicyProperties, CertificateProperties>(resources);
 
 			AddDependency<ApiProperties, ApiVersionSetProperties>(resources);
-			AddDependency<ApiProperties, ProductsProperties>(resources);
 			AddDependency<ApiProperties, TagProperties>(resources);
 			AddDependency<ApiProperties, LoggerProperties>(resources);
 			AddDependency<ApiProperties, BackendProperties>(resources);
@@ -182,22 +181,26 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				.CreateResourcesIf(d => d.Operations != null));
 
 			resources.AddRange(
-				new TemplateCreator<ApiDeploymentDefinition, ProductApiTemplateProperties>(_mapper)
+				new TemplateCreator<ApiDeploymentDefinition, ProductApiProperties>(_mapper)
 				.ForDeploymentDefinitions(_deploymentDefinition.Apis)
 				.UseResourceCreator(apiDeploymentDefinition =>
 				{
-					var templateResources = new List<TemplateResource<ProductApiTemplateProperties>>();
+					var templateResources = new List<TemplateResource<ProductApiProperties>>();
 
 					foreach (string productDisplayName in apiDeploymentDefinition.ProductList)
 					{
 						var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
 
-						var templateResource = new TemplateResource<ProductApiTemplateProperties>(
+						var templateResource = new TemplateResource<ProductApiProperties>(
 							$"{productName}/{apiDeploymentDefinition.Name}",
 							$"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
 							ResourceType.ProductApi,
-							new ProductApiTemplateProperties(),
-							new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
+							new ProductApiProperties(),
+							new [] 
+							{ 
+								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
+								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]"
+							});
 
 						templateResources.Add(templateResource);
 					}
@@ -223,7 +226,11 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 							$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{tagName}')]",
 							ResourceType.TagApi,
 							new TagApiTemplateProperties(),
-							new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
+							new string[]
+							{
+								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
+								$"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]"
+							});
 
 						templateResources.Add(templateResource);
 					}
@@ -233,18 +240,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				.CreateResourcesIf(d => d.IsDependentOnTags()));
 
 			return resources;
-		}
-
-		private IEnumerable<TemplateResource> CreateApiInitialTemplate()
-		{
-			Console.WriteLine("Creating api initial template");
-			Console.WriteLine("------------------------------------------");
-
-			return new TemplateCreator<ApiDeploymentDefinition, ApiInitialProperties>(_mapper)
-				.ForDeploymentDefinitions(_deploymentDefinition.Apis)
-				.WithName(d => d.Name)
-				.OfType(ResourceType.Api)
-				.CreateResources();
 		}
 
 		private IEnumerable<TemplateResource> CreateAuthorizationServerResource()
@@ -314,7 +309,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				.CreateResources());
 
 			resources.AddRange(
-				new TemplateCreator<ProductDeploymentDefinition, PolicyProductProperties>(_mapper)
+				new TemplateCreator<ProductDeploymentDefinition, ProductPolicyProperties>(_mapper)
 				.ForDeploymentDefinitions(_deploymentDefinition.Products)
 				.WithName(d => $"{d.Name}/policy")
 				.OfType(ResourceType.ProductPolicy)
@@ -337,7 +332,11 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 							$"[concat(parameters('ApimServiceName'), '/{ProductDeploymentDefinition.Name}/{tagName}')]",
 							ResourceType.TagProduct,
 							new TagProductProperties(),
-							new string[] { $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{ProductDeploymentDefinition.Name}')]" });
+							new string[]
+							{
+								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{ProductDeploymentDefinition.Name}')]",
+								$"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]"
+							});
 
 						templateResources.Add(templateRsource);
 					}
