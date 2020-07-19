@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Apim.DevOps.Toolkit.Core.Variables;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Apim.DevOps.Toolkit.Core.Infrastructure
 {
@@ -25,7 +26,7 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 			}
 
 			var content = await File.ReadAllTextAsync(variablesFilePath);
-			var deserializer = new Deserializer();
+			var deserializer = GetDeserializer();
 
 			var keyValues = deserializer.Deserialize<string[]>(content);
 			var variables = keyValues.Select(kv => Variable.FromString(kv));
@@ -134,29 +135,26 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 
 		private DeploymentDefinition GetDeploymentDefinition(string yamlContent)
 		{
-			var deserializer = new Deserializer();
-			object deserializedYaml = deserializer.Deserialize<object>(yamlContent);
-			object deserializedYaml2 = deserializer.Deserialize<DeploymentDefinition>(yamlContent);
+			var deploymentDefinition = GetDeserializer().Deserialize<DeploymentDefinition>(yamlContent);
 
-			var jsonSerializer = new JsonSerializer();
+			ValidateDeploymentDefinition(deploymentDefinition);
 
-			using (var writer = new StringWriter())
-			{
-				jsonSerializer.Serialize(writer, deserializedYaml);
-				string jsonText = writer.ToString();
-				var deploymentDefinition = JsonConvert.DeserializeObject<DeploymentDefinition>(jsonText);
+			return deploymentDefinition;
 
-				var isConfigCreatorValid = IsDeploymentDefinitionValid(deploymentDefinition);
-
-				return deploymentDefinition;
-			}
 		}
 
-		private bool IsDeploymentDefinitionValid(DeploymentDefinition deploymentDefinition)
+		private bool ValidateDeploymentDefinition(DeploymentDefinition deploymentDefinition)
 		{
 			var DeploymentDefinitionValidator = new DeploymentDefinitionValidator();
 
 			return DeploymentDefinitionValidator.Validate(deploymentDefinition);
+		}
+
+		private IDeserializer GetDeserializer()
+		{
+			return new DeserializerBuilder()
+				.WithNamingConvention(CamelCaseNamingConvention.Instance)
+				.Build();
 		}
 	}
 }

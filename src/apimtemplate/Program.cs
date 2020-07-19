@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using Apim.DevOps.Toolkit.CommandLine.Commands;
 using Apim.DevOps.Toolkit.Core.Mapping;
+using AutoMapper;
 
 namespace Apim.DevOps.Toolkit
 {
@@ -13,12 +14,12 @@ namespace Apim.DevOps.Toolkit
 		private static int errorCode;
 		public static Task<int> Main(string[] args)
 		{
-			MappingConfiguration.Map();
+			var mapper = MappingConfiguration.Map();
 
 			var result = Parser.Default.ParseArguments<CommandLineOption>(args);
 
 			result.MapResult(
-				async option => await ProcessCommand(option),
+				async option => await ProcessCommand(option, mapper),
 				async errors => await ProcessError(errors));
 
 			return Task.FromResult(errorCode);
@@ -36,11 +37,11 @@ namespace Apim.DevOps.Toolkit
 			return Task.CompletedTask;
 		}
 
-		private static Task ProcessCommand(CommandLineOption option)
+		private static Task ProcessCommand(CommandLineOption option, IMapper mapper)
 		{
 			try
 			{
-				var createCommand = new CreateCommand();
+				var createCommand = new CreateCommand(mapper);
 				createCommand.Process(option).Wait();
 			}
 			catch (Exception e)

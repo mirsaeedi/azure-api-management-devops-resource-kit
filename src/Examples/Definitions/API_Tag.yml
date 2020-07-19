@@ -1,32 +1,26 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apis:
+  - name: ApiG1
+    tags: TagG1, TagG2 # the name or displayName of Tags
+    displayName: API G v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
 
-    - name: ApiG1
-      tags: TagG1, TagG2  # the name or displayName of Tags
-      displayName: API G v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
-      path: $(prefix)/g/api
-      apiVersion: v1
-      apiRevision: 1
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: true
-      subscriptionKeyParameterNames: 
-         header: ProviderKey
-         query: ProviderKey 
-        
 tags:
+  - name: TagG1
+    displayName: Tag G 1
 
-     - name: TagG1
-       displayName: Tag G 1
-       
-       
-     - name: TagG2
-       displayName: Tag G 2
-  
+  - name: TagG2
+    displayName: Tag G 2
+
 outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

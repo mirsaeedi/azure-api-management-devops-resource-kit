@@ -2,6 +2,10 @@
 {
 	public class ApiProperties
 	{
+		public string Value { get; set; }
+
+		public string Format { get; set; }
+
 		public string Description { get; set; }
 
 		public ApiTemplateAuthenticationSettings AuthenticationSettings { get; set; }

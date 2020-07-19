@@ -14,7 +14,7 @@ namespace Apim.DevOps.Toolkit.Core.Mapping
 				{
 					var openApiSpecReader = new OpenApiSpecReader(api.OpenApiSpec);
 					var format = openApiSpecReader.GetOpenApiFormat().Result;
-					var value = openApiSpecReader.GetOpenApiFormat().Result;
+					var value = openApiSpecReader.GetValue().Result;
 					var path = api.Path;
 
 					return new ApiInitialProperties(path, format, value);

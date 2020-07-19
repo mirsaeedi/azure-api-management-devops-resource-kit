@@ -12,7 +12,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 
 		private string _resourceType;
 		private Func<TResourceDeploymentDefinition, string> _getResourceName;
-		private Template _template;
 		private string _parentResourceType;
 		private Func<TResourceDeploymentDefinition, string> _getParentResourceName;
 		private Func<TResourceDeploymentDefinition, IEnumerable<TemplateResource<TResourceProperties>>> _resourceCreator;
@@ -58,11 +57,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 			return this;
 		}
 
-		public TemplateCreator<TResourceDeploymentDefinition, TResourceProperties> WithTemplate(Template template)
-		{
-			_template = template;
-			return this;
-		}
 		public TemplateCreator<TResourceDeploymentDefinition, TResourceProperties> UseResourceCreator(Func<TResourceDeploymentDefinition, IEnumerable<TemplateResource<TResourceProperties>>> resourceCreator)
 		{
 			_resourceCreator = resourceCreator;
@@ -85,7 +79,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 					continue;
 				}
 
-				resources.AddRange(_resourceCreator(deploymentDefinition) ?? GetResource(_getResourceName, _resourceType, deploymentDefinition));
+				resources.AddRange(_resourceCreator != null ? _resourceCreator(deploymentDefinition) : GetResource(_getResourceName, _resourceType, deploymentDefinition));
 			}
 
 			return resources;
@@ -107,10 +101,13 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 			string resourceType,
 			TResourceDeploymentDefinition deploymentDefinition)
 		{
+			var name = getResourceName(deploymentDefinition).Trim(new [] { '/' });
+
 			return new[]
 			{
 				new TemplateResource<TResourceProperties>(
-					$"[concat(parameters('ApimServiceName'), '/{getResourceName(deploymentDefinition)}')]",
+					name,
+					$"[concat(parameters('ApimServiceName'), '/{name}')]",
 					resourceType,
 					_mapper.Map<TResourceProperties>(deploymentDefinition),
 					GetDependsOn(deploymentDefinition))

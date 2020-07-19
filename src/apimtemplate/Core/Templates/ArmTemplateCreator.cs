@@ -66,8 +66,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 
 			resources.AddRange(CreateAuthorizationServerResource());
 
-			resources.AddRange(CreateApiInitialTemplate());
-
 			resources.AddRange(CreateApiSubsequentTemplate());
 
 			OrderResources(resources);
@@ -84,7 +82,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 			AddDependency<BackendProperties, CertificateProperties>(resources);
 			AddDependency<PolicyProperties, CertificateProperties>(resources);
 
-			AddDependency<ApiProperties, ApiInitialProperties>(resources);
 			AddDependency<ApiProperties, ApiVersionSetProperties>(resources);
 			AddDependency<ApiProperties, ProductsProperties>(resources);
 			AddDependency<ApiProperties, TagProperties>(resources);
@@ -105,9 +102,9 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 		private void AddDependency<TDependentResource, TDependencyResource>(List<TemplateResource> resources)
 		{
 			var dependentResources = GetResources<TDependentResource>(resources);
-			var dependencyResource = GetResources<TDependencyResource>(resources);
+			var dependencyResources = GetResources<TDependencyResource>(resources);
 
-			AddDependencyTo(dependentResources, dependencyResource);
+			AddDependencyTo(dependentResources, dependencyResources);
 		}
 
 		private void AddDependencyTo(IEnumerable<TemplateResource> resources, IEnumerable<TemplateResource> dependencies)
@@ -149,7 +146,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				.OfType(ResourceType.ApiPolicy)
 				.WhichDependsOnResourceOfType(ResourceType.Api)
 				.WhichDependsOnResourceWithName(d => d.Name)
-				.CreateResourcesIf(d => d.Policy != null));
+				.CreateResourcesIf(d => d.HasPolicy()));
 
 			resources.AddRange(
 				new TemplateCreator<ApiDeploymentDefinition, ApiOperationPolicyProperties>(_mapper)
@@ -167,6 +164,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 						var isUrl = operationPolicy.IsUri(out _);
 
 						var templateResource = new TemplateResource<ApiOperationPolicyProperties>(
+							$"{apiDeploymentDefinition.Name}/{operationName}/policy",
 							$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{operationName}/policy')]",
 							ResourceType.ApiOperationPolicy,
 							new ApiOperationPolicyProperties()
@@ -195,6 +193,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 						var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
 
 						var templateResource = new TemplateResource<ProductApiTemplateProperties>(
+							$"{productName}/{apiDeploymentDefinition.Name}",
 							$"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
 							ResourceType.ProductApi,
 							new ProductApiTemplateProperties(),
@@ -220,6 +219,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 						var tagName = apiDeploymentDefinition.GetTagName(tagDisplayName);
 
 						var templateResource = new TemplateResource<TagApiTemplateProperties>(
+							$"{apiDeploymentDefinition.Name}/{tagName}",
 							$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{tagName}')]",
 							ResourceType.TagApi,
 							new TagApiTemplateProperties(),
@@ -231,15 +231,6 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 					return templateResources;
 				})
 				.CreateResourcesIf(d => d.IsDependentOnTags()));
-
-			resources.AddRange(
-				new TemplateCreator<ApiDeploymentDefinition, ApiPolicyProperties>(_mapper)
-				.ForDeploymentDefinitions(_deploymentDefinition.Apis)
-				.WithName(d => $"/{d.Name}/policy")
-				.OfType(ResourceType.ApiPolicy)
-				.WhichDependsOnResourceOfType(ResourceType.Api)
-				.WhichDependsOnResourceWithName(d => d.Name)
-				.CreateResourcesIf(d => d.HasPolicy()));
 
 			return resources;
 		}
@@ -342,6 +333,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 					{
 						var tagName = ProductDeploymentDefinition.GetTagName(tagDisplayName);
 						var templateRsource = new TemplateResource<TagProductProperties>(
+							$"{ProductDeploymentDefinition.Name}/{tagName}",
 							$"[concat(parameters('ApimServiceName'), '/{ProductDeploymentDefinition.Name}/{tagName}')]",
 							ResourceType.TagProduct,
 							new TagProductProperties(),
@@ -414,7 +406,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				.ForDeploymentDefinition(_deploymentDefinition)
 				.WithName((_) => "/policy")
 				.OfType(ResourceType.GlobalServicePolicy)
-				.CreateResources();
+				.CreateResourcesIf(d => d.Policy != null);
 		}
 
 		private async Task SaveMasterTemplate(List<TemplateResource> resources)

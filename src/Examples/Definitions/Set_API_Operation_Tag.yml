@@ -1,34 +1,30 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apiVersionSets:
-      
-    - name: ApiVersionSetH
-      displayName: API Version Set H
-      description: Contains the APIs.
-      versioningScheme: Segment
+  - name: ApiVersionSetH
+    displayName: API Version Set H
+    description: Contains the APIs.
+    versioningScheme: Segment
 
 apis:
+  - name: ApiH1
+    displayName: API H v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/h/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetH
+    apiRevision: 1
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    operations:
+      findPetsByStatus: #operation id
+        policy: $(apimBasePath)\Policies\OperationPolicy.xml #path to the policy file
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
 
-    - name: ApiH1
-      displayName: API H v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
-      path: $(prefix)/h/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetH
-      apiRevision: 1
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: true
-      operations:
-        findPetsByStatus: #operation id
-            policy: $(apimBasePath)\Policies\OperationPolicy.xml #path to the policy file
-      subscriptionKeyParameterNames: 
-         header: ProviderKey
-         query: ProviderKey 
-        
-  
 outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

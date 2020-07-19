@@ -5,27 +5,27 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 {
 	public class VariableCollection
 	{
-		private Dictionary<string, Variable> _variableDict;
+		private Dictionary<string, Variable> _variableCollection;
 
-		public IReadOnlyCollection<Variable> Variables => _variableDict.Values;
+		public IReadOnlyCollection<Variable> Variables => _variableCollection.Values;
 
 		public VariableCollection()
 		{
-			_variableDict = new Dictionary<string, Variable>();
+			_variableCollection = new Dictionary<string, Variable>();
 		}
 
 		public VariableCollection(IEnumerable<Variable> variables)
 		{
-			_variableDict = variables.ToDictionary(variable => variable.Key);
+			_variableCollection = variables.ToDictionary(variable => variable.Key);
 		}
 
 		public void Add(Variable variable)
 		{
-			_variableDict.Add(variable.Key, variable);
+			_variableCollection.Add(variable.Key, variable);
 		}
 		public bool ContainsKey(string variableKey)
 		{
-			return _variableDict.ContainsKey(variableKey);
+			return _variableCollection.ContainsKey(variableKey);
 		}
 
 		public VariableCollection Merge(VariableCollection variableCollection)
@@ -35,14 +35,14 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 
 		public VariableCollection Merge(IEnumerable<Variable> variables)
 		{
-			var newCollection = this._variableDict.ToDictionary(kv => kv.Key, kv => kv.Value);
+			var newVariableCollection = this._variableCollection.ToDictionary(kv => kv.Key, kv => kv.Value);
 
 			foreach (var variable in variables)
 			{
-				newCollection[variable.Key] = variable;
+				newVariableCollection[variable.Key] = variable;
 			}
 
-			return new VariableCollection(newCollection.Values);
+			return new VariableCollection(newVariableCollection.Values);
 		}
 	}
 }

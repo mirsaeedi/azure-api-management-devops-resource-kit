@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.Configuration
@@ -12,20 +13,31 @@ namespace Apim.DevOps.Toolkit.Core.Configuration
 		/// local path or url to global policy
 		/// </summary>
 		public string Policy { get; set; }
-		public IEnumerable<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; }
-		public IEnumerable<ApiDeploymentDefinition> Apis { get; set; }
-		public IEnumerable<CertificateDeploymentDefinition> Certificates { get; set; }
-		public IEnumerable<SubscriptionDeploymentDefinition> Subscriptions { get; set; }
-		public IEnumerable<UserDeploymentDefinition> Users { get; set; }
-		public IEnumerable<ProductDeploymentDefinition> Products { get; set; }
-		public IEnumerable<TagDeploymentDefinition> Tags { get; set; }
-		public IEnumerable<LoggerDeploymentDefinition> Loggers { get; set; }
-		public IEnumerable<AuthorizationServerDeploymentDefinition> AuthorizationServers { get; set; }
-		public IEnumerable<BackendDeploymentDefinition> Backends { get; set; }
+
+		public IEnumerable<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; } = Array.Empty<ApiVersionSetDeploymentDefinition>();
+
+		public IEnumerable<ApiDeploymentDefinition> Apis { get; set; } = Array.Empty<ApiDeploymentDefinition>();
+
+		public IEnumerable<CertificateDeploymentDefinition> Certificates { get; set; } = Array.Empty<CertificateDeploymentDefinition>();
+
+		public IEnumerable<SubscriptionDeploymentDefinition> Subscriptions { get; set; } = Array.Empty<SubscriptionDeploymentDefinition>();
+
+		public IEnumerable<UserDeploymentDefinition> Users { get; set; } = Array.Empty<UserDeploymentDefinition>();
+
+		public IEnumerable<ProductDeploymentDefinition> Products { get; set; } = Array.Empty<ProductDeploymentDefinition>();
+
+		public IEnumerable<TagDeploymentDefinition> Tags { get; set; } = Array.Empty<TagDeploymentDefinition>();
+
+		public IEnumerable<LoggerDeploymentDefinition> Loggers { get; set; } = Array.Empty<LoggerDeploymentDefinition>();
+
+		public IEnumerable<AuthorizationServerDeploymentDefinition> AuthorizationServers { get; set; } = Array.Empty<AuthorizationServerDeploymentDefinition>();
+
+		public IEnumerable<BackendDeploymentDefinition> Backends { get; set; } = Array.Empty<BackendDeploymentDefinition>();
+
 		public string OutputLocation { get; set; }
-		public string LinkedTemplatesBaseUrl { get; set; }
-		public string LinkedTemplatesUrlQueryString { get; set; }
+
 		public string PrefixFileName { get; set; }
+
 		public string MasterTemplateName { get; set; }
 
 		public bool HasCertificates() => Certificates != null && Certificates.Count() > 0;

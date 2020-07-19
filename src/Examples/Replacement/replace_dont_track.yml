@@ -1,5 +1,5 @@
-- "apimServiceName=test-apim"
-- "apimBasePath=C:/Users/u6104652/source/repos/dotnet-apim/src/Examples"
+- "apimServiceName=esi-apim"
+- "apimBasePath=C:/Users/6104652/source/repos/dotnet-apim/src/Examples"
 - "ApiServiceURL=http://google.net"
 - "linkedTemplatesBaseUrl=https://esitestaccount.blob.core.windows.net/apimarm"
 - "include=true"

@@ -11,7 +11,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 		[JsonProperty(PropertyName = "$schema")]
 		public string Schema => GlobalConstants.TemplateSchema;
 
-		public string ContentVersion => GlobalConstants.ApiVersion;
+		public string ContentVersion => GlobalConstants.TemplateContentVesion;
 
 		public Dictionary<string, TemplateParameter> Parameters { get; set; } = new Dictionary<string, TemplateParameter>();
 

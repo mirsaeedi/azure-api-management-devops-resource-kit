@@ -2,6 +2,7 @@ using Apim.DevOps.Toolkit.Core.Configuration;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Templates;
 using Apim.DevOps.Toolkit.Core.Variables;
+using AutoMapper;
 using System;
 using System.Threading.Tasks;
 
@@ -10,6 +11,12 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 	public class CreateCommand
 	{
 		private static readonly FileReader _fileReader = new FileReader();
+		private IMapper mapper;
+
+		public CreateCommand(IMapper mapper)
+		{
+			this.mapper = mapper;
+		}
 
 		public async Task Process(CommandLineOption option)
 		{
@@ -22,7 +29,7 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 		private async Task CreateTemplates(DeploymentDefinition deploymentDefinition)
 		{
-			var armTemplateCreator = new ArmTemplateCreator(deploymentDefinition, null);
+			var armTemplateCreator = new ArmTemplateCreator(deploymentDefinition, mapper);
 			await armTemplateCreator.Create();
 		}
 

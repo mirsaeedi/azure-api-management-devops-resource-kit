@@ -1,6 +1,7 @@
 ﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using System;
 using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace Apim.DevOps.Toolkit.Core.Templates
 {
@@ -8,12 +9,16 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 	{
 		private List<string> _dependencies = new List<string>();
 
-		public TemplateResource(string name, string type, IEnumerable<string> dependencies)
+		public TemplateResource(string identifier, string name, string type, IEnumerable<string> dependencies)
 		{
+			Identifier = identifier;
 			Name = name;
 			Type = type;
 			_dependencies.AddRange(dependencies);
 		}
+		private string Identifier { get; set; }
+
+		private string ResourceId => $"[resourceId('{Type}', parameters('ApimServiceName'), '{Identifier}')]";
 
 		public string Name { get; set; }
 
@@ -34,19 +39,12 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 				_dependencies.Add(dependency.ResourceId);
 			}
 		}
-
-		internal void AddDependency(string api, string name)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string ResourceId => $"[resourceId('{Type}', parameters('ApimServiceName'), '{Name}')]";
 	}
 
 	public class TemplateResource<TProperties> : TemplateResource
 	{
-		public TemplateResource(string name, string type, TProperties properties, IEnumerable<string> dependencies)
-			: base(name, type, dependencies)
+		public TemplateResource(string identifier, string name, string type, TProperties properties, IEnumerable<string> dependencies)
+			: base(identifier, name, type, dependencies)
 		{
 			Properties = properties;
 		}

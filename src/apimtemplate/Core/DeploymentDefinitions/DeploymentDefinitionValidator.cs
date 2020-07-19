@@ -98,10 +98,6 @@ namespace Apim.DevOps.Toolkit.Core.Configuration
 			{
 				throw new ArgumentException("APIM service name is required");
 			}
-			if (deploymentDefinition.LinkedTemplatesBaseUrl == null)
-			{
-				throw new ArgumentException("LinkTemplatesBaseUrl is required for linked templates");
-			}
 			return true;
 		}
 

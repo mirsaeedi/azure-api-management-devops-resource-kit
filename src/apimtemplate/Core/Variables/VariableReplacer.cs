@@ -11,8 +11,10 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 	{
 		private static string _variableKeyRegexPattern = @"\$\([a-zA-Z][a-zA-Z0-9]+\)";
 		private static Lazy<VariableReplacer> _instance = new Lazy<VariableReplacer>(() => new VariableReplacer());
+
 		private readonly FileReader _fileReader = new FileReader();
-		private readonly VariableCollection _variableCollection = new VariableCollection();
+
+		private VariableCollection _variableCollection = new VariableCollection();
 
 		public static VariableReplacer Instance => _instance.Value;
 		public IReadOnlyCollection<Variable> Variables => this._variableCollection.Variables;
@@ -25,7 +27,7 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 				return;
 
 			var variableCollection = await _fileReader.GetVariablesFromYaml(filePath);
-			_variableCollection.Merge(variableCollection);
+			_variableCollection = _variableCollection.Merge(variableCollection);
 		}
 
 		/// <summary>
@@ -36,7 +38,7 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 		public void LoadFromString(string variables)
 		{
 			var variableCollection = GetFromString(variables);
-			this._variableCollection.Merge(variableCollection);
+			_variableCollection = this._variableCollection.Merge(variableCollection);
 		}
 
 		/// <summary>
