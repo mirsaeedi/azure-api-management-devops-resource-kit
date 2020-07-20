@@ -1,15 +1,13 @@
 ﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
-using System;
 using System.Collections.Generic;
-using YamlDotNet.Serialization;
 
 namespace Apim.DevOps.Toolkit.Core.Templates
 {
-	public abstract class TemplateResource
+	public abstract class ArmTemplateResource
 	{
 		private List<string> _dependencies = new List<string>();
 
-		public TemplateResource(string identifier, string name, string type, IEnumerable<string> dependencies)
+		public ArmTemplateResource(string identifier, string name, string type, IEnumerable<string> dependencies)
 		{
 			Identifier = identifier;
 			Name = name;
@@ -30,9 +28,9 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 
 		public IReadOnlyList<string> DependsOn => _dependencies.AsReadOnly();
 
-		public IReadOnlyList<TemplateResource> Resources { get; set; }
+		public IReadOnlyList<ArmTemplateResource> Resources { get; set; }
 
-		internal void AddDependencies(IEnumerable<TemplateResource> dependencies)
+		internal void AddDependencies(IEnumerable<ArmTemplateResource> dependencies)
 		{
 			foreach (var dependency in dependencies)
 			{
@@ -41,9 +39,9 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 		}
 	}
 
-	public class TemplateResource<TProperties> : TemplateResource
+	public class ArmTemplateResource<TProperties> : ArmTemplateResource
 	{
-		public TemplateResource(string identifier, string name, string type, TProperties properties, IEnumerable<string> dependencies)
+		public ArmTemplateResource(string identifier, string name, string type, TProperties properties, IEnumerable<string> dependencies)
 			: base(identifier, name, type, dependencies)
 		{
 			Properties = properties;

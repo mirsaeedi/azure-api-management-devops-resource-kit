@@ -42,7 +42,7 @@ namespace Apim.DevOps.Toolkit
 			try
 			{
 				var createCommand = new CreateCommand(mapper);
-				createCommand.Process(option).Wait();
+				createCommand.ProcessAsync(option).Wait();
 			}
 			catch (Exception e)
 			{

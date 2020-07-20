@@ -14,12 +14,12 @@ namespace Apim.DevOps.Toolkit.CommandLine
 		public string VariableString { get; set; }
 
 		[Option('p', "armPrefix", Required = false, HelpText = "Prefix of generated arm files.")]
-		public string FileNamePrefix { get; set; }
+		public string FileNamePrefix { get; set; } = "";
 
 		[Option('m', "master", Required = false, HelpText = "Name of the master template file.")]
-		public string MasterFileName { get; set; }
+		public string MasterFileName { get; set; } = "apim_deploy.template.json";
 
 		[Option('v', "printVariables", Required = false, HelpText = "Print loaded variables before generating arm templates.")]
-		public bool PrintVariables { get; internal set; }
+		public bool PrintVariables { get; set; }
 	}
 }

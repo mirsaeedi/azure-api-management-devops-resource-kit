@@ -3,7 +3,6 @@ using Apim.DevOps.Toolkit.Core.Infrastructure.Models;
 using Apim.DevOps.Toolkit.Extensions;
 using Newtonsoft.Json;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Apim.DevOps.Toolkit.Core.Infrastructure

@@ -18,22 +18,16 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 			this.mapper = mapper;
 		}
 
-		public async Task Process(CommandLineOption option)
+		public async Task ProcessAsync(CommandLineOption option)
 		{
 			await LoadGlobalVariables(option);
 
-			var deploymentDefinition = await GetDeploymentDefinition(option);
+			var deploymentDefinition = await GetDeploymentDefinitionAsync(option);
 
-			await CreateTemplates(deploymentDefinition);
+			await new ArmTemplateCreator(deploymentDefinition, option.MasterFileName, option.FileNamePrefix, mapper).CreateAsync();
 		}
 
-		private async Task CreateTemplates(DeploymentDefinition deploymentDefinition)
-		{
-			var armTemplateCreator = new ArmTemplateCreator(deploymentDefinition, mapper);
-			await armTemplateCreator.Create();
-		}
-
-		private async Task<DeploymentDefinition> GetDeploymentDefinition(CommandLineOption option)
+		private async Task<DeploymentDefinition> GetDeploymentDefinitionAsync(CommandLineOption option)
 		{
 			var deploymentDefinition = await _fileReader.GetDeploymentDefinitionFromYaml(option.YamlConfigPath);
 
@@ -49,8 +43,6 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 			{
 				apiDeploymentDefinition.Root = deploymentDefinition;
 			}
-
-			// TODO: Fix hierarchy
 
 			return deploymentDefinition;
 		}

@@ -7,12 +7,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {
 	public class MasterTemplateCreator
 	{
-		private Template EmptyApimServiceTemplate => new Template
+		private ArmTemplate EmptyApimServiceTemplate => new ArmTemplate
 		{
-			Parameters = new Dictionary<string, TemplateParameter>
+			Parameters = new Dictionary<string, ArmTemplateParameter>
 			{
 				{
-					"ApimServiceName", new TemplateParameter
+					"ApimServiceName", new ArmTemplateParameter
 					{
 						Type = "string",
 					}
@@ -20,12 +20,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			},
 		};
 
-		private Template EmptyTemplate => new Template
+		private ArmTemplate EmptyTemplate => new ArmTemplate
 		{
-			Parameters = new Dictionary<string, TemplateParameter>()
+			Parameters = new Dictionary<string, ArmTemplateParameter>()
 		};
 
-		public async Task<Template> Create(IEnumerable<TemplateResource> resources)
+		public async Task<ArmTemplate> Create(IEnumerable<ArmTemplateResource> resources)
 		{
 			var template = EmptyApimServiceTemplate;
 			template.Parameters = this.CreateMasterTemplateParameters();
@@ -34,11 +34,11 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return template;
 		}
 
-		public Template CreateMasterTemplateParameterValues(DeploymentDefinition deploymentDefinition)
+		public ArmTemplate CreateMasterTemplateParameterValues(DeploymentDefinition deploymentDefinition)
 		{
 			var template = EmptyTemplate;
 
-			TemplateParameter apimServiceNameProperties = new TemplateParameter()
+			ArmTemplateParameter apimServiceNameProperties = new ArmTemplateParameter()
 			{
 				Value = deploymentDefinition.ApimServiceName
 			};
@@ -48,13 +48,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			return template;
 		}
 
-		private Dictionary<string, TemplateParameter> CreateMasterTemplateParameters()
+		private Dictionary<string, ArmTemplateParameter> CreateMasterTemplateParameters()
 		{
-			Dictionary<string, TemplateParameter> parameters = new Dictionary<string, TemplateParameter>();
+			Dictionary<string, ArmTemplateParameter> parameters = new Dictionary<string, ArmTemplateParameter>();
 
-			TemplateParameter apimServiceNameProperties = new TemplateParameter()
+			ArmTemplateParameter apimServiceNameProperties = new ArmTemplateParameter()
 			{
-				Metadata = new TemplateParameterMetadata()
+				Metadata = new ArmTemplateParameterMetadata()
 				{
 					Description = "Name of the API Management"
 				},
