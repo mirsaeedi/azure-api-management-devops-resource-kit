@@ -1,94 +1,80 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
-
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apiVersionSets:
-      
-    - name: ApiVersionSetE
-      displayName: API Version Set E
-      description: Contains the APIs.
-      versioningScheme: Segment
+  - name: ApiVersionSetE
+    displayName: API Version Set E
+    description: Contains the APIs.
+    versioningScheme: Segment
 
 apis:
+  - name: ApiE1
+    tags: TagE1, TagE2 # the name or displayName of Tags
+    displayName: API E v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::certThumbprint=15044E02B20B6D1341220EC7AC3B2360EBBA7A7D # passing the local certThumbprint variable to the policy
+    path: $(prefix)/E/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetE # the name of the version set
+    apiRevision: 1
+    protocols: https
+    isCurrent: true
+    products: ProductE1, ProductE2 # the name or displayName of Products
 
-    - name: ApiE1
-      tags: TagE1, TagE2 # the name or displayName of Tags
-      displayName: API E v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  # passing the local certThumbprint variable to the policy 
-      path: $(prefix)/E/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetE # the name of the version set
-      apiRevision: 1
-      protocols: https
-      isCurrent: true
-      products: ProductE1, ProductE2 # the name or displayName of Products
-        
 tags:
+  - name: TagE1
+    displayName: Tag E 1
 
-     - name: TagE1
-       displayName: Tag E 1
-       
-     - name: TagE2
-       displayName: Tag E 2
-        
-         
+  - name: TagE2
+    displayName: Tag E 2
+
 products:
-        
-    - name: ProductE1
-      displayName: Product E1
-      description: Product for E1
-      subscriptionRequired: true
-      approvalRequired: true
-      subscriptionsLimit: 1
-      state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint) # passing the local certThumbprint variable to the policy 
-      
-      
-    - name: ProductE2
-      displayName: Product E2
-      description: Product for E2
-      subscriptionRequired: true
-      approvalRequired: true
-      subscriptionsLimit: 1
-      state: published
-      policy: $(apimBasePath)\Policies\ProductPolicy.xml  
+  - name: ProductE1
+    displayName: Product E1
+    description: Product for E1
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::certThumbprint=15044E02B20B6D1341220EC7AC3B2360EBBA7A7D # passing the local certThumbprint variable to the policy
 
-    
+  - name: ProductE2
+    displayName: Product E2
+    description: Product for E2
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\ProductPolicy.xml
+
 certificates:
-      
-      - name: cert
-        filePath: $(apimBasePath)\Cert\cert.pfx
-        password: $(certPass)   
+  - name: cert
+    filePath: $(apimBasePath)\Cert\cert.pfx
+    password: $(certPass)
 
-users: 
+users:
+  - name: userE
+    state: active
+    firstName: Ehsan
+    lastName: Mirsaeedi
+    email: mirsaeedi@outlook.com
+    note: esi palang
 
-     - name: userE
-       state: active
-       firstName: Ehsan  
-       lastName: Mirsaeedi
-       email: mirsaeedi@outlook.com
-       note: esi palang
-        
 subscriptions:
+  - name: subscriptionE1
+    scope: /apis # access to all APIs
+    displayName: subcription E1
+    ownerId: /users/userE
 
+  - name: subscriptionE2
+    scope: /products/ProductE2 # access to apis definded under ProductE2
+    displayName: subcription E2
+    ownerId: /users/userE
 
-       - name: subscriptionE1
-         scope: /apis # access to all APIs
-         displayName: subcription E1
-         ownerId: /users/userE
-         
-         
-       - name: subscriptionE2
-         scope: /products/ProductE2 # access to apis definded under ProductE2
-         displayName:  subcription E2
-         ownerId: /users/userE
-         
-       - name: subscriptionE3
-         scope: /apis/ApiE1 # access to ApiE1 only
-         displayName:  subcription E3
-         ownerId: /users/userE        
-  
+  - name: subscriptionE3
+    scope: /apis/ApiE1 # access to ApiE1 only
+    displayName: subcription E3
+    ownerId: /users/userE
+
 outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

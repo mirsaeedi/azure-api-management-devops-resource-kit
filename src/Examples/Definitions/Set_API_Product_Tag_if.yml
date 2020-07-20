@@ -1,74 +1,84 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
-
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apiVersionSets:
-      
-    - name: ApiVersionSetF
-      displayName: API Version Set F
-      description: Contains the APIs.
-      versioningScheme: Segment
+  - name: ApiVersionSetF
+    displayName: API Version Set F
+    description: Contains the APIs.
+    versioningScheme: Segment
+
+    #if $(include)
+  - name: ApiVersionSetE
+    displayName: API Version Set E
+    description: Contains the APIs.
+    versioningScheme: Segment
+    #endif
 
 apis:
+  - name: ApiF1
+    tags: TagF1, #if $(include) TagE1 #endif
+    displayName: API F v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/F/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetF
+    apiRevision: 1
+    protocols: https
+    isCurrent: true
+    products: ProductF1
 
-    - name: ApiF1
-      tags: TagF1, #if $(include) TagF2 #endif, TagF3
-      displayName: API F v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
-      path: $(prefix)/F/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetF
-      apiRevision: 1
-      protocols: https
-      isCurrent: true
-      products: ProductF1, ProductF2
-      
-      #if $(include)
-      
-    - name: ApiE1
-      tags: TagE1, TagE2
-      displayName: API E v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml
-      path: $(prefix)/E/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetE
-      apiRevision: 1
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: true
-      products: ProductE1, ProductE2
-      
-      #endif
-        
+    #if $(include)
+  - name: ApiE1
+    tags: TagE1, TagE2
+    displayName: API E v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/E/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetE
+    apiRevision: 1
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    products: ProductE1
+    #endif
+
 tags:
+  - name: TagF1
+    displayName: Tag F 1
 
-     - name: TagF1
-       displayName: Tag F 1
-       
-       #if $(include)
-       
-     - name: TagF2
-       displayName: Tag F 2
-        
-       #endif 
-       
-     - name: TagF3
-       displayName: Tag F 3
-         
+    #if $(include)
+  - name: TagE1
+    displayName: Tag E 1
+
+  - name: TagE2
+    displayName: Tag E 2
+
+    #endif
+
 products:
-        
-    - name: ProductF1
-      displayName: Product F1
-      description: Product for F1
-      subscriptionRequired: true
-      approvalRequired: true
-      subscriptionsLimit: 1
-      state: published
-      policy: $(apimBasePath)\Policies\ProductPolicy.xml  
-      
+  - name: ProductF1
+    displayName: Product F1
+    description: Product for F1
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\ProductPolicy.xml
+
+    #if $(include)
+  - name: ProductE1
+    displayName: Product E1
+    description: Product for E1
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\ProductPolicy.xml
+
+    #endif
+
 outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage

@@ -9,7 +9,7 @@ apiVersionSets:
 
 apis:
   - name: ApiC1
-    tags: TagA1, TagC2 # the name or displayName of Tags
+    tags: TagC1, TagC2 # the name or displayName of Tags
     displayName: API C v1
     serviceUrl: $(ApiServiceURL)
     openApiSpec: $(apimBasePath)\OpenApi.json

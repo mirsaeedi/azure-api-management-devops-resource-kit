@@ -1,71 +1,60 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
-
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apiVersionSets:
-      
-    - name: ApiVersionSetD
-      displayName: API Version Set D
-      description: Contains the APIs.
-      versioningScheme: Segment
+  - name: ApiVersionSetD
+    displayName: API Version Set D
+    description: Contains the APIs.
+    versioningScheme: Segment
 
 apis:
+  - name: ApiD1
+    tags: TagD1, TagD2 # the name or displayName of Tags
+    displayName: API D v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::certThumbprint=15044E02B20B6D1341220EC7AC3B2360EBBA7A7D # passing the local certThumbprint variable to the policy
+    path: $(prefix)/D/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetD
+    apiRevision: 1
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    products: ProductD1, ProductD2 # the name or displayName of Products
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
 
-    - name: ApiD1
-      tags: TagD1, TagD2 # the name or displayName of Tags
-      displayName: API D v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\CertificateApiPolicy.xml:::$(certThumbprint)  # passing the local certThumbprint variable to the policy
-      path: $(prefix)/D/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetD
-      apiRevision: 1
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: true
-      products: ProductD1, ProductD2  # the name or displayName of Products
-      subscriptionKeyParameterNames: 
-         header: ProviderKey
-         query: ProviderKey 
-        
 tags:
+  - name: TagD1
+    displayName: Tag D 1
 
-     - name: TagD1
-       displayName: Tag D 1
-       
-     - name: TagD2
-       displayName: Tag D 2
-        
-         
+  - name: TagD2
+    displayName: Tag D 2
+
 products:
-        
-    - name: ProductD1
-      displayName: Product D1
-      description: Product for D1
-      subscriptionRequired: true
-      approvalRequired: true
-      subscriptionsLimit: 1
-      state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)   # passing the local certThumbprint variable to the policy 
-      
-      
-    - name: ProductD2
-      displayName: Product D2
-      description: Product for D2
-      subscriptionRequired: true
-      approvalRequired: true
-      subscriptionsLimit: 1
-      state: published
-      policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::$(certThumbprint)   # passing the local certThumbprint variable to the policy
+  - name: ProductD1
+    displayName: Product D1
+    description: Product for D1
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::certThumbprint=15044E02B20B6D1341220EC7AC3B2360EBBA7A7D # passing the local certThumbprint variable to the policy
 
-    
+  - name: ProductD2
+    displayName: Product D2
+    description: Product for D2
+    subscriptionRequired: true
+    approvalRequired: true
+    subscriptionsLimit: 1
+    state: published
+    policy: $(apimBasePath)\Policies\CertificateProductPolicy.xml:::certThumbprint=15044E02B20B6D1341220EC7AC3B2360EBBA7A7D # passing the local certThumbprint variable to the policy
+
 certificates:
-      
-      - name: cert
-        filePath: $(apimBasePath)\Cert\cert.pfx
-        password: 123    
-  
-  
+  - name: cert
+    filePath: $(apimBasePath)\Cert\cert.pfx
+    password: 123
+
 outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage
