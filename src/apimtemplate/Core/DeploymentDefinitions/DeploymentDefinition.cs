@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Apim.DevOps.Toolkit.Core.Configuration
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 {
 	public class DeploymentDefinition
 	{

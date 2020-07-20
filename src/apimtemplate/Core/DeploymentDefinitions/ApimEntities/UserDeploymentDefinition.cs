@@ -1,6 +1,6 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.User;
 
-namespace Apim.DevOps.Toolkit.Core.Configuration
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
 	public class UserDeploymentDefinition
 	{

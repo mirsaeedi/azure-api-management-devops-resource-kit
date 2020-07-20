@@ -1,7 +1,7 @@
 ﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using System.Collections.Generic;
 
-namespace Apim.DevOps.Toolkit.Core.Templates
+namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
 	public abstract class ArmTemplateResource
 	{

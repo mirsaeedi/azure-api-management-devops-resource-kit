@@ -1,6 +1,6 @@
 using Apim.DevOps.Toolkit.Core.Configuration;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
-using Apim.DevOps.Toolkit.Core.Templates;
+using Apim.DevOps.Toolkit.Core.ArmTemplates;
 using Apim.DevOps.Toolkit.Core.Variables;
 using AutoMapper;
 using System;

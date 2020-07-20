@@ -1,4 +1,4 @@
-﻿namespace Apim.DevOps.Toolkit.Core.Templates
+﻿namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
 	public class ArmTemplateVariable
 	{

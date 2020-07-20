@@ -5,7 +5,7 @@ using Apim.DevOps.Toolkit.ApimEntities.Api;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Extensions;
 
-namespace Apim.DevOps.Toolkit.Core.Configuration
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
 	public class ApiDeploymentDefinition
 	{

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Apim.DevOps.Toolkit.Core.Templates
+namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
 	public class ArmTemplateResourceCreator<TResourceDeploymentDefinition, TResourceProperties>
 	{
@@ -101,7 +101,7 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 			string resourceType,
 			TResourceDeploymentDefinition deploymentDefinition)
 		{
-			var name = getResourceName(deploymentDefinition).Trim(new [] { '/' });
+			var name = getResourceName(deploymentDefinition).Trim(new[] { '/' });
 
 			return new[]
 			{

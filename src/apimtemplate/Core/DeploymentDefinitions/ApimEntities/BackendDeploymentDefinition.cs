@@ -1,6 +1,6 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Backend;
 
-namespace Apim.DevOps.Toolkit.Core.Configuration
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
 	public class BackendDeploymentDefinition
 	{

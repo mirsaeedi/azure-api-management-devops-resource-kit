@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.Core.Configuration;
-using Apim.DevOps.Toolkit.Core.Templates;
+using Apim.DevOps.Toolkit.Core.ArmTemplates;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 {

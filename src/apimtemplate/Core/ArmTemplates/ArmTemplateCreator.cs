@@ -26,7 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Apim.DevOps.Toolkit.Core.Templates
+namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
 	public class ArmTemplateCreator
 	{
@@ -198,8 +198,8 @@ namespace Apim.DevOps.Toolkit.Core.Templates
 							$"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
 							ResourceType.ProductApi,
 							new ProductApiProperties(),
-							new [] 
-							{ 
+							new[]
+							{
 								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
 								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]"
 							});
