@@ -38,23 +38,31 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
         public async Task<string> GetOpenApiFormat()
         {
             var contents = await GetContents();
-            var version = await GetOpenApiVersion();
+
             var isUrl = _openApiFilePath.IsUri(out _);
 
             if (isUrl)
             {
-                if (contents.IsJson() && version.StartsWith("2"))
-                    return "swagger-link-json";
-                else if (contents.IsJson() && version.StartsWith("3"))
-                    return "openapi-link";
+                if (contents.IsJson())
+                {
+                    var version = await GetOpenApiVersion();
+                    if (version.StartsWith("2"))
+                        return "swagger-link-json";
+                    else if (version.StartsWith("3"))
+                        return "openapi-link";
 
-                throw new Exception("Unsupported openapi format");
+                    throw new Exception("Unsupported openapi format");
+                }
             }
 
-            if (contents.IsJson() && version.StartsWith("2"))
-                return "swagger-json";
-            else if (contents.IsJson() && version.StartsWith("3"))
-                return "openapi+json";
+            if (contents.IsJson())
+            {
+                var version = await GetOpenApiVersion();
+                if (version.StartsWith("2"))
+                    return "swagger-json";
+                else if (version.StartsWith("3"))
+                    return "openapi+json";
+            }
 
             return "openapi";
         }
