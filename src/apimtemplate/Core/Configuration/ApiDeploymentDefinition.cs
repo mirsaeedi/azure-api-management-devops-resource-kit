@@ -64,6 +64,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		
 		public bool IsDependOnGlobalServicePolicies(DeploymentDefinition creatorConfig) => creatorConfig.Policy != null;
 
+        public bool IsDependOnNamedValues(DeploymentDefinition creatorConfig) => creatorConfig.NamedValues != null;
+
 		public bool IsDependOnAuthorizationServers() => AuthenticationSettings != null && 
 			AuthenticationSettings.OAuth2 != null && 
 			AuthenticationSettings.OAuth2.AuthorizationServerId != null;

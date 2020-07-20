@@ -26,7 +26,10 @@
 		{
 			return "loggersTemplate";
 		}
-	
+        public string NamedValues()
+        {
+            return "namedValueTemplate";
+		}
 		public string Products()
 		{
 			return "productsTemplate";

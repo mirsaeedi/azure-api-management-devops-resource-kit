@@ -69,6 +69,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		{
 			CreateGlobalPolicyResource(creatorConfig, resources);
 
+            CreateNamedValueResource(creatorConfig, resources);
+
 			CreateApiVersionSetResource(creatorConfig, resources);
 
 			CreateLoggerResource(creatorConfig, resources);
@@ -96,6 +98,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 				CreateResource(resources, creatorConfig, _templateFileNames.GlobalServicePolicy(), _nestedTemplateName.GlobalServicePolicy());
 		}
 
+        private void CreateNamedValueResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)
+        {
+            if (creatorConfig.NamedValues != null)
+                CreateResource(resources, creatorConfig, _templateFileNames.NamedValues(), _nestedTemplateName.NamedValues());
+        }
+
 		private void CreateApiVersionSetResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)
 		{
 			if (creatorConfig.ApiVersionSets != null)
@@ -113,6 +121,12 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 			if (creatorConfig.Backends != null)
 				CreateResource(resources, creatorConfig, _templateFileNames.Backends(), _nestedTemplateName.Backends());
 		}
+
+        private void CreatePropertyResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)
+        {
+            if (creatorConfig.NamedValues != null)
+                CreateResource(resources, creatorConfig, _templateFileNames.NamedValues(), _nestedTemplateName.NamedValues());
+        }
 
 		private void CreateAuthorizationServerResource(DeploymentDefinition creatorConfig, List<TemplateResource> resources)
 		{
@@ -228,7 +242,10 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
             {
                 apiDependsOn.Add(DependsOn(_nestedTemplateName.GlobalServicePolicy()));
             }
-
+            if (api.IsDependOnNamedValues(creatorConfig))
+            {
+                apiDependsOn.Add(DependsOn(_nestedTemplateName.NamedValues()));
+            }
             if (api.IsDependOnApiVersionSet())
             {
                 apiDependsOn.Add(DependsOn(_nestedTemplateName.ApiVersionSets()));

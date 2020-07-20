@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Apim.DevOps.Toolkit.ApimEntities;
 using Apim.DevOps.Toolkit.ArmTemplates;
 
 namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
@@ -22,6 +23,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
 		public List<LoggerDeploymentDefinition> Loggers { get; set; }
 		public List<AuthorizationServerProperties> AuthorizationServers { get; set; }
 		public List<BackendProperties> Backends { get; set; }
+		public List<NamedValueProperties> NamedValues { get; set; }
 		public string OutputLocation { get; set; }
 		public string LinkedTemplatesBaseUrl { get; set; }
 		public string LinkedTemplatesUrlQueryString { get; set; }

@@ -27,6 +27,10 @@ namespace Apim.Arm.Creator.Creator.Models
 			Console.WriteLine("------------------------------------------");
 			await SaveTemplate<PolicyTemplateCreator>(_templateFileNames.GlobalServicePolicy(), c => c.Policy != null);
 
+            Console.WriteLine("Creating named value template");
+            Console.WriteLine("------------------------------------------");
+            await SaveTemplate<NamedValueTemplateCreator>(_templateFileNames.NamedValues(), c => c.NamedValues != null);
+
 			Console.WriteLine("Creating api version sets template");
 			Console.WriteLine("------------------------------------------");
 			await SaveTemplate<APIVersionSetTemplateCreator>(_templateFileNames.ApiVersionSets(), c => c.ApiVersionSets != null);
@@ -55,7 +59,7 @@ namespace Apim.Arm.Creator.Creator.Models
 			Console.WriteLine("------------------------------------------");
 			await SaveTemplate<LoggerTemplateCreator>(_templateFileNames.Loggers(), c => c.Loggers != null);
 
-			Console.WriteLine("Creating backends template");
+			Console.WriteLine("Creating backend template");
 			Console.WriteLine("------------------------------------------");
 			await SaveTemplate<BackendTemplateCreator>(_templateFileNames.Backends(), c => c.Backends != null);
 
