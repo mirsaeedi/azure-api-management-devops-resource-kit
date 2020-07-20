@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "-c  \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Definitions\\Set_API_Tag.yml\" -f \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Replacement\\replace_dont_track.yml\"  -p ebillinghub-dev.business.  -v"
+      "commandLineArgs": "-c  \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Definitions\\Set_API_Product_Tag_User_Subscription.yml\" -f \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Replacement\\replace_dont_track.yml\"  -p ebillinghub-dev.business.  -v"
     }
   }
 }
