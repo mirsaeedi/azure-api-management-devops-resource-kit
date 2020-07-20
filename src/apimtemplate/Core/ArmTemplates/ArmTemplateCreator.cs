@@ -19,7 +19,6 @@ using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
 using AutoMapper;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -367,10 +366,10 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			var masterTemplateCreator = new DeployArmTemplateCreator();
 
 			var masterTemplate = await masterTemplateCreator.Create(resources);
-			SaveTemplate($"{_fileNamePrefix}{_masterFileName}", masterTemplate);
+			await SaveTemplateAsync($"{_fileNamePrefix}{_masterFileName}", masterTemplate);
 
 			var templateParameters = masterTemplateCreator.CreateMasterTemplateParameterValues(_deploymentDefinition);
-			SaveTemplate($"{_fileNamePrefix}parameters.json", templateParameters);
+			await SaveTemplateAsync($"{_fileNamePrefix}parameters.json", templateParameters);
 
 			Console.WriteLine("Templates written to output location");
 		}
@@ -422,10 +421,10 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			return resources.Where(resources => resources is ArmTemplateResource<TResourceProperties>);
 		}
 
-		private void SaveTemplate(string fileName, ArmTemplate template)
+		private Task SaveTemplateAsync(string fileName, ArmTemplate template)
 		{
 			var path = Path.Combine(_deploymentDefinition.OutputLocation, fileName);
-			_fileWriter.WriteJson(template, path);
+			return _fileWriter.WriteJsonAsync(template, path);
 		}
 	}
 }

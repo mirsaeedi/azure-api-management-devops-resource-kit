@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
+namespace Apim.DevOps.Toolkit.Core.Infrastructure
 {
 	public class FileWriter
 	{
-		public void WriteJson<T>(T template, string filePath)
+		public async Task WriteJsonAsync<T>(T template, string filePath)
 		{
 			var jsonString = JsonConvert.SerializeObject(template,
 							Formatting.Indented,
@@ -25,7 +26,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common
 			if (!fileInfo.Directory.Exists)
 				fileInfo.Directory.Create();
 
-			File.WriteAllText(filePath, jsonString);
+			await File.WriteAllTextAsync(filePath, jsonString);
 		}
 	}
 }
