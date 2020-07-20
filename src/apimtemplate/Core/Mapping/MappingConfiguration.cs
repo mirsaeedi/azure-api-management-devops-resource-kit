@@ -8,6 +8,9 @@ namespace Apim.DevOps.Toolkit.Core.Mapping
 		{
 			var config = new MapperConfiguration(cfg =>
 			{
+				cfg.AllowNullCollections = true;
+				cfg.AllowNullDestinationValues = true;
+
 				ApiPolicyMapper.Map(cfg);
 				ApiMapper.Map(cfg);
 				PolicyMapper.Map(cfg);

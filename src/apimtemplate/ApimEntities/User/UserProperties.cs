@@ -8,6 +8,7 @@ namespace Apim.DevOps.Toolkit.ApimEntities.User
 
 		public string Note { get; set; }
 
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public UserIdentityContract[] Identities { get; set; }
 
 		[JsonProperty(Required = Required.Always)]
