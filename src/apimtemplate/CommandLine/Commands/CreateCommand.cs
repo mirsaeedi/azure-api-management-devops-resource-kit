@@ -1,10 +1,10 @@
-using Apim.DevOps.Toolkit.Core.Configuration;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.ArmTemplates;
 using Apim.DevOps.Toolkit.Core.Variables;
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
 
 namespace Apim.DevOps.Toolkit.CommandLine.Commands
 {

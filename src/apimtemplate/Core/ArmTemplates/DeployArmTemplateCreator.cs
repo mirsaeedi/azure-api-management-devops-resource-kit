@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Apim.DevOps.Toolkit.Core.Configuration;
-using Apim.DevOps.Toolkit.Core.ArmTemplates;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
 
-namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create
+namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
-	public class MasterTemplateCreator
+	public class DeployArmTemplateCreator
 	{
 		private ArmTemplate EmptyApimServiceTemplate => new ArmTemplate
 		{

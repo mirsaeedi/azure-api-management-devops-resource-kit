@@ -13,13 +13,13 @@ using Apim.DevOps.Toolkit.ApimEntities.Subscription;
 using Apim.DevOps.Toolkit.ApimEntities.Tag;
 using Apim.DevOps.Toolkit.ApimEntities.User;
 using Apim.DevOps.Toolkit.ArmTemplates;
-using Apim.DevOps.Toolkit.Core.Configuration;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
 using AutoMapper;
 using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Common;
-using Microsoft.Azure.Management.ApiManagement.ArmTemplates.Create;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +40,8 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		{
 			_deploymentDefinition = deploymentDefinition;
 			_mapper = mapper;
-			_masterFileName = masterFileName;
-			_fileNamePrefix = fileNamePrefix ?? string.Empty;
+			_masterFileName = string.IsNullOrEmpty(masterFileName) ? "apim_deploy.template.json" : masterFileName;
+			_fileNamePrefix = string.IsNullOrEmpty(fileNamePrefix) ? string.Empty : fileNamePrefix;
 		}
 
 		public async Task CreateAsync()
@@ -72,58 +72,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			OrderResources(resources);
 
-			Console.WriteLine("Creating master template");
-			Console.WriteLine("------------------------------------------");
 			await SaveMasterTemplate(resources);
-
-			Console.WriteLine("Templates written to output location");
-		}
-
-		private void OrderResources(List<ArmTemplateResource> resources)
-		{
-			AddDependency<BackendProperties, CertificateProperties>(resources);
-			AddDependency<PolicyProperties, CertificateProperties>(resources);
-
-			AddDependency<ApiProperties, ApiVersionSetProperties>(resources);
-			AddDependency<ApiProperties, TagProperties>(resources);
-			AddDependency<ApiProperties, LoggerProperties>(resources);
-			AddDependency<ApiProperties, BackendProperties>(resources);
-			AddDependency<ApiProperties, AuthorizationServerProperties>(resources);
-			AddDependency<ApiProperties, CertificateProperties>(resources);
-
-			AddDependency<ProductsProperties, CertificateProperties>(resources);
-			AddDependency<ProductsProperties, ApiProperties>(resources);
-			AddDependency<ApiProperties, TagProductProperties>(resources);
-
-			AddDependency<SubscriptionProperties, ApiProperties>(resources);
-			AddDependency<SubscriptionProperties, ProductsProperties>(resources);
-			AddDependency<SubscriptionProperties, UserProperties>(resources);
-		}
-
-		private void AddDependency<TDependentResource, TDependencyResource>(List<ArmTemplateResource> resources)
-		{
-			var dependentResources = GetResources<TDependentResource>(resources);
-			var dependencyResources = GetResources<TDependencyResource>(resources);
-
-			AddDependencyTo(dependentResources, dependencyResources);
-		}
-
-		private void AddDependencyTo(IEnumerable<ArmTemplateResource> resources, IEnumerable<ArmTemplateResource> dependencies)
-		{
-			foreach (var resource in resources)
-			{
-				if (dependencies.Contains(resource))
-				{
-					continue;
-				}
-
-				resource.AddDependencies(dependencies);
-			}
-		}
-
-		private IEnumerable<ArmTemplateResource> GetResources<TResourceProperties>(List<ArmTemplateResource> resources)
-		{
-			return resources.Where(resources => resources is ArmTemplateResource<TResourceProperties>);
 		}
 
 		private IEnumerable<ArmTemplateResource> CreateApiSubsequentTemplate()
@@ -412,13 +361,65 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private async Task SaveMasterTemplate(List<ArmTemplateResource> resources)
 		{
-			var masterTemplateCreator = new MasterTemplateCreator();
+			Console.WriteLine("Creating deploy template");
+			Console.WriteLine("------------------------------------------");
+
+			var masterTemplateCreator = new DeployArmTemplateCreator();
 
 			var masterTemplate = await masterTemplateCreator.Create(resources);
 			SaveTemplate($"{_fileNamePrefix}{_masterFileName}", masterTemplate);
 
 			var templateParameters = masterTemplateCreator.CreateMasterTemplateParameterValues(_deploymentDefinition);
 			SaveTemplate($"{_fileNamePrefix}parameters.json", templateParameters);
+
+			Console.WriteLine("Templates written to output location");
+		}
+
+		private void OrderResources(List<ArmTemplateResource> resources)
+		{
+			AddDependency<BackendProperties, CertificateProperties>(resources);
+			AddDependency<PolicyProperties, CertificateProperties>(resources);
+
+			AddDependency<ApiProperties, ApiVersionSetProperties>(resources);
+			AddDependency<ApiProperties, TagProperties>(resources);
+			AddDependency<ApiProperties, LoggerProperties>(resources);
+			AddDependency<ApiProperties, BackendProperties>(resources);
+			AddDependency<ApiProperties, AuthorizationServerProperties>(resources);
+			AddDependency<ApiProperties, CertificateProperties>(resources);
+
+			AddDependency<ProductsProperties, CertificateProperties>(resources);
+			AddDependency<ProductsProperties, ApiProperties>(resources);
+			AddDependency<ApiProperties, TagProductProperties>(resources);
+
+			AddDependency<SubscriptionProperties, ApiProperties>(resources);
+			AddDependency<SubscriptionProperties, ProductsProperties>(resources);
+			AddDependency<SubscriptionProperties, UserProperties>(resources);
+		}
+
+		private void AddDependency<TDependentResource, TDependencyResource>(List<ArmTemplateResource> resources)
+		{
+			var dependentResources = GetResources<TDependentResource>(resources);
+			var dependencyResources = GetResources<TDependencyResource>(resources);
+
+			AddDependencyTo(dependentResources, dependencyResources);
+		}
+
+		private void AddDependencyTo(IEnumerable<ArmTemplateResource> resources, IEnumerable<ArmTemplateResource> dependencies)
+		{
+			foreach (var resource in resources)
+			{
+				if (dependencies.Contains(resource))
+				{
+					continue;
+				}
+
+				resource.AddDependencies(dependencies);
+			}
+		}
+
+		private IEnumerable<ArmTemplateResource> GetResources<TResourceProperties>(List<ArmTemplateResource> resources)
+		{
+			return resources.Where(resources => resources is ArmTemplateResource<TResourceProperties>);
 		}
 
 		private void SaveTemplate(string fileName, ArmTemplate template)

@@ -17,7 +17,7 @@ namespace Apim.DevOps.Toolkit.CommandLine
 		public string FileNamePrefix { get; set; } = "";
 
 		[Option('m', "master", Required = false, HelpText = "Name of the master template file.")]
-		public string MasterFileName { get; set; } = "apim_deploy.template.json";
+		public string MasterFileName { get; set; }
 
 		[Option('v', "printVariables", Required = false, HelpText = "Print loaded variables before generating arm templates.")]
 		public bool PrintVariables { get; set; }

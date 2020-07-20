@@ -3,13 +3,14 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
-using Apim.DevOps.Toolkit.Core.Configuration;
 using Apim.DevOps.Toolkit.Extensions;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Apim.DevOps.Toolkit.Core.Variables;
 using YamlDotNet.Serialization.NamingConventions;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Validation;
 
 namespace Apim.DevOps.Toolkit.Core.Infrastructure
 {

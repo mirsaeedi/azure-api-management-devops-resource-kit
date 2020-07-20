@@ -1,5 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Api;
-using Apim.DevOps.Toolkit.Core.Configuration;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;

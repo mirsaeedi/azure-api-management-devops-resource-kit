@@ -1,5 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.AuthotizationServer;
-using Apim.DevOps.Toolkit.Core.Configuration;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
 using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
