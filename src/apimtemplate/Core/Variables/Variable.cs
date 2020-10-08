@@ -5,7 +5,7 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 {
 	public class Variable
 	{
-		private static string _variableRegexPattern = "(?<key>[a-zA-Z][a-zA-Z0-9]+)=(?<value>.+)";
+		private static string _variableRegexPattern = "(?<key>[a-zA-Z\\.][a-zA-Z0-9\\.]+)(\\s)*=(\\s)*(?<value>.*)";
 		public string Key { get; set; }
 
 		public string Value { get; set; }

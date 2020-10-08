@@ -5,6 +5,7 @@ using AutoMapper;
 using System;
 using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
+using System.IO;
 
 namespace Apim.DevOps.Toolkit.CommandLine.Commands
 {
@@ -29,7 +30,7 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 		private async Task<DeploymentDefinition> GetDeploymentDefinitionAsync(CommandLineOption option)
 		{
-			var deploymentDefinition = await _fileReader.GetDeploymentDefinitionFromYaml(option.YamlConfigPath);
+			var deploymentDefinition = await AggregateDeploymentDefinitionsAsync(option);
 
 			deploymentDefinition.PrefixFileName = option.FileNamePrefix;
 			deploymentDefinition.MasterTemplateName = option.MasterFileName;
@@ -42,6 +43,33 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 			foreach (var apiDeploymentDefinition in deploymentDefinition.Apis)
 			{
 				apiDeploymentDefinition.Root = deploymentDefinition;
+			}
+
+			return deploymentDefinition;
+		}
+
+		private async Task<DeploymentDefinition> AggregateDeploymentDefinitionsAsync(CommandLineOption option)
+		{
+			var deploymentDefinition = default(DeploymentDefinition);
+
+			if (Directory.Exists(option.YamlConfigPath))
+			{
+				var fileDefinitionPaths = Directory.GetFiles(option.YamlConfigPath, "*.yml", new EnumerationOptions
+				{
+					RecurseSubdirectories = true
+				});
+
+				deploymentDefinition = new DeploymentDefinition();
+
+				foreach (var fileDefinitionPath in fileDefinitionPaths)
+				{
+					var individualDefinition = await _fileReader.GetDeploymentDefinitionFromYaml(fileDefinitionPath);
+					deploymentDefinition = deploymentDefinition.MergeWith(individualDefinition);
+				}
+			}
+			else
+			{
+				deploymentDefinition = await _fileReader.GetDeploymentDefinitionFromYaml(option.YamlConfigPath);
 			}
 
 			return deploymentDefinition;

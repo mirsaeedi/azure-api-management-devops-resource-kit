@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Extensions
@@ -40,6 +41,18 @@ namespace Apim.DevOps.Toolkit.Extensions
 		public static bool IsUri(this string path, out Uri uriResult)
 		{
 			return Uri.TryCreate(path, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+		}
+
+		public static ICollection<T> AddRange<T>(this ICollection<T> c1, IEnumerable<T> c2)
+		{
+
+			// needs to be changed. This method has a side effect.
+			foreach (var item in c2)
+			{
+				c1.Add(item);
+			}
+
+			return c1;
 		}
 	}
 }

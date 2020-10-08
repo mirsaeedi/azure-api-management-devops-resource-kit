@@ -36,3 +36,5 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+/src/Examples/Replacement/replace_dont_track-2.yml
+/src/Examples/EBH

@@ -76,6 +76,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateApiSubsequentTemplate()
 		{
+			if (_deploymentDefinition.Apis.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			} 
+
 			Console.WriteLine("Creating api subsequent template");
 			Console.WriteLine("------------------------------------------");
 
@@ -194,6 +199,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateAuthorizationServerResource()
 		{
+			if (_deploymentDefinition.AuthorizationServers.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating authorization servers template");
 			Console.WriteLine("------------------------------------------");
 
@@ -206,6 +216,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateBackendResource()
 		{
+			if (_deploymentDefinition.Backends.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating backends template");
 			Console.WriteLine("------------------------------------------");
 
@@ -218,6 +233,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateLoggerResource()
 		{
+			if (_deploymentDefinition.Loggers.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating loggers template");
 			Console.WriteLine("------------------------------------------");
 
@@ -230,6 +250,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateTagsResource()
 		{
+			if (_deploymentDefinition.Tags.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating tags template");
 			Console.WriteLine("------------------------------------------");
 
@@ -242,15 +267,15 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateProductResource()
 		{
-			Console.WriteLine("Creating products template");
-			Console.WriteLine("------------------------------------------");
-
-			var resources = new List<ArmTemplateResource>();
-
 			if (_deploymentDefinition.Products.Count() == 0)
 			{
 				return Array.Empty<ArmTemplateResource>();
 			}
+
+			Console.WriteLine("Creating products template");
+			Console.WriteLine("------------------------------------------");
+
+			var resources = new List<ArmTemplateResource>();
 
 			resources.AddRange(new ArmTemplateResourceCreator<ProductDeploymentDefinition, ProductsProperties>(_mapper)
 				.ForDeploymentDefinitions(_deploymentDefinition.Products)
@@ -300,6 +325,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateSubscriptionResource()
 		{
+			if (_deploymentDefinition.Subscriptions.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating subscriptions template");
 			Console.WriteLine("------------------------------------------");
 
@@ -312,6 +342,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateUserResource()
 		{
+			if (_deploymentDefinition.Users.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating users template");
 			Console.WriteLine("------------------------------------------");
 
@@ -324,6 +359,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateCertificateResource()
 		{
+			if (_deploymentDefinition.Certificates.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating certificates template");
 			Console.WriteLine("------------------------------------------");
 
@@ -336,6 +376,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateApiVersionSetResource()
 		{
+			if (_deploymentDefinition.ApiVersionSets.Count() == 0)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating api version sets template");
 			Console.WriteLine("------------------------------------------");
 
@@ -348,6 +393,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		private IEnumerable<ArmTemplateResource> CreateGlobalPolicyResource()
 		{
+			if (_deploymentDefinition.Policy != null)
+			{
+				return Array.Empty<ArmTemplateResource>();
+			}
+
 			Console.WriteLine("Creating global service policy template");
 			Console.WriteLine("------------------------------------------");
 

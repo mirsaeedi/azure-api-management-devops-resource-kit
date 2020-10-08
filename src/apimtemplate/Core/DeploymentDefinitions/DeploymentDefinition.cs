@@ -1,4 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+using Apim.DevOps.Toolkit.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,25 +16,49 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 		/// </summary>
 		public string Policy { get; set; }
 
-		public IEnumerable<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; } = Array.Empty<ApiVersionSetDeploymentDefinition>();
+		public ICollection<ApiVersionSetDeploymentDefinition> ApiVersionSets { get; set; } = new List<ApiVersionSetDeploymentDefinition>();
 
-		public IEnumerable<ApiDeploymentDefinition> Apis { get; set; } = Array.Empty<ApiDeploymentDefinition>();
+		public ICollection<ApiDeploymentDefinition> Apis { get; set; } = new List<ApiDeploymentDefinition>();
 
-		public IEnumerable<CertificateDeploymentDefinition> Certificates { get; set; } = Array.Empty<CertificateDeploymentDefinition>();
+		public ICollection<CertificateDeploymentDefinition> Certificates { get; set; } = new List<CertificateDeploymentDefinition>();
 
-		public IEnumerable<SubscriptionDeploymentDefinition> Subscriptions { get; set; } = Array.Empty<SubscriptionDeploymentDefinition>();
+		public ICollection<SubscriptionDeploymentDefinition> Subscriptions { get; set; } = new List<SubscriptionDeploymentDefinition>();
 
-		public IEnumerable<UserDeploymentDefinition> Users { get; set; } = Array.Empty<UserDeploymentDefinition>();
+		public ICollection<UserDeploymentDefinition> Users { get; set; } = new List<UserDeploymentDefinition>();
 
-		public IEnumerable<ProductDeploymentDefinition> Products { get; set; } = Array.Empty<ProductDeploymentDefinition>();
+		public ICollection<ProductDeploymentDefinition> Products { get; set; } = new List<ProductDeploymentDefinition>();
 
-		public IEnumerable<TagDeploymentDefinition> Tags { get; set; } = Array.Empty<TagDeploymentDefinition>();
+		public ICollection<TagDeploymentDefinition> Tags { get; set; } = new List<TagDeploymentDefinition>();
 
-		public IEnumerable<LoggerDeploymentDefinition> Loggers { get; set; } = Array.Empty<LoggerDeploymentDefinition>();
+		public ICollection<LoggerDeploymentDefinition> Loggers { get; set; } = new List<LoggerDeploymentDefinition>();
 
-		public IEnumerable<AuthorizationServerDeploymentDefinition> AuthorizationServers { get; set; } = Array.Empty<AuthorizationServerDeploymentDefinition>();
+		public ICollection<AuthorizationServerDeploymentDefinition> AuthorizationServers { get; set; } = new List<AuthorizationServerDeploymentDefinition>();
 
-		public IEnumerable<BackendDeploymentDefinition> Backends { get; set; } = Array.Empty<BackendDeploymentDefinition>();
+		public ICollection<BackendDeploymentDefinition> Backends { get; set; } = new List<BackendDeploymentDefinition>();
+
+		internal DeploymentDefinition MergeWith(DeploymentDefinition individualDefinition)
+		{
+			var mergedDefinition = new DeploymentDefinition
+			{
+				Version = this.Version ?? individualDefinition.Version,
+				ApimServiceName = this.ApimServiceName ?? individualDefinition.ApimServiceName,
+				Policy = this.Policy ?? individualDefinition.Policy,
+				OutputLocation = this.OutputLocation ?? individualDefinition.OutputLocation
+			};
+
+			mergedDefinition.ApiVersionSets.AddRange(this.ApiVersionSets).AddRange(individualDefinition.ApiVersionSets);
+			mergedDefinition.Apis.AddRange(this.Apis).AddRange(individualDefinition.Apis);
+			mergedDefinition.Certificates.AddRange(this.Certificates).AddRange(individualDefinition.Certificates);
+			mergedDefinition.Subscriptions.AddRange(this.Subscriptions).AddRange(individualDefinition.Subscriptions);
+			mergedDefinition.Users.AddRange(this.Users).AddRange(individualDefinition.Users);
+			mergedDefinition.Products.AddRange(this.Products).AddRange(individualDefinition.Products);
+			mergedDefinition.Tags.AddRange(this.Tags).AddRange(individualDefinition.Tags);
+			mergedDefinition.Loggers.AddRange(this.Loggers).AddRange(individualDefinition.Loggers);
+			mergedDefinition.AuthorizationServers.AddRange(this.AuthorizationServers).AddRange(individualDefinition.AuthorizationServers);
+			mergedDefinition.Backends.AddRange(this.Backends).AddRange(individualDefinition.Backends);
+
+			return mergedDefinition;
+		}
 
 		public string OutputLocation { get; set; }
 
