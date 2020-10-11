@@ -4,8 +4,15 @@ using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
+	/// <summary>
+	/// This class manifests the final arm template. It contains all requires variables, parametes, and resources.
+	/// </summary>
 	public class ArmTemplate
 	{
+		private Dictionary<string, ArmTemplateVariable> _variables = new Dictionary<string, ArmTemplateVariable>();
+
+		private Dictionary<string, ArmTemplateParameter> _parameters = new Dictionary<string, ArmTemplateParameter>();
+
 		private List<ArmTemplateResource> _resources = new List<ArmTemplateResource>();
 
 		[JsonProperty(PropertyName = "$schema")]
@@ -13,11 +20,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		public string ContentVersion => GlobalConstants.TemplateContentVesion;
 
-		public Dictionary<string, ArmTemplateParameter> Parameters { get; set; } = new Dictionary<string, ArmTemplateParameter>();
+		public IReadOnlyDictionary<string, ArmTemplateParameter> Parameters => _parameters;
 
-		public Dictionary<string, ArmTemplateVariable> Variables { get; set; }
+		public IReadOnlyDictionary<string, ArmTemplateVariable> Variables => _variables;
 
-		public IReadOnlyList<ArmTemplateResource> Resources => _resources.AsReadOnly();
+		public IReadOnlyList<ArmTemplateResource> Resources => _resources;
 
 		public void AddResources(IEnumerable<ArmTemplateResource> resources)
 		{
@@ -32,9 +39,14 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			_resources.Add(resource);
 		}
 
-		internal void AddParameter(string parameterName, ArmTemplateParameter apimServiceNameProperties)
+		internal void AddParameter(string parameterName, ArmTemplateParameter parameter)
 		{
-			Parameters.Add(parameterName, apimServiceNameProperties);
+			_parameters.Add(parameterName, parameter);
+		}
+
+		internal void AddVariable(string variableName, ArmTemplateVariable variable)
+		{
+			_variables.Add(variableName, variable);
 		}
 	}
 }

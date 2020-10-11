@@ -42,8 +42,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 			{
 				Version = this.Version ?? individualDefinition.Version,
 				ApimServiceName = this.ApimServiceName ?? individualDefinition.ApimServiceName,
-				Policy = this.Policy ?? individualDefinition.Policy,
-				OutputLocation = this.OutputLocation ?? individualDefinition.OutputLocation
+				Policy = this.Policy ?? individualDefinition.Policy
 			};
 
 			mergedDefinition.ApiVersionSets.AddRange(this.ApiVersionSets).AddRange(individualDefinition.ApiVersionSets);

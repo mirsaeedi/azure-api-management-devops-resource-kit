@@ -25,7 +25,7 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 			var deploymentDefinition = await GetDeploymentDefinitionAsync(option);
 
-			await new ArmTemplateCreator(deploymentDefinition, option.MasterFileName, option.FileNamePrefix, mapper).CreateAsync();
+			await new ArmTemplateCreator(deploymentDefinition, mapper).CreateAsync();
 		}
 
 		private async Task<DeploymentDefinition> GetDeploymentDefinitionAsync(CommandLineOption option)
@@ -34,6 +34,7 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 			deploymentDefinition.PrefixFileName = option.FileNamePrefix;
 			deploymentDefinition.MasterTemplateName = option.MasterFileName;
+			deploymentDefinition.OutputLocation = option.OutputPath;
 
 			foreach (var productDeploymentDefinition in deploymentDefinition.Products)
 			{

@@ -21,5 +21,8 @@ namespace Apim.DevOps.Toolkit.CommandLine
 
 		[Option('v', "printVariables", Required = false, HelpText = "Print loaded variables before generating arm templates.")]
 		public bool PrintVariables { get; set; }
+
+		[Option('o', "output", Required = true, HelpText = "Output file location.")]
+		public string OutputPath { get; set; }
 	}
 }

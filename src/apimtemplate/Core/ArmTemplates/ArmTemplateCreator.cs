@@ -33,14 +33,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private readonly IMapper _mapper;
 		private readonly string _masterFileName;
 		private readonly string _fileNamePrefix;
-		private readonly FileWriter _fileWriter = new FileWriter();
 
-		public ArmTemplateCreator(DeploymentDefinition deploymentDefinition, string masterFileName, string fileNamePrefix, IMapper mapper)
+		public ArmTemplateCreator(DeploymentDefinition deploymentDefinition, IMapper mapper)
 		{
 			_deploymentDefinition = deploymentDefinition;
 			_mapper = mapper;
-			_masterFileName = string.IsNullOrEmpty(masterFileName) ? "apim_deploy.template.json" : masterFileName;
-			_fileNamePrefix = string.IsNullOrEmpty(fileNamePrefix) ? string.Empty : fileNamePrefix;
 		}
 
 		public async Task CreateAsync()
@@ -71,7 +68,17 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			OrderResources(resources);
 
-			await SaveMasterTemplate(resources);
+			await GenerateArmTemplateFile(resources);
+		}
+
+		private async Task GenerateArmTemplateFile(List<ArmTemplateResource> resources)
+		{
+			var fileGenerator = new ArmTemplateFileGenerator(_deploymentDefinition.OutputLocation,
+				_deploymentDefinition.MasterTemplateName,
+				_deploymentDefinition.PrefixFileName,
+				_deploymentDefinition.ApimServiceName);
+
+			await fileGenerator.Save(resources);
 		}
 
 		private IEnumerable<ArmTemplateResource> CreateApiTemplate()
@@ -411,22 +418,6 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.CreateResourcesIf(d => d.Policy != null);
 		}
 
-		private async Task SaveMasterTemplate(List<ArmTemplateResource> resources)
-		{
-			Console.WriteLine("Creating deploy template");
-			Console.WriteLine("------------------------------------------");
-
-			var masterTemplateCreator = new DeployArmTemplateCreator();
-
-			var masterTemplate = await masterTemplateCreator.Create(resources);
-			await SaveTemplateAsync($"{_fileNamePrefix}{_masterFileName}", masterTemplate);
-
-			var templateParameters = masterTemplateCreator.CreateMasterTemplateParameterValues(_deploymentDefinition);
-			await SaveTemplateAsync($"{_fileNamePrefix}parameters.json", templateParameters);
-
-			Console.WriteLine("Templates written to output location");
-		}
-
 		private void OrderResources(List<ArmTemplateResource> resources)
 		{
 			AddDependency<BackendProperties, CertificateProperties>(resources);
@@ -464,12 +455,6 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private IEnumerable<ArmTemplateResource> GetResources<TResourceProperties>(List<ArmTemplateResource> resources)
 		{
 			return resources.Where(resources => resources is ArmTemplateResource<TResourceProperties>);
-		}
-
-		private Task SaveTemplateAsync(string fileName, ArmTemplate template)
-		{
-			var path = Path.Combine(_deploymentDefinition.OutputLocation, fileName);
-			return _fileWriter.WriteJsonAsync(template, path);
 		}
 	}
 }
