@@ -38,3 +38,5 @@ msbuild.wrn
 .vs/
 /src/Examples/Replacement/replace_dont_track-2.yml
 /src/Examples/EBH
+/src/Examples/Replacement/ebh-staging.yml
+/src/Examples/Replacement/ebh-prod.yml

@@ -67,14 +67,14 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			resources.AddRange(CreateAuthorizationServerResource());
 
-			resources.AddRange(CreateApiSubsequentTemplate());
+			resources.AddRange(CreateApiTemplate());
 
 			OrderResources(resources);
 
 			await SaveMasterTemplate(resources);
 		}
 
-		private IEnumerable<ArmTemplateResource> CreateApiSubsequentTemplate()
+		private IEnumerable<ArmTemplateResource> CreateApiTemplate()
 		{
 			if (_deploymentDefinition.Apis.Count() == 0)
 			{
@@ -91,6 +91,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.ForDeploymentDefinitions(_deploymentDefinition.Apis)
 				.WithName(d => d.Name)
 				.OfType(ResourceType.Api)
+				.CheckDependencies()
 				.CreateResources());
 
 			resources.AddRange(
@@ -141,28 +142,28 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.UseResourceCreator(apiDeploymentDefinition =>
 				{
 					var templateResources = new List<ArmTemplateResource<ProductApiProperties>>();
-
 					foreach (string productDisplayName in apiDeploymentDefinition.ProductList)
 					{
 						var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
+						var dependencies = new List<string>()
+						{
+								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
+								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]"
+						};
 
 						var templateResource = new ArmTemplateResource<ProductApiProperties>(
 							$"{productName}/{apiDeploymentDefinition.Name}",
 							$"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
 							ResourceType.ProductApi,
 							new ProductApiProperties(),
-							new[]
-							{
-								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
-								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]"
-							});
+							dependencies);
 
 						templateResources.Add(templateResource);
 					}
 
 					return templateResources;
 				})
-				.CreateResourcesIf(d => d.IsDependentOnProducts()));
+				.CreateResourcesIf(d => d.IsDependentOnProducts(), true));
 
 
 			resources.AddRange(
@@ -281,6 +282,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.ForDeploymentDefinitions(_deploymentDefinition.Products)
 				.WithName(d => d.Name)
 				.OfType(ResourceType.Product)
+				.CheckDependencies()
 				.CreateResources());
 
 			resources.AddRange(
@@ -337,6 +339,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.ForDeploymentDefinitions(_deploymentDefinition.Subscriptions)
 				.WithName(d => d.Name)
 				.OfType(ResourceType.Subscription)
+				.CheckDependencies()
 				.CreateResources();
 		}
 
@@ -429,20 +432,12 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			AddDependency<BackendProperties, CertificateProperties>(resources);
 			AddDependency<PolicyProperties, CertificateProperties>(resources);
 
-			AddDependency<ApiProperties, ApiVersionSetProperties>(resources);
-			AddDependency<ApiProperties, TagProperties>(resources);
 			AddDependency<ApiProperties, LoggerProperties>(resources);
 			AddDependency<ApiProperties, BackendProperties>(resources);
 			AddDependency<ApiProperties, AuthorizationServerProperties>(resources);
 			AddDependency<ApiProperties, CertificateProperties>(resources);
 
 			AddDependency<ProductsProperties, CertificateProperties>(resources);
-			AddDependency<ProductsProperties, ApiProperties>(resources);
-			AddDependency<ApiProperties, TagProductProperties>(resources);
-
-			AddDependency<SubscriptionProperties, ApiProperties>(resources);
-			AddDependency<SubscriptionProperties, ProductsProperties>(resources);
-			AddDependency<SubscriptionProperties, UserProperties>(resources);
 		}
 
 		private void AddDependency<TDependentResource, TDependencyResource>(List<ArmTemplateResource> resources)

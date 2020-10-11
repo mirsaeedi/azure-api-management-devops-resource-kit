@@ -1,11 +1,12 @@
-﻿using AutoMapper;
+﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
-	public class ArmTemplateResourceCreator<TResourceDeploymentDefinition, TResourceProperties>
+	public class ArmTemplateResourceCreator<TResourceDeploymentDefinition, TResourceProperties> where TResourceDeploymentDefinition: EntityDeploymentDefinition
 	{
 		private readonly IMapper _mapper;
 		private readonly List<TResourceDeploymentDefinition> _resourceDeploymentDefinitions = new List<TResourceDeploymentDefinition>();
@@ -15,6 +16,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private string _parentResourceType;
 		private Func<TResourceDeploymentDefinition, string> _getParentResourceName;
 		private Func<TResourceDeploymentDefinition, IEnumerable<ArmTemplateResource<TResourceProperties>>> _resourceCreator;
+		private bool _checkDependencies;
 
 		public ArmTemplateResourceCreator(IMapper mapper)
 		{
@@ -45,6 +47,12 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			return this;
 		}
 
+		public ArmTemplateResourceCreator<TResourceDeploymentDefinition, TResourceProperties> CheckDependencies()
+		{
+			_checkDependencies = true;
+			return this;
+		}
+
 		public ArmTemplateResourceCreator<TResourceDeploymentDefinition, TResourceProperties> WhichDependsOnResourceOfType(string parentResourceType)
 		{
 			_parentResourceType = parentResourceType;
@@ -63,14 +71,15 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			return this;
 		}
 
-		public IEnumerable<ArmTemplateResource> CreateResourcesIf(Predicate<TResourceDeploymentDefinition> shouldConsider)
+		public IEnumerable<ArmTemplateResource<TResourceProperties>> CreateResourcesIf(Predicate<TResourceDeploymentDefinition> shouldConsider, bool sequential = false)
 		{
-			var resources = new List<ArmTemplateResource>();
-
 			if (_resourceDeploymentDefinitions.Count() == 0)
 			{
 				return null;
 			}
+
+			var resources = new List<ArmTemplateResource<TResourceProperties>>();
+			var previousResource = default(ArmTemplateResource<TResourceProperties>);
 
 			foreach (var deploymentDefinition in _resourceDeploymentDefinitions)
 			{
@@ -79,49 +88,59 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 					continue;
 				}
 
-				resources.AddRange(_resourceCreator != null ? _resourceCreator(deploymentDefinition) : GetResource(_getResourceName, _resourceType, deploymentDefinition));
+				var newResources = _resourceCreator != null ? _resourceCreator(deploymentDefinition) : new[] { GetResource(_getResourceName, _resourceType, deploymentDefinition) };
+
+				foreach (var newResource in newResources)
+				{
+					if (previousResource != null)
+					{
+						newResource.AddDependencies(new[] { previousResource });
+					}
+
+					previousResource = newResource;
+				}
+
+				resources.AddRange(newResources);
 			}
 
 			return resources;
 		}
 
-		public IEnumerable<ArmTemplateResource<TResourceProperties>> CreateResources()
+		public IEnumerable<ArmTemplateResource<TResourceProperties>> CreateResources(bool sequential = false)
 		{
-			var resources = new List<ArmTemplateResource<TResourceProperties>>();
-			foreach (var deploymentDefinition in _resourceDeploymentDefinitions)
-			{
-				resources.AddRange(GetResource(_getResourceName, _resourceType, deploymentDefinition));
-			}
-
-			return resources;
+			return CreateResourcesIf((_) => true, sequential);
 		}
 
-		private IEnumerable<ArmTemplateResource<TResourceProperties>> GetResource(
+		private ArmTemplateResource<TResourceProperties> GetResource(
 			Func<TResourceDeploymentDefinition, string> getResourceName,
 			string resourceType,
 			TResourceDeploymentDefinition deploymentDefinition)
 		{
 			var name = getResourceName(deploymentDefinition).Trim(new[] { '/' });
 
-			return new[]
-			{
-				new ArmTemplateResource<TResourceProperties>(
+			return new ArmTemplateResource<TResourceProperties>(
 					name,
 					$"[concat(parameters('ApimServiceName'), '/{name}')]",
 					resourceType,
 					_mapper.Map<TResourceProperties>(deploymentDefinition),
-					GetDependsOn(deploymentDefinition))
-			};
+					GetDependsOn(deploymentDefinition));
 		}
 
 		private IEnumerable<string> GetDependsOn(TResourceDeploymentDefinition deploymentDefinition)
 		{
-			if (_parentResourceType == null || _getParentResourceName == null)
+			var dependencies = new List<string>();
+
+			if (_parentResourceType != null && _getParentResourceName != null)
 			{
-				return Array.Empty<string>();
+				dependencies.Add($"[resourceId('{_parentResourceType}', parameters('ApimServiceName'), '{_getParentResourceName(deploymentDefinition)}')]");
 			}
 
-			return new[] { $"[resourceId('{_parentResourceType}', parameters('ApimServiceName'), '{_getParentResourceName(deploymentDefinition)}')]" };
+			if (_checkDependencies)
+			{
+				dependencies.AddRange(deploymentDefinition.Dependencies());
+			}
+
+			return dependencies;
 		}
 	}
 }

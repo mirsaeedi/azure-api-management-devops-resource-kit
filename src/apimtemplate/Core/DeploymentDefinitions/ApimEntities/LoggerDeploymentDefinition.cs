@@ -1,8 +1,10 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Logger;
+using System;
+using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class LoggerDeploymentDefinition
+	public class LoggerDeploymentDefinition : EntityDeploymentDefinition
 	{
 		public string Name { get; set; }
 
@@ -15,5 +17,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		public bool IsBuffered { get; set; }
 
 		public string ResourceId { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

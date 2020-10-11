@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 {
-	public class DeploymentDefinition
+	public class DeploymentDefinition : EntityDeploymentDefinition
 	{
 		public string Version { get; set; }
 		public string ApimServiceName { get; set; }
@@ -67,5 +67,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 		public string MasterTemplateName { get; set; }
 
 		public bool HasCertificates() => Certificates != null && Certificates.Count() > 0;
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.ApimEntities.Api;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
+using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class ApiDeploymentDefinition
+	public class ApiDeploymentDefinition: EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the Api
@@ -99,15 +100,13 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 
 		public bool IsDependentOnTags() => Tags != null;
 
-		public bool IsDependOnApiVersionSet() => ApiVersionSetId != null;
+		public bool IsDependentOnApiVersionSet() => ApiVersionSetId != null;
 
-		public bool IsDependOnGlobalServicePolicies(DeploymentDefinition deploymentDefinition) => deploymentDefinition.Policy != null;
-
-		public bool IsDependOnAuthorizationServers() => AuthenticationSettings != null &&
+		public bool IsDependentOnAuthorizationServers() => AuthenticationSettings != null &&
 			AuthenticationSettings.OAuth2 != null &&
 			AuthenticationSettings.OAuth2.AuthorizationServerId != null;
 
-		public async Task<bool> IsDependOnBackend(FileReader fileReader)
+		public async Task<bool> IsDependentOnBackend(FileReader fileReader)
 		{
 			string apiPolicy = Policy != null ? await fileReader.RetrieveFileContentsAsync(Policy) : "";
 
@@ -142,19 +141,48 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 
 		public DeploymentDefinition Root { get; set; }
 
-		internal object GetProductName(string productDisplayName)
+		public string GetProductName(string productDisplayName)
 		{
 			return Root.Products.FirstOrDefault(q => q.DisplayName == productDisplayName || q.Name == productDisplayName)?.Name ?? productDisplayName;
 		}
 
-		internal object GetTagName(string tagDisplayName)
+		public string GetTagName(string tagDisplayName)
 		{
 			return Root.Tags.FirstOrDefault(q => q.DisplayName == tagDisplayName || q.Name == tagDisplayName)?.Name ?? tagDisplayName;
 		}
 
-		internal bool HasPolicy()
+		public bool HasPolicy()
 		{
 			return Policy != null;
+		}
+
+		public override IEnumerable<string> Dependencies()
+		{
+			var dependencies = new List<string>();
+
+			if (IsDependentOnProducts())
+			{
+				var dependentProducts = ProductList.Select(product => $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{GetProductName(product)}')]");
+
+				dependencies.AddRange(dependentProducts);
+			}
+
+			if (IsDependentOnTags())
+			{
+				var dependentTags = TagList.Select(tag => $"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{GetTagName(tag)}')]");
+
+				dependencies.AddRange(dependentTags);
+			}
+
+
+			if (IsDependentOnApiVersionSet())
+			{
+				var dependentApiVersionSet = $"[resourceId('{ResourceType.ApiVersionSet}', parameters('ApimServiceName'), '{ApiVersionSetId}')]";
+
+				dependencies.Add(dependentApiVersionSet);
+			}
+
+			return dependencies;
 		}
 	}
 }

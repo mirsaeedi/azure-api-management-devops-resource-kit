@@ -1,5 +1,6 @@
 ﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
@@ -9,14 +10,12 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		public ArmTemplateResource(string identifier, string name, string type, IEnumerable<string> dependencies)
 		{
-			Identifier = identifier;
+			Identifier = identifier.Split('/').Select(id => $"'{id}'").Aggregate((a,b) => $"{a}, {b}" );
 			Name = name;
 			Type = type;
 			_dependencies.AddRange(dependencies);
 		}
 		private string Identifier { get; set; }
-
-		private string ResourceId => $"[resourceId('{Type}', parameters('ApimServiceName'), '{Identifier}')]";
 
 		public string Name { get; set; }
 
@@ -30,11 +29,18 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 		public IReadOnlyList<ArmTemplateResource> Resources { get; set; }
 
-		internal void AddDependencies(IEnumerable<ArmTemplateResource> dependencies)
+		public string ResourceId() => $"[resourceId('{Type}', parameters('ApimServiceName'), {Identifier})]";
+
+		public void AddDependencies(IEnumerable<ArmTemplateResource> dependencies)
+		{
+			AddDependencies(dependencies.Select(dependency => dependency.ResourceId()));
+		}
+
+		public void AddDependencies(IEnumerable<string> dependencies)
 		{
 			foreach (var dependency in dependencies)
 			{
-				_dependencies.Add(dependency.ResourceId);
+				_dependencies.Add(dependency);
 			}
 		}
 	}

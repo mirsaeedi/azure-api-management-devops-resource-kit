@@ -1,6 +1,9 @@
-﻿namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+﻿using System;
+using System.Collections.Generic;
+
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class ApiVersionSetDeploymentDefinition
+	public class ApiVersionSetDeploymentDefinition : EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the Api Version Set
@@ -16,5 +19,7 @@
 		public string VersionHeaderName { get; set; }
 
 		public string VersioningScheme { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

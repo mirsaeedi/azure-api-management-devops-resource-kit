@@ -1,9 +1,19 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Subscription;
+using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class SubscriptionDeploymentDefinition
+	public class SubscriptionDeploymentDefinition : EntityDeploymentDefinition
 	{
+		private static string _productRegexPattern = "/products/(?<productName>.+)";
+
+		private static string _apiRegexPattern = "/apis/(?<apiName>.+)";
+
+		private static string _userRegexPattern = "/users/(?<userName>.+)";
+
 		/// <summary>
 		/// The Id of the Subscription
 		/// </summary>
@@ -49,5 +59,69 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		/// Determines whether tracing can be enabled
 		/// </summary>
 		public bool? AllowTracing { get; set; }
+
+		public override IEnumerable<string> Dependencies()
+		{
+			var dependencies = new List<string>();
+			var dependentProduct = DependentProduct();
+			var dependentApi = DependentApi();
+			var dependentUser = DependentUser();
+
+			if (dependentProduct != null)
+			{
+				dependencies.Add($"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{dependentProduct}')]");
+			}
+
+			if (dependentApi != null)
+			{
+				dependencies.Add($"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{dependentApi}')]");
+			}
+
+			if (dependentUser != null)
+			{
+				dependencies.Add($"[resourceId('{ResourceType.User}', parameters('ApimServiceName'), '{dependentUser}')]");
+			}
+
+			return dependencies;
+		}
+
+		private string DependentProduct()
+		{
+			var regex = new Regex(_productRegexPattern, RegexOptions.IgnoreCase);
+			var match = regex.Match(Scope);
+
+			if (match.Success)
+			{
+				return $"{match.Groups["productName"].Value}";
+			}
+
+			return null;
+		}
+
+		private string DependentApi()
+		{
+			var regex = new Regex(_apiRegexPattern, RegexOptions.IgnoreCase);
+			var match = regex.Match(Scope);
+
+			if (match.Success)
+			{
+				return $"{match.Groups["apiName"].Value}";
+			}
+
+			return null;
+		}
+
+		private string DependentUser()
+		{
+			var regex = new Regex(_userRegexPattern, RegexOptions.IgnoreCase);
+			var match = regex.Match(OwnerId);
+
+			if (match.Success)
+			{
+				return $"{match.Groups["userName"].Value}";
+			}
+
+			return null;
+		}
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Backend;
+using System;
+using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class BackendDeploymentDefinition
+	public class BackendDeploymentDefinition : EntityDeploymentDefinition
 	{
 		public string Name { get; set; }
 
@@ -23,5 +25,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		public string Url { get; set; }
 
 		public string Protocol { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

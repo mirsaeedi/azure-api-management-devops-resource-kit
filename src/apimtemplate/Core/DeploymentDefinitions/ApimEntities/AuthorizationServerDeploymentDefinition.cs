@@ -1,8 +1,10 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.AuthotizationServer;
+using System;
+using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class AuthorizationServerDeploymentDefinition
+	public class AuthorizationServerDeploymentDefinition : EntityDeploymentDefinition
 	{
 		public string Description { get; set; }
 
@@ -35,5 +37,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		public string[] GrantTypes { get; set; }
 
 		public string ClientId { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

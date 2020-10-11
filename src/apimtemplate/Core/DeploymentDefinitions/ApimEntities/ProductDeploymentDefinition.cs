@@ -1,10 +1,12 @@
-﻿using Apim.DevOps.Toolkit.Extensions;
+﻿using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
+using Apim.DevOps.Toolkit.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class ProductDeploymentDefinition
+	public class ProductDeploymentDefinition : EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the product
@@ -43,6 +45,20 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		public string GetTagName(string tag)
 		{
 			return Root.Tags.FirstOrDefault(tagDeploymentDefinition => tagDeploymentDefinition.DisplayName == tag || tagDeploymentDefinition.Name == tag)?.Name ?? tag;
+		}
+
+		public override IEnumerable<string> Dependencies()
+		{
+			var dependencies = new List<string>();
+
+			if (IsDependentOnTags())
+			{
+				var dependentTags = TagList.Select(tag => $"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{GetTagName(tag)}')]");
+
+				dependencies.AddRange(dependentTags);
+			}
+
+			return dependencies;
 		}
 	}
 }

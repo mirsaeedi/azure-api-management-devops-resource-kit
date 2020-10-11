@@ -1,8 +1,10 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.User;
+using System;
+using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class UserDeploymentDefinition
+	public class UserDeploymentDefinition : EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the User
@@ -24,5 +26,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 		public string Password { get; set; }
 
 		public UserConfirmation? Confirmation { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

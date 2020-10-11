@@ -1,6 +1,9 @@
-﻿namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+﻿using System;
+using System.Collections.Generic;
+
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class TagDeploymentDefinition
+	public class TagDeploymentDefinition : EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the tag
@@ -8,5 +11,7 @@
 		public string Name { get; set; }
 
 		public string DisplayName { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }

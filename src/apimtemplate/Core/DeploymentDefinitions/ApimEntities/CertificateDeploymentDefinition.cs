@@ -1,6 +1,9 @@
-﻿namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+﻿using System;
+using System.Collections.Generic;
+
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
 {
-	public class CertificateDeploymentDefinition
+	public class CertificateDeploymentDefinition : EntityDeploymentDefinition
 	{
 		/// <summary>
 		/// The Id of the Certificate
@@ -13,5 +16,7 @@
 		public string FilePath { get; set; }
 
 		public string Password { get; set; }
+
+		public override IEnumerable<string> Dependencies() => Array.Empty<string>();
 	}
 }
