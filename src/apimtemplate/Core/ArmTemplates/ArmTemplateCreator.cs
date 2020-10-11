@@ -134,7 +134,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 					return templateResources;
 				})
-				.CreateResourcesIf(d => d.Operations != null));
+				.CreateResourcesIf(d => d.Operations != null, true));
 
 			resources.AddRange(
 				new ArmTemplateResourceCreator<ApiDeploymentDefinition, ProductApiProperties>(_mapper)
@@ -193,7 +193,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 					return templateResources;
 				})
-				.CreateResourcesIf(d => d.IsDependentOnTags()));
+				.CreateResourcesIf(d => d.IsDependentOnTags(), true));
 
 			return resources;
 		}
@@ -292,7 +292,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				.OfType(ResourceType.ProductPolicy)
 				.WhichDependsOnResourceOfType(ResourceType.Product)
 				.WhichDependsOnResourceWithName(d => d.Name)
-				.CreateResourcesIf(d => d.Policy != null));
+				.CreateResourcesIf(d => d.Policy != null, true));
 
 			resources.AddRange(
 				new ArmTemplateResourceCreator<ProductDeploymentDefinition, TagProductProperties>(_mapper)
@@ -320,7 +320,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 					return templateResources;
 				})
-				.CreateResourcesIf(d => d.Tags != null));
+				.CreateResourcesIf(d => d.Tags != null, true));
 
 			return resources;
 		}
