@@ -20,12 +20,6 @@ namespace Apim.DevOps.Toolkit.Extensions
 			}
 		}
 
-		public static bool IsYaml(this string content)
-		{
-			// TODO
-			return false;
-		}
-
 		public static string[] GetItems(this string content, string[] defaultItems)
 		{
 			if (content != null)

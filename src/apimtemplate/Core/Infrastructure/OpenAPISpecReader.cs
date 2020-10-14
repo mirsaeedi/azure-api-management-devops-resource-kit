@@ -24,9 +24,9 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 		{
 			var content = await GetContent();
 			var isJson = content.IsJson();
-			var isYaml = content.IsYaml();
+			var isYaml = false; // TODO: add support for YAML.
 
-			if (!isJson || isYaml)
+			if (!isJson)
 			{
 				throw new Exception("Unsupported OpenApi format. The OpenApi document should be provided in json format. Version 2 and 3 of OpenApi are supported");
 			}
