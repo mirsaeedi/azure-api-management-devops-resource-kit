@@ -26,7 +26,7 @@ While Microsoft's approach to the problem is solid on paper, we found that there
 * The official toolkit is actually a C# project which you need to build/run manually, near impossible to have it in your ci/cd pipeline. 
 * It has some bugs and flaws in generating the arm templates.
 * The source code is not in comliance with C# best practices and design patterns. This makes maintenance and contribution more difficult for the community.
-* Support for tags, users, subscriptions, and certificates is added.
+* Support for tags, users, subscriptions, and certificates is required.
 
 To address these fundamental issues, we have re-written the source code from the ground up. Bugs are eliminated and source code is much more in line with best practices. A cross-platform dotnet global tool, **dotnet-apim** is at your hand to streamline your APIM deployment by integrating it into CI/CD pipelines. Furthermore, new functionalities have been added such as Global/Local variables.
 
@@ -66,9 +66,6 @@ apis:
           policy: C:\apim\operationRateLimit.xml
         deletePet:
           policy: C:\apim\operationRateLimit.xml
-
-outputLocation: C:\apim\output
-linkedTemplatesBaseUrl : https://mystorageaccount.blob.core.windows.net/mycontainer
 ```
 
 The above yml definition has the minimum properties required for defining an API in an APIM instance. More examples are provided [here](https://github.com/mirsaeedi/dotnet-apim/tree/master/src/Examples/Definitions). Few things to note here are:
@@ -77,41 +74,33 @@ The above yml definition has the minimum properties required for defining an API
 * **_openApiSpec_**: Takes a local path or url which refers to the OpenApi spec of your apis. You have to have this file ready for deployment. The tool creates operations based on this file.
 * **_policy_**: Takes a local path or url which refers to an XML file that contains the policy.
 * **_operations_**: Under this node, operation-specific policies are defined. Takes a local path or url which refers to an XML file that contains the policy. In this sample, **addPet** and **deletePet** are OperationIds defined in the OpenApi spec file.
-* **_outputLocation_**: Refers to the place that tool output the generated ARM templates.
-* **_linkedTemplatesBaseUrl_**: The address of the blob storage account you want to upload the ARM templates to. You have to upload all templates to a place accessible by Azure Resource Manager. This [limitation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) is imposed by Azure.
 
 ## Run dotnet-apim
 
 After having the yml file ready, it's time for running dotnet-apim for generating the corresponding ARM templates.
 
 ```powershell
-dotnet-apim --yamlConfig "c:/apim/definition.yml" 
+dotnet-apim --yamlConfig "c:/apim/definition.yml" --output "c:/output"
 ```
 
 
 ```powershell
-dotnet-apim -c "c:/apim/definition.yml" 
+dotnet-apim -c "c:/apim/definition.yml" -o "c:/output"
 ```
 
-The command creates ARM templates for the defined products, tags,, APIs, etc accordingly. You can find the generated files in the location defined by **_outputLocation_**. 
+The command creates ARM templates for the defined products, tags,, APIs, etc accordingly. You can find the generated files in the location defined by **_output_**. 
 
-Among all generated templates, the following two files play a fundamental role in the whole scenario:
+the following two files play a fundamental role in the whole scenario:
 
-**Master Template**: By default named master.template.json, is the main file executed by Azure Resource Manager. It consists of links to all other templates. 
-**Parameter Template**: By default named parameters.json, contains the parameters required for executing the Master template.
-
-### Uploading Generated ARM Templates
-
-A known limitation of the ARM Templates is that they [need to get uploaded](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-linked-templates#external-template) to a location accessible to Azure Resource Manager. 
-
-Azure Blob Storage could be a good option for most users. For test purposes, you can use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) to manually upload files in a drag and drop manner. You can also use [Azure CLI](https://docs.microsoft.com/en-us/azure/storage/common/storage-azure-cli), [AzCopy](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10), or [Azure File Copy](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-file-copy?view=azure-devops) task in Azure Pipeline to upload your files according to your needs.
+**Deploy Template**: By default named `apim_deploy.template.json`, is the main file executed by Azure Resource Manager. It consists of all resources required to deploy into APIM. 
+**Parameter Template**: By default named `parameters.json`, contains the parameters required for executing the Master template.
 
 ### Deploying ARM Templates into APIM
 
-Having the ARM templates uploaded, we are ready to start the deployment. We can use [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli) or [Azure Resource Group Deployment](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment?view=azure-devops) in Azure Pipeline.
+Having the ARM templates ready, we are ready to start the deployment. We can use [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli) or [Azure Resource Group Deployment](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-resource-group-deployment?view=azure-devops) in Azure Pipeline.
 
 ```powershell
-az group deployment create --resource-group your-resource-group --template-file "c:\apim\output\master.template.json" --parameters "c:\apim\output\parameters.json"
+az group deployment create --resource-group your-resource-group --template-file "c:\apim\output\apim_deploy.template.json" --parameters "c:\apim\output\parameters.json"
 ```
 
 ## Variables
@@ -140,9 +129,6 @@ apis:
           policy: C:\apim\operationRateLimit.xml
         deletePet:
           policy: C:\apim\operationRateLimit.xml
-
-outputLocation: $(apimFolder)\output  # global variable
-linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 ```
 
 ```xml
@@ -300,18 +286,14 @@ products:
       policy: $(apimBasePath)\Products\ProductB\policy.xml
       
     #endif
-
-
-outputLocation: $(apimFolder)\output  # global variable
-linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 ```
 
 ## Customizing The Name of Generated ARM Templates
 
 Another customization that can be applied is changing the name of generated ARM templates.
 
-1. Specify a prefix for all generated ARM files using the **--prefix** argument. Used to tag files to categorize each deployment based on APIM instance, date, etc
-2. Specify the name of **Master Template** using the **--masterFileName** argument.
+1. Specify a prefix for all generated ARM files using the **--armPrefix** argument. Used to tag files to categorize each deployment based on APIM instance, date, etc
+2. Specify the name of **Deploy Template** using the **--master** argument.
 
 
 ```powershell
