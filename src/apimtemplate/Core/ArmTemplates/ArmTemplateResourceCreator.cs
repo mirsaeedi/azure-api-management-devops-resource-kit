@@ -1,4 +1,4 @@
-﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities;
 using AutoMapper;
 using System;
 using System.Collections.Generic;

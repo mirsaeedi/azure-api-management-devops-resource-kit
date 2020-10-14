@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates
@@ -14,13 +12,14 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private readonly FileWriter _fileWriter = new FileWriter();
 		private readonly string _masterFileName;
 		private readonly string _fileNamePrefix;
+		private readonly string _apimServiceName;
 		private readonly string _outputLocation;
 
 		public ArmTemplateFileGenerator(string outputLocation, string masterFileName, string fileNamePrefix, string apimServiceName)
 		{
 			_masterFileName = string.IsNullOrEmpty(masterFileName) ? "apim_deploy.template.json" : masterFileName;
 			_fileNamePrefix = string.IsNullOrEmpty(fileNamePrefix) ? string.Empty : fileNamePrefix;
-			_outputLocation = apimServiceName;
+			_apimServiceName = apimServiceName;
 			_outputLocation = outputLocation;
 		}
 
@@ -68,7 +67,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			template.AddParameter(ApimServiceNameProperyName, new ArmTemplateParameter()
 			{
-				Value = _outputLocation
+				Value = _apimServiceName
 			});
 
 			return template;

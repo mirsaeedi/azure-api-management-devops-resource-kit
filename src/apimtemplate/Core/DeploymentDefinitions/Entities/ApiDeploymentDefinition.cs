@@ -6,7 +6,7 @@ using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
 
-namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 {
 	public class ApiDeploymentDefinition: EntityDeploymentDefinition
 	{

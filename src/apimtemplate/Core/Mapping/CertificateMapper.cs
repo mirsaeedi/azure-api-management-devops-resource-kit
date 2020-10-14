@@ -1,5 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.ArmTemplates;
-using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using AutoMapper;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 {
 	public class CertificateDeploymentDefinition : EntityDeploymentDefinition
 	{

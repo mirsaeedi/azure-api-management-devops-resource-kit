@@ -1,4 +1,4 @@
-﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+﻿using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -87,10 +87,6 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Validation
 
 		private bool ValidateBaseProperties(DeploymentDefinition deploymentDefinition)
 		{
-			if (deploymentDefinition.OutputLocation == null)
-			{
-				throw new ArgumentException("Output location is required");
-			}
 			if (deploymentDefinition.Version == null)
 			{
 				throw new ArgumentException("Version is required");

@@ -3,7 +3,7 @@ using Apim.DevOps.Toolkit.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 {
 	public class ProductDeploymentDefinition : EntityDeploymentDefinition
 	{

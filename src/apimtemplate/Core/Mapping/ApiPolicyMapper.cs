@@ -1,5 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Api.Policy;
-using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities;
+using Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Extensions;
 using AutoMapper;

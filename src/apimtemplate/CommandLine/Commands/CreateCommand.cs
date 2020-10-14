@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.Core.DeploymentDefinitions;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Apim.DevOps.Toolkit.CommandLine.Commands
 {
@@ -25,7 +26,20 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 			var deploymentDefinition = await GetDeploymentDefinitionAsync(option);
 
-			await new ArmTemplateCreator(deploymentDefinition, mapper).CreateAsync();
+			var resources = new ArmTemplateCreator(deploymentDefinition, mapper).CreateAsync();
+
+			await GenerateArmTemplateFile(resources, deploymentDefinition);
+		}
+
+
+		private async Task GenerateArmTemplateFile(List<ArmTemplateResource> resources, DeploymentDefinition deploymentDefinition)
+		{
+			var fileGenerator = new ArmTemplateFileGenerator(deploymentDefinition.OutputLocation,
+				deploymentDefinition.MasterTemplateName,
+				deploymentDefinition.PrefixFileName,
+				deploymentDefinition.ApimServiceName);
+
+			await fileGenerator.Save(resources);
 		}
 
 		private async Task<DeploymentDefinition> GetDeploymentDefinitionAsync(CommandLineOption option)

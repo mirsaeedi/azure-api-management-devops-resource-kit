@@ -3,7 +3,7 @@ using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.ApimEntities
+namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 {
 	public class SubscriptionDeploymentDefinition : EntityDeploymentDefinition
 	{
