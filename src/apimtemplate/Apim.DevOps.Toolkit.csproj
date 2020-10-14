@@ -1,44 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>dotnet-apim</ToolCommandName>
-    <ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
-    <PackageId>Apim.DevOps.Toolkit</PackageId>
-    <Version>1.1.6</Version>
-    <Authors>Ehsan Mirsaeedi</Authors>
-    <Company />
-    <Product>dotnet-apim DevOps Toolkit</Product>
-    <Description>dotnet-apim is a cross-platform dotnet tool which streamlines the CI/CD process of deploying APIs into Azure API Management.</Description>
-    <RepositoryUrl>https://github.com/mirsaeedi/dotnet-apim</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>apim; devops; cicd; toolkit; azure</PackageTags>
-    <PackageLicenseUrl>https://github.com/mirsaeedi/dotnet-apim</PackageLicenseUrl>
-    <PackageLicenseUrl>https://github.com/mirsaeedi/dotnet-apim</PackageLicenseUrl>
-
-    <PackageProjectUrl>https://github.com/mirsaeedi/dotnet-apim</PackageProjectUrl>
-    <AssemblyName>Apim.DevOps.Toolkit</AssemblyName>
-    <RootNamespace>Apim.DevOps.Toolkit</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <LangVersion>latest</LangVersion>
+	<OutputType>Exe</OutputType>
+	<TargetFrameworks>netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
+	<PackAsTool>true</PackAsTool>
+	<ToolCommandName>dotnet-apim</ToolCommandName>
+	<ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
+	<PackageId>Apim.DevOps.Toolkit</PackageId>
+	<Version>2.0.0</Version>
+	<Authors>Ehsan Mirsaeedi</Authors>
+	<Company />
+	<Title>dotnet-apim</Title>
+	<Product>dotnet-apim DevOps Toolkit</Product>
+	<Description>dotnet-apim is a cross-platform dotnet tool which streamlines the CI/CD process of deploying APIs into Azure API Management.</Description>
+	<RepositoryUrl>https://github.com/mirsaeedi/dotnet-apim</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>apim; devops; cicd; toolkit; azure</PackageTags>
+	<PackageLicenseUrl>https://github.com/mirsaeedi/dotnet-apim</PackageLicenseUrl>
+	<AssemblyName>Apim.DevOps.Toolkit</AssemblyName>
+	<RootNamespace>Apim.DevOps.Toolkit</RootNamespace>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="microsoft.gpg" />
-    <None Remove="packages-microsoft-prod.deb" />
+	<None Remove="microsoft.gpg" />
+	<None Remove="packages-microsoft-prod.deb" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="Microsoft.Azure.Management.ApiManagement" Version="4.0.6-preview" />
-    <PackageReference Include="Microsoft.Azure.Management.Authorization" Version="2.9.0-preview" />
-    <PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.34.0" />
-    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="YamlDotNet" Version="8.1.2" />
+	<PackageReference Include="AutoMapper" Version="10.0.0" />
+	<PackageReference Include="CommandLineParser" Version="2.8.0" />
+	<PackageReference Include="Microsoft.Azure.Management.ApiManagement" Version="4.0.6-preview" />
+	<PackageReference Include="Microsoft.Azure.Management.Authorization" Version="2.9.0-preview" />
+	<PackageReference Include="Microsoft.Azure.Management.Fluent" Version="1.34.0" />
+	<PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+	<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	<PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 
 </Project>
