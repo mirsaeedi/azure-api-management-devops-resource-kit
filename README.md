@@ -308,6 +308,12 @@ dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableString "apimInstance
 dotnet-apim -c "c:/apim/definition.yml" -s "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" -p "current-date-time" -m "master.file"
 ```
 
+## Maintaining Large YAML Definitions By Splitting Them 
+In real world, we need to define a huge list of resources to setup our APIM instance. In these cases, instead of having all resources defined in one file, you can split them across multiple files. For example, you can have `subsciptions.yml`, `users.yml`, `products.yml`, and `apis.yml` to define subscriptions, users, products and apis in seperate files. The tool reads all the files and aggregates them to build a single definition for the deployment. 
+
+If you pass a folder path to the `-o` or `--output` flag, the tool searches the folder recursively for all yml files. The discovered files will be consolidated to be used for generating the ARM template. 
+
+
 ## License
 
 This project is licensed under [the MIT License](LICENSE).
