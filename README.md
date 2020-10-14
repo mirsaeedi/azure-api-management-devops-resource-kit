@@ -1,3 +1,13 @@
+### Version 2 Release Notes
+
+1. The output of the tool should be specified via `-o` or `--output` [flags](https://github.com/mirsaeedi/dotnet-apim#run-dotnet-apim). `outputLocation` should not be specified in YML files anymore.
+2. Unlike version 1, the output contains only 2 files, [deployment and parameter templates](https://github.com/mirsaeedi/dotnet-apim#run-dotnet-apim). This makes the deployment a lot easier by eliminating the need for uploading arm templates to a secure storage. Therefore, `linkedTemplatesBaseUrl` should not be specified in YML files anymore.
+3. If there is any variable in yml definitions which doesn't have any corresponding value, the tool raises an [exception](https://github.com/mirsaeedi/dotnet-apim#unmatched-variables).
+4. The tool support [splitted](https://github.com/mirsaeedi/dotnet-apim#maintaining-large-yaml-definitions-by-splitting-them) yml definitions to make maintenance of large projects easier.
+5. The flags `-v` or `--printVariables` are added to print the variables before generating the output. This helps in debugging the tool.
+6. The tool now runs on either .NET Core 2.1 or 3.1.
+7. The tool has undergone major changes which were highly required to speed up the development of the project.
+
 ## The Problem
 
 Organizations today normally have multiple deployment environments (e.g., Development, Testing, Production) and use separate API Management instances for each environment. Some of these instances are shared by multiple development teams, who are responsible for different APIs with different release cadence.
