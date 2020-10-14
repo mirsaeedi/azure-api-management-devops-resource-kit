@@ -223,6 +223,9 @@ linkedTemplatesBaseUrl : $(uploadLocation)  # global variable
 
 Local variables are defined using **:::variableName1=value1;variableName2=value2** syntax inside yml file. Key=Value pairs are separated using a semicolon. The local variables are only applied to their associated policy and override the global variables in case of name collision.
 
+### Unmatched variables
+If there is any variable in the yaml files without any matched values, the tool throws an exception with message "__There should be a value assigned to all variables__". Therefore, be sure that a value is provided for all the defined variables.
+
 ## Conditional Statements
 In some cases, we need to customize our deployments based on some conditions. dotnet-apim supports simple conditional statements. An if block starts with **#if $(booleanVar)** and ends with **#endif**. If booleanVar is _true_, then all the lines in between will be interpreted by dotnet-apim otherwise they are ignored. The tool supports nested if statements too.
 
@@ -304,6 +307,12 @@ dotnet-apim --yamlConfig "c:/apim/definition.yml" --variableString "apimInstance
 ```powershell
 dotnet-apim -c "c:/apim/definition.yml" -s "apimInstanceName=value1;apimFolder=value2;uploadLocation=value3" -p "current-date-time" -m "master.file"
 ```
+
+## Maintaining Large YAML Definitions By Splitting Them 
+In real world, we need to define a huge list of resources to setup our APIM instance. In these cases, instead of having all resources defined in one file, you can split them across multiple files. For example, you can have `subsciptions.yml`, `users.yml`, `products.yml`, and `apis.yml` to define subscriptions, users, products and apis in seperate files. The tool reads all the files and aggregates them to build a single definition for the deployment. 
+
+If you pass a folder path to the `-o` or `--output` flag, the tool searches the folder recursively for all yml files. The discovered files will be consolidated to be used for generating the ARM template. 
+
 
 ## License
 
