@@ -1,57 +1,50 @@
-version: 0.0.1   # Required
-apimServiceName: $(apimServiceName)   # Required, must match name of an apim service deployed in the specified resource group
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
 apiVersionSets:
-      
-    - name: ApiVersionSetB
-      displayName: API Version Set B
-      description: Contains the APIs.
-      versioningScheme: Segment
+  - name: ApiVersionSetB
+    displayName: API Version Set B
+    description: Contains the APIs.
+    versioningScheme: Segment
 
 apis:
+  - name: ApiB1
+    tags: TagB1, TagB2
+    displayName: API B1 v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/b/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetB
+    apiRevision: 1
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: false
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
 
-    - name: ApiB1
-      tags: TagB1, TagB2
-      displayName: API B1 v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
-      path: $(prefix)/b/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetB
-      apiRevision: 1
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: false
-      subscriptionKeyParameterNames: 
-         header: ProviderKey
-         query: ProviderKey 
-         
-    - name: ApiB2
-      tags: TagB1, TagB2
-      displayName: API B2 v1
-      serviceUrl: $(ApiServiceURL)
-      openApiSpec: $(apimBasePath)\OpenApi.json
-      policy: $(apimBasePath)\Policies\ApiPolicy.xml  
-      path: $(prefix)/b/api
-      apiVersion: v1
-      apiVersionSetId: ApiVersionSetB
-      apiRevision: 2
-      protocols: https
-      subscriptionRequired: true
-      isCurrent: true
-      subscriptionKeyParameterNames: 
-         header: ProviderKey
-         query: ProviderKey 
-        
+  - name: ApiB2
+    tags: TagB1, TagB2
+    displayName: API B2 v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/b/api
+    apiVersion: v1
+    apiVersionSetId: ApiVersionSetB
+    apiRevision: 2
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
+
 tags:
+  - name: TagB1
+    displayName: Tag B 1
 
-     - name: TagB1
-       displayName: Tag B 1
-       
-       
-     - name: Tagb2
-       displayName: Tag B 2
-  
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
-linkedTemplatesBaseUrl : $(linkedTemplatesBaseUrl) # the path to the blob storage
+  - name: Tagb2
+    displayName: Tag B 2

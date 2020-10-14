@@ -80,5 +80,3 @@ products:
     policy: $(apimBasePath)\Policies\ProductPolicy.xml
 
     #endif
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file

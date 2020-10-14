@@ -104,5 +104,3 @@ subscriptions:
     scope: /apis/ApiE1 # access to ApiE1 only
     displayName: subcription E3
     ownerId: /users/userE
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file

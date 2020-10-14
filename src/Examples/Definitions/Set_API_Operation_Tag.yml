@@ -26,5 +26,3 @@ apis:
     subscriptionKeyParameterNames:
       header: ProviderKey
       query: ProviderKey
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file

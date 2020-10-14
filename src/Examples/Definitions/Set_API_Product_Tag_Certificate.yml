@@ -56,5 +56,3 @@ certificates:
   - name: cert
     filePath: $(apimBasePath)\Cert\cert.pfx
     password: 123
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file

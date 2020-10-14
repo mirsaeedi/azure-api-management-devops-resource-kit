@@ -22,5 +22,3 @@ tags:
 
   - name: TagG2
     displayName: Tag G 2
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file

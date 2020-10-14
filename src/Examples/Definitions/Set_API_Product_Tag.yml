@@ -51,5 +51,3 @@ products:
     subscriptionsLimit: 1
     state: published
     policy: $(apimBasePath)\Policies\ProductPolicy.xml #Policy of the Product
-
-outputLocation: $(apimBasePath)\output # the local path to the ARM templates generated based on this yml file
