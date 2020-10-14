@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "-c  \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\EBH\\Definitions\" -f \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Replacement\\ebh-staging.yml\"  -p ebillinghub-dev.business.api-staging.  -v -o \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\EBH\\output\""
+      "commandLineArgs": "-c  \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Definitions\\Backend.yml\" -f \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Replacement\\replace.yml\"  -p ebillinghub-dev.business.api-staging.  -v -o \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\\\output\""
     }
   }
 }

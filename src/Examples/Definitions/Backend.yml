@@ -1,0 +1,13 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+backends:
+  - name: "test_backend"
+    title: "Test Backend"
+    description: "Azure Function App for Testing"
+    url: $(functionUrl)
+    protocol: http
+    credentials:
+      header:
+        x-functions-key:
+          - "0812038102381223123"

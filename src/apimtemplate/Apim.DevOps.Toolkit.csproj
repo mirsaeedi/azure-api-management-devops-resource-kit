@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotnet-apim</ToolCommandName>
     <ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
@@ -12,13 +12,13 @@
     <Company />
     <Product>dotnet-apim DevOps Toolkit</Product>
     <Description>dotnet-apim is a cross-platform dotnet tool which streamlines the CI/CD process of deploying APIs into Azure API Management.</Description>
-    <RepositoryUrl>https://github.com/mirsaeedi/azure-api-management-devops-resource-kit</RepositoryUrl>
+    <RepositoryUrl>https://github.com/mirsaeedi/dotnet-apim</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>apim; devops; cicd; toolkit; azure</PackageTags>
-    <PackageLicenseUrl>https://github.com/mirsaeedi/RelationalGit</PackageLicenseUrl>
-    <PackageLicenseUrl>https://github.com/mirsaeedi/RelationalGit</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/mirsaeedi/dotnet-apim</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/mirsaeedi/dotnet-apim</PackageLicenseUrl>
 
-    <PackageProjectUrl>https://github.com/mirsaeedi/azure-api-management-devops-resource-kit</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/mirsaeedi/dotnet-apim</PackageProjectUrl>
     <AssemblyName>Apim.DevOps.Toolkit</AssemblyName>
     <RootNamespace>Apim.DevOps.Toolkit</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
