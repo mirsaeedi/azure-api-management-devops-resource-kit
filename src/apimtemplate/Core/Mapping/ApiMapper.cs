@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class ApiMapper : IMapper
+	public class ApiMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{

@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class AuthorizationServerMapper : IMapper
+	public class AuthorizationServerMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{

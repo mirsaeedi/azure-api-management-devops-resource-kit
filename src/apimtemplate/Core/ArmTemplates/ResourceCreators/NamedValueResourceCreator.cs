@@ -30,7 +30,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			return new ArmTemplateResourceCreator<NamedValueDeploymentDefinition, NamedValueProperties>(_mapper)
 				.ForDeploymentDefinitions(deploymentDefinition.NamedValues)
 				.WithName(d => d.Name)
-				.OfType(ResourceType.NameValue)
+				.OfType(ResourceType.NamedValue)
 				.CreateResources();
 		}
 	}

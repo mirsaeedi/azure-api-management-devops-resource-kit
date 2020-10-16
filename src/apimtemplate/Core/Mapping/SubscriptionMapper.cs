@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class SubscriptionMapper : IMapper
+	public class SubscriptionMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{

@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class ApiVersionSetMapper : IMapper
+	public class ApiVersionSetMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{

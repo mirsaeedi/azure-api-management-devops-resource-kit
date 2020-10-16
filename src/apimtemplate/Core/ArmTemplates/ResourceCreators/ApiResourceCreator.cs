@@ -30,7 +30,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 				return Array.Empty<ArmTemplateResource>();
 			}
 
-			Console.WriteLine("Creating api subsequent template");
+			Console.WriteLine("Creating api resources");
 			Console.WriteLine("------------------------------------------");
 
 			var resources = new List<ArmTemplateResource>();
@@ -149,7 +149,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.OfType(ResourceType.ApiPolicy)
 							.WhichDependsOnResourceOfType(ResourceType.Api)
 							.WhichDependsOnResourceWithName(d => d.Name)
-							.CreateResourcesIf(d => d.HasPolicy());
+							.CreateResourcesIf(d => d.HasPolicy(), true);
 		}
 
 		private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)

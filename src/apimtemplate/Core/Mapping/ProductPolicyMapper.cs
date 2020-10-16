@@ -6,7 +6,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class ProductPolicyMapper : IMapper
+	public class ProductPolicyMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{

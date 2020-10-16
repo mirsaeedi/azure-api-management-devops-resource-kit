@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class LoggerMapper : IMapper
+	public class LoggerMapper: IMapper
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{
