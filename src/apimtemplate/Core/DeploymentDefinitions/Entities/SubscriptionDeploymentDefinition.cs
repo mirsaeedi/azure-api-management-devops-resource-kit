@@ -112,10 +112,10 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		private string DependentUser()
 		{
-            if (string.IsNullOrWhiteSpace(OwnerId))
-            {
-                return null;
-            }
+			if (string.IsNullOrWhiteSpace(OwnerId))
+			{
+				return null;
+			}
 
 			var regex = new Regex(_userRegexPattern, RegexOptions.IgnoreCase);
 			var match = regex.Match(OwnerId);
