@@ -7,6 +7,8 @@
 5. The flags `-v` or `--printVariables` are added to print the variables before generating the output. This helps in debugging the tool.
 6. The tool now runs on either .NET Core 2.1 or 3.1.
 7. The tool has undergone major changes which were highly required to speed up the development of the project.
+8. Uses API version `2019-12-01`
+9. The tool supports [NamedValue](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties).
 
 ## The Problem
 
