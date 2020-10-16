@@ -139,8 +139,6 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		/// </summary>
 		public IEnumerable<string> TagList => Tags.GetItems(new string[0]);
 
-		public DeploymentDefinition Root { get; set; }
-
 		public string GetProductName(string productDisplayName)
 		{
 			return Root.Products.FirstOrDefault(q => q.DisplayName == productDisplayName || q.Name == productDisplayName)?.Name ?? productDisplayName;

@@ -9,6 +9,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 	public class DeploymentDefinition : EntityDeploymentDefinition
 	{
 		public string Version { get; set; }
+
 		public string ApimServiceName { get; set; }
 
 		/// <summary>
