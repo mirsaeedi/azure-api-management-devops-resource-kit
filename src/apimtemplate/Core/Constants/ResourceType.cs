@@ -49,6 +49,6 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure.Constants
 
 		public const string TagProduct = "Microsoft.ApiManagement/service/products/tags";
 
-		public const string NameValue = "Microsoft.ApiManagement/service/namedValues";
+		public const string NamedValue = "Microsoft.ApiManagement/service/namedValues";
 	}
 }

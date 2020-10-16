@@ -4,9 +4,9 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public static class UserMapper
+	public class UserMapper: IMapper
 	{
-		internal static void Map(IMapperConfigurationExpression cfg)
+		public void Map(IMapperConfigurationExpression cfg)
 		{
 			cfg.CreateMap<UserDeploymentDefinition, UserProperties>();
 		}

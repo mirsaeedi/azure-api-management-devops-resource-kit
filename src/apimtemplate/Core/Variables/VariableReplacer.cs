@@ -51,6 +51,12 @@ namespace Apim.DevOps.Toolkit.Core.Variables
 			if (string.IsNullOrEmpty(variables))
 				return new VariableCollection();
 
+			if(variables[0] == '{' && variables[variables.Length - 1] == '}')
+			{
+				// Use System.Range when drop support for .NET Core 2.1.
+				variables = variables.Substring(1, variables.Length - 2);
+			}
+
 			return new VariableCollection(variables.Split(";").Select(Variable.FromString));
 		}
 

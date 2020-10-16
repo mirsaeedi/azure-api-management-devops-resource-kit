@@ -4,9 +4,9 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public static class TagMapper
+	public class TagMapper: IMapper
 	{
-		internal static void Map(IMapperConfigurationExpression cfg)
+		public void Map(IMapperConfigurationExpression cfg)
 		{
 			cfg.CreateMap<TagDeploymentDefinition, TagProperties>();
 		}

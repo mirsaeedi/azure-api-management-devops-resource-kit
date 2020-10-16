@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System;
 using Apim.DevOps.Toolkit.CommandLine.Commands;
 using Apim.DevOps.Toolkit.Core.Mapping;
-using AutoMapper;
 
 namespace Apim.DevOps.Toolkit
 {
@@ -37,7 +36,7 @@ namespace Apim.DevOps.Toolkit
 			return Task.CompletedTask;
 		}
 
-		private static Task ProcessCommand(CommandLineOption option, IMapper mapper)
+		private static Task ProcessCommand(CommandLineOption option, AutoMapper.IMapper mapper)
 		{
 			try
 			{
