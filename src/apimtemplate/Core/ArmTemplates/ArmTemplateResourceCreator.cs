@@ -97,7 +97,10 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 						newResource.AddDependencies(new[] { previousResource });
 					}
 
-					previousResource = newResource;
+					if (sequential)
+					{
+						previousResource = newResource;
+					}
 				}
 
 				resources.AddRange(newResources);

@@ -26,7 +26,7 @@ namespace Apim.DevOps.Toolkit.CommandLine.Commands
 
 			var deploymentDefinition = await GetDeploymentDefinitionAsync(option);
 
-			var resources = new ArmTemplateCreator(deploymentDefinition, mapper).CreateAsync();
+			var resources = new ArmTemplateCreator(deploymentDefinition, mapper).Create();
 
 			await GenerateArmTemplateFile(resources, deploymentDefinition);
 		}

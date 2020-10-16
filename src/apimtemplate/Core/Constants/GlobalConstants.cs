@@ -7,6 +7,6 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure.Constants
 
 		public const string TemplateContentVesion = "1.0.0.0";
 
-		public const string ApiVersion = "2019-01-01";
+		public const string ApiVersion = "2019-12-01";
 	}
 }

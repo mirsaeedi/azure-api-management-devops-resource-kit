@@ -24,6 +24,7 @@ namespace Apim.DevOps.Toolkit.Core.Mapping
 				SubscriptionMapper.Map(cfg);
 				TagMapper.Map(cfg);
 				UserMapper.Map(cfg);
+				NamedValueMapper.Map(cfg);
 			});
 
 			return config.CreateMapper();
