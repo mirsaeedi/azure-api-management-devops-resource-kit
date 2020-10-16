@@ -39,8 +39,6 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		internal bool IsDependentOnPolicy() => Policy != null;
 
-		public DeploymentDefinition Root { get; set; }
-
 		public string GetTagName(string tag)
 		{
 			return Root.Tags.FirstOrDefault(tagDeploymentDefinition => tagDeploymentDefinition.DisplayName == tag || tagDeploymentDefinition.Name == tag)?.Name ?? tag;

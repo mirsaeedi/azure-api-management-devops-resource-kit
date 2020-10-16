@@ -32,7 +32,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 				.WithName(d => d.Name)
 				.OfType(ResourceType.Subscription)
 				.CheckDependencies()
-				.CreateResources();
+				.CreateResources(true);
 		}
 	}
 }
