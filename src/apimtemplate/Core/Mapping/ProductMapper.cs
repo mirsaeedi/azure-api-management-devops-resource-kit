@@ -4,9 +4,9 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public static class ProductMapper
+	public class ProductMapper : IMapper
 	{
-		internal static void Map(IMapperConfigurationExpression cfg)
+		public void Map(IMapperConfigurationExpression cfg)
 		{
 			cfg.CreateMap<ProductDeploymentDefinition, ProductsProperties>()
 				.ForMember(dst => dst.ApprovalRequired, opt => opt.MapFrom(src => src.SubscriptionRequired ? src.ApprovalRequired : null))

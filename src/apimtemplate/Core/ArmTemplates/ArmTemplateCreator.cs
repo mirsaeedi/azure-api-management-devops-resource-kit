@@ -11,6 +11,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 {
@@ -25,31 +26,14 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			_mapper = mapper;
 		}
 
-		public List<ArmTemplateResource> CreateAsync()
+		public List<ArmTemplateResource> Create()
 		{
 			var resources = new List<ArmTemplateResource>();
 
-			resources.AddRange(new GlobalPolicyResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new ApiVersionSetResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new CertificateResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new UserResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new SubscriptionResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new ProductResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new TagResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new LoggerResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new BackendResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new AuthorizationServerResourceCreator(_mapper).Create(_deploymentDefinition));
-
-			resources.AddRange(new ApiResourceCreator(_mapper).Create(_deploymentDefinition));
+			foreach (var resourceCreator in DiscoverResourceCreators(_mapper))
+			{
+				resources.AddRange(resourceCreator.Create(_deploymentDefinition));
+			}
 
 			OrderResources(resources);
 
@@ -93,6 +77,16 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private IEnumerable<ArmTemplateResource> GetResources<TResourceProperties>(List<ArmTemplateResource> resources)
 		{
 			return resources.Where(resources => resources is ArmTemplateResource<TResourceProperties>);
+		}
+
+		private IEnumerable<IResourceCreator> DiscoverResourceCreators(IMapper mapper)
+		{
+			return Assembly
+				.GetExecutingAssembly()
+				.GetTypes()
+				.Where(x => typeof(IResourceCreator).IsAssignableFrom(x) && !x.IsInterface)
+				.Select(x => (IResourceCreator)Activator.CreateInstance(x, new[] { mapper }));
+
 		}
 	}
 }

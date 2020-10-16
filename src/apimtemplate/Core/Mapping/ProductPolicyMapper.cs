@@ -6,9 +6,9 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public static class ProductPolicyMapper
+	public class ProductPolicyMapper : IMapper
 	{
-		internal static void Map(IMapperConfigurationExpression cfg)
+		public void Map(IMapperConfigurationExpression cfg)
 		{
 			cfg.CreateMap<ProductDeploymentDefinition, ProductPolicyProperties>()
 				.ConvertUsing((product, _) =>

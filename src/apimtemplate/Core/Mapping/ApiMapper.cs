@@ -7,9 +7,9 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public static class ApiMapper
+	public class ApiMapper : IMapper
 	{
-		internal static void Map(IMapperConfigurationExpression cfg)
+		public void Map(IMapperConfigurationExpression cfg)
 		{
 			cfg.CreateMap<ApiDeploymentDefinition, ApiProperties>()
 				.ForMember(dst => dst.Path, opt => opt.MapFrom(src => src.Path.Replace("//", "/").TrimStart(new[] { '/' })))
