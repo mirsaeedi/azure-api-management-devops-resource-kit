@@ -2,6 +2,7 @@
 using Apim.DevOps.Toolkit.ApimEntities.AuthotizationServer;
 using Apim.DevOps.Toolkit.ApimEntities.Backend;
 using Apim.DevOps.Toolkit.ApimEntities.Logger;
+using Apim.DevOps.Toolkit.ApimEntities.NamedValues;
 using Apim.DevOps.Toolkit.ApimEntities.Policy;
 using Apim.DevOps.Toolkit.ApimEntities.Product;
 using Apim.DevOps.Toolkit.ArmTemplates;
@@ -25,7 +26,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 			_mapper = mapper;
 		}
 
-		public List<ArmTemplateResource> CreateAsync()
+		public List<ArmTemplateResource> Create()
 		{
 			var resources = new List<ArmTemplateResource>();
 
@@ -51,6 +52,8 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			resources.AddRange(new ApiResourceCreator(_mapper).Create(_deploymentDefinition));
 
+			resources.AddRange(new NamedValueResourceCreator(_mapper).Create(_deploymentDefinition));
+
 			OrderResources(resources);
 
 			return resources;
@@ -60,13 +63,16 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		{
 			AddDependency<BackendProperties, CertificateProperties>(resources);
 			AddDependency<PolicyProperties, CertificateProperties>(resources);
+			AddDependency<PolicyProperties, NamedValueProperties>(resources);
 
 			AddDependency<ApiProperties, LoggerProperties>(resources);
 			AddDependency<ApiProperties, BackendProperties>(resources);
 			AddDependency<ApiProperties, AuthorizationServerProperties>(resources);
 			AddDependency<ApiProperties, CertificateProperties>(resources);
+			AddDependency<ApiProperties, NamedValueProperties>(resources);
 
 			AddDependency<ProductsProperties, CertificateProperties>(resources);
+			AddDependency<ProductsProperties, NamedValueProperties>(resources);
 		}
 
 		private void AddDependency<TDependentResource, TDependencyResource>(List<ArmTemplateResource> resources)

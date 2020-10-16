@@ -1,0 +1,13 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+
+namedValues:
+  - name: "namedvalue1"
+    displayName: "namevalue1DisplayName"
+    secret: false
+    value: "test"
+  - name: "namedvalue2"
+    displayName: "namevalue2DisplayName"
+    secret: true
+    value: "pass"

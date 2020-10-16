@@ -36,6 +36,8 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 
 		public ICollection<BackendDeploymentDefinition> Backends { get; set; } = new List<BackendDeploymentDefinition>();
 
+		public ICollection<NamedValueDeploymentDefinition> NamedValues { get; set; } = new List<NamedValueDeploymentDefinition>();
+
 		internal DeploymentDefinition MergeWith(DeploymentDefinition individualDefinition)
 		{
 			var mergedDefinition = new DeploymentDefinition
@@ -55,6 +57,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions
 			mergedDefinition.Loggers.AddRange(this.Loggers).AddRange(individualDefinition.Loggers);
 			mergedDefinition.AuthorizationServers.AddRange(this.AuthorizationServers).AddRange(individualDefinition.AuthorizationServers);
 			mergedDefinition.Backends.AddRange(this.Backends).AddRange(individualDefinition.Backends);
+			mergedDefinition.NamedValues.AddRange(this.NamedValues).AddRange(individualDefinition.NamedValues);
 
 			return mergedDefinition;
 		}
