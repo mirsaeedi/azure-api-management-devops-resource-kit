@@ -36,8 +36,6 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 				resources.AddRange(resourceCreator.Create(_deploymentDefinition));
 			}
 
-			resources.AddRange(new NamedValueResourceCreator(_mapper).Create(_deploymentDefinition));
-
 			OrderResources(resources);
 
 			return resources;
