@@ -159,7 +159,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.WithName(d => d.Name)
 							.OfType(ResourceType.Api)
 							.CheckDependencies()
-							.CreateResources();
+							.CreateResources(true);
 		}
 	}
 }
