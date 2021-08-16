@@ -55,6 +55,13 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 
 		public async Task<string> GetValue(string apiTitle)
 		{
+			var isUrl = _openApiFilePath.IsUri(out _);
+
+			if (isUrl)
+            {
+				return _openApiFilePath;
+            }
+
 			var swaggerJson = await GetContent();
 
 			var swagger = JsonConvert.DeserializeObject<dynamic>(swaggerJson);

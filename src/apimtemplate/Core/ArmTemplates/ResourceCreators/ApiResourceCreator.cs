@@ -9,6 +9,7 @@ using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
 using AutoMapper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			var resources = new List<ArmTemplateResource>();
 
 			resources.AddRange(CreateApis(deploymentDefinition));
+			resources.AddRange(CreateUpdateDisplayName(deploymentDefinition));
 			resources.AddRange(CreateApiPolicies(deploymentDefinition));
 			resources.AddRange(CreateOperationPolicies(deploymentDefinition));
 			resources.AddRange(CreateProductApis(deploymentDefinition));
@@ -161,5 +163,49 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.CheckDependencies()
 							.CreateResources(true);
 		}
+
+		private IEnumerable<ArmTemplateResource<ApiUpdateDisplayNameProperties>> CreateUpdateDisplayName(DeploymentDefinition deploymentDefinition)
+		{
+			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiUpdateDisplayNameProperties>(_mapper)
+							.ForDeploymentDefinitions(deploymentDefinition.Apis)
+							.UseResourceCreator(apiDeploymentDefinition =>
+							{
+								var templateResources = new List<ArmTemplateResource<ApiUpdateDisplayNameProperties>>();
+								var templateResource = new ArmTemplateResource<ApiUpdateDisplayNameProperties>(
+									$"{apiDeploymentDefinition.Name}-updateDisplayName",
+									$"{apiDeploymentDefinition.Name}-updateDisplayName",
+									ResourceType.Deployment,
+									new ApiUpdateDisplayNameProperties
+									{
+										Template = CreateUpdateDisplayNameNestedTemplate(apiDeploymentDefinition)
+									},
+									new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
+
+								templateResource.ApiVersion = GlobalConstants.DeploymentApiVersion;
+								templateResources.Add(templateResource);
+
+								return templateResources;
+							})
+							.CreateResources(true);
+		}
+
+		private ArmTemplate CreateUpdateDisplayNameNestedTemplate(ApiDeploymentDefinition apiDeploymentDefinition)
+        {
+			var nestedTemplate = new ArmTemplate();
+			var updateApiResource = new ArmTemplateResource<ApiProperties>(
+					$"{apiDeploymentDefinition.Name}/api",
+					$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}')]",
+					ResourceType.Api,
+					new ApiProperties
+                    {
+						Path = $"[reference(resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')).path]",
+						DisplayName = apiDeploymentDefinition.DisplayName,
+						Description = $"[reference(resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')).description]",
+						ServiceUrl = $"[reference(resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')).serviceUrl]",
+						Protocols = apiDeploymentDefinition.Protocols.GetItems(new[] { "https" })
+                    }, Array.Empty<string>());
+			nestedTemplate.AddResource(updateApiResource);
+			return nestedTemplate;
+        }
 	}
 }
