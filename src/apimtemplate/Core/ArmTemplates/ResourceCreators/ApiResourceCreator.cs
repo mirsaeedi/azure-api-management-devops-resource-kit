@@ -87,8 +87,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 									var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
 									var dependencies = new List<string>()
 									{
-								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
-								$"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]"
+								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
 									};
 
 									var templateResource = new ArmTemplateResource<ProductApiProperties>(
