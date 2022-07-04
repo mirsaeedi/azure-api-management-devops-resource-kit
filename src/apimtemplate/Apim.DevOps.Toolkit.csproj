@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	<OutputType>Exe</OutputType>
-	<TargetFrameworks>netcoreapp3.1;netcoreapp2.1</TargetFrameworks>
+	<TargetFrameworks>netcoreapp3.1;netcoreapp2.1;net5;net6</TargetFrameworks>
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>dotnet-apim</ToolCommandName>
 	<ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
