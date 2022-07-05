@@ -53,13 +53,9 @@ namespace Apim.DevOps.Toolkit.Core.Infrastructure
 			throw new Exception("Unsupported OpenApi format. The OpenApi document should be provided in json format. Version 2 and 3 of OpenApi are supported");
 		}
 
-		public async Task<string> GetValue(string apiTitle)
+		public async Task<string> GetValue()
 		{
-			var swaggerJson = await GetContent();
-
-			var swagger = JsonConvert.DeserializeObject<dynamic>(swaggerJson);
-			swagger.info.title = apiTitle;
-			return JsonConvert.SerializeObject(swagger);
+			return _openApiFilePath.IsUri(out _) ? _openApiFilePath : await GetContent();
 		}
 
 		private async Task<string> GetContent()
