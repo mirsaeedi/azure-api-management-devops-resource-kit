@@ -39,12 +39,12 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			resources.AddRange(CreateApiPolicies(deploymentDefinition));
 			resources.AddRange(CreateOperationPolicies(deploymentDefinition));
 			resources.AddRange(CreateProductApis(deploymentDefinition));
-			resources.AddRange(CreateProductTags(deploymentDefinition));
+			resources.AddRange(CreateTagApis(deploymentDefinition));
 
 			return resources;
 		}
 
-		private IEnumerable<ArmTemplateResource<TagApiTemplateProperties>> CreateProductTags(DeploymentDefinition deploymentDefinition)
+		private IEnumerable<ArmTemplateResource<TagApiTemplateProperties>> CreateTagApis(DeploymentDefinition deploymentDefinition)
 		{
 			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, TagApiTemplateProperties>(_mapper)
 							.ForDeploymentDefinitions(deploymentDefinition.Apis)
@@ -56,16 +56,22 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 								{
 									var tagName = apiDeploymentDefinition.GetTagName(tagDisplayName);
 
+									var dependencies = new List<string>()
+									{
+								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+									};
+
+									if (apiDeploymentDefinition.Root.Tags.Any(tag => tag.Name == tagName))
+									{
+										dependencies.Add($"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]");
+									}
+
 									var templateResource = new ArmTemplateResource<TagApiTemplateProperties>(
 										$"{apiDeploymentDefinition.Name}/{tagName}",
 										$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{tagName}')]",
 										ResourceType.TagApi,
 										new TagApiTemplateProperties(),
-										new string[]
-										{
-								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]",
-								$"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]"
-										});
+										dependencies);
 
 									templateResources.Add(templateResource);
 								}
@@ -89,6 +95,11 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 									{
 								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
 									};
+
+									if (apiDeploymentDefinition.Root.Products.Any(product => product.Name == productName))
+									{
+										dependencies.Add($"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]");
+									}
 
 									var templateResource = new ArmTemplateResource<ProductApiProperties>(
 										$"{productName}/{apiDeploymentDefinition.Name}",

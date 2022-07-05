@@ -160,14 +160,18 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 			if (IsDependentOnProducts())
 			{
-				var dependentProducts = ProductList.Select(product => $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{GetProductName(product)}')]");
+				var dependentProducts = ProductList
+					.Where(product => Root.Products.Any(p => GetProductName(product) == p.Name))
+					.Select(product => $"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{GetProductName(product)}')]");
 
 				dependencies.AddRange(dependentProducts);
 			}
 
 			if (IsDependentOnTags())
 			{
-				var dependentTags = TagList.Select(tag => $"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{GetTagName(tag)}')]");
+				var dependentTags = TagList
+					.Where(tag => Root.Tags.Any(t => GetTagName(tag) == t.Name))
+					.Select(tag => $"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{GetTagName(tag)}')]");
 
 				dependencies.AddRange(dependentTags);
 			}
