@@ -57,7 +57,6 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 
 			AddDependency<ProductsProperties, CertificateProperties>(resources);
 			AddDependency<ProductsProperties, NamedValueProperties>(resources);
-			AddDependency<ProductsProperties, BackendProperties>(resources);
 		}
 
 		private void AddDependency<TDependentResource, TDependencyResource>(List<ArmTemplateResource> resources)
