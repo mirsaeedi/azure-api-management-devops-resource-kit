@@ -44,6 +44,8 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		private void OrderResources(List<ArmTemplateResource> resources)
 		{
 			AddDependency<BackendProperties, CertificateProperties>(resources);
+			AddDependency<BackendProperties, NamedValueProperties>(resources);
+
 			AddDependency<PolicyProperties, CertificateProperties>(resources);
 			AddDependency<PolicyProperties, NamedValueProperties>(resources);
 
