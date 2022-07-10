@@ -40,3 +40,4 @@ msbuild.wrn
 /src/Examples/EBH
 /src/Examples/Replacement/ebh-staging.yml
 /src/Examples/Replacement/ebh-prod.yml
+/src/Examples/Definitions/output
