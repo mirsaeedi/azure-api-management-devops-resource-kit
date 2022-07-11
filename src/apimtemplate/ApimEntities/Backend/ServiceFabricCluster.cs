@@ -2,7 +2,8 @@
 {
 	public class ServiceFabricCluster
 	{
-		public string ClientCertificatethumbprint { get; set; }
+        public string ClientCertificateId { get; set; }
+        public string ClientCertificatethumbprint { get; set; }
 		public int MaxPartitionResolutionRetries { get; set; }
 		public string[] ManagementEndpoints { get; set; }
 		public string[] ServerCertificateThumbprints { get; set; }
