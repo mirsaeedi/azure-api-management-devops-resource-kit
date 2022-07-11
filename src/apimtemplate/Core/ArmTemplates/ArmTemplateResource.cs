@@ -40,7 +40,10 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates
 		{
 			foreach (var dependency in dependencies)
 			{
-				_dependencies.Add(dependency);
+				if (!dependencies.Contains(dependency))
+				{
+					_dependencies.Add(dependency);
+				}
 			}
 		}
 	}
