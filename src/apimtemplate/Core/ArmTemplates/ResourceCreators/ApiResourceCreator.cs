@@ -58,7 +58,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 
 									var dependencies = new List<string>()
 									{
-								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+										$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
 									};
 
 									if (apiDeploymentDefinition.Root.Tags.Any(tag => tag.Name == tagName))
@@ -93,7 +93,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 									var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
 									var dependencies = new List<string>()
 									{
-								$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+										$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
 									};
 
 									if (apiDeploymentDefinition.Root.Products.Any(product => product.Name == productName))
@@ -166,10 +166,21 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 		{
 			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiProperties>(_mapper)
 							.ForDeploymentDefinitions(deploymentDefinition.Apis)
-							.WithName(d => d.Name)
+							.WithName(d => GetApiName(d))
 							.OfType(ResourceType.Api)
 							.CheckDependencies()
 							.CreateResources(true);
+
+			static string GetApiName(ApiDeploymentDefinition apiDeploymentDefinition)
+			{
+				if (int.TryParse(apiDeploymentDefinition.ApiRevision, out var revisionNumber) && revisionNumber >= 1 && apiDeploymentDefinition.IsCurrent == false)
+				{
+					string currentAPIName = apiDeploymentDefinition.Name;
+					return apiDeploymentDefinition.Name += $";rev={revisionNumber}";
+				}
+
+				return apiDeploymentDefinition.Name;
+			}
 		}
 	}
 }

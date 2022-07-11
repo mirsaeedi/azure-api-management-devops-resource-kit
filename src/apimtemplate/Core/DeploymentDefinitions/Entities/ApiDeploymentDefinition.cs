@@ -41,6 +41,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		public string Type { get; set; }
 
+		/// <summary>
+		/// Describes the revision of the API. If no value is provided, default revision 1 is created.
+		/// </summary>
 		public string ApiRevision { get; set; }
 
 		public string ApiVersion { get; set; }
