@@ -13,6 +13,8 @@ apis:
     subscriptionRequired: true
     isCurrent: true
 
+# NamedValues can be defined here or manually via UI. Once defined, you can refer to them via {{namedvalue_name}}. Please look at `ApiPolicyWithNamedValue` for a sample.
+
 namedValues:
   - name: "namedvalue3"
     displayName: "namevalue3DisplayName"

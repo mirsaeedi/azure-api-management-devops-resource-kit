@@ -1,0 +1,45 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+policy: $(apimBasePath)\Policies\GlobalPolicy.xml
+
+apis:
+  - name: ApiG1
+    isCurrent: true
+    apiRevision: 3
+    displayName: API G v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    protocols: https
+    subscriptionRequired: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
+  - name: ApiG1
+    isCurrent: false
+    apiRevision: 2
+    displayName: API G v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    protocols: https
+    subscriptionRequired: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
+  - name: ApiG1
+    isCurrent: false
+    apiRevision: 1
+    displayName: API G v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    protocols: https
+    subscriptionRequired: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey

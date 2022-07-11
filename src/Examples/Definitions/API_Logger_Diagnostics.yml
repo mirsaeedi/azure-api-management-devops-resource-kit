@@ -1,13 +1,16 @@
 version: 0.0.1 # Required
 apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
 
+# Specify global policy (Optional)
+policy: $(apimBasePath)\Policies\GlobalPolicy.xml
+
 apis:
-  - name: ApiA1
-    displayName: API A v1
+  - name: ApiE1
+    displayName: API E v1
     serviceUrl: $(ApiServiceURL)
     openApiSpec: $(apimBasePath)\OpenApi.json
     policy: $(apimBasePath)\Policies\ApiPolicy.xml
-    path: $(prefix)/a/api
+    path: $(prefix)/e/api
     protocols: https
     subscriptionRequired: true
     isCurrent: true
@@ -16,7 +19,7 @@ apis:
       query: ProviderKey
     diagnostics:
       alwaysLog: allErrors
-      loggerId: myAppInsights
+      loggerId: myAppInsights2 # The id of the logger.
       sampling:
         samplingType: fixed
         percentage: 50
@@ -40,14 +43,11 @@ apis:
             bytes: 512
       enableHttpCorrelationHeaders: true
 
-
-
-
 loggers:
-    - name: myAppInsights
-      resourceId: $(appInsightName)
+    - name: myAppInsights2
+      resourceId: $(appInsightName) #The name of the Azure Application Insights resource.
       loggerType: applicationInsights
       description: a test app insights
       credentials:
-        instrumentationKey: $(instrumentationKey)
+        instrumentationKey: $(instrumentationKey) #The instrumentation key of the Azure Application Insights resource.
       isBuffered: true
