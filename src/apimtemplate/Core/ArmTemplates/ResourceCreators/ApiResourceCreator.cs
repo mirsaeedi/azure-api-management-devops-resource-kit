@@ -1,4 +1,5 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Api;
+using Apim.DevOps.Toolkit.ApimEntities.Api.Diagnostics;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Operation.Policy;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Policy;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Product;
@@ -40,6 +41,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			resources.AddRange(CreateOperationPolicies(deploymentDefinition));
 			resources.AddRange(CreateProductApis(deploymentDefinition));
 			resources.AddRange(CreateTagApis(deploymentDefinition));
+			resources.AddRange(CreateApiDiagnostics(deploymentDefinition));
 
 			return resources;
 		}
@@ -160,6 +162,18 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.WhichDependsOnResourceOfType(ResourceType.Api)
 							.WhichDependsOnResourceWithName(d => d.Name)
 							.CreateResourcesIf(d => d.HasPolicy(), true);
+		}
+
+		private IEnumerable<ArmTemplateResource<ApiDiagnosticsProperties>> CreateApiDiagnostics(DeploymentDefinition deploymentDefinition)
+		{
+			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiDiagnosticsProperties>(_mapper)
+							.ForDeploymentDefinitions(deploymentDefinition.Apis)
+							.WithName(d => $"{d.Name}/{d.AssociatedLogger.LoggerType}")
+							.OfType(ResourceType.ApiDiagnostic)
+							.WhichDependsOnResourceOfType(ResourceType.Api)
+							.WhichDependsOnResourceWithName(d => d.Name)
+							.CheckDependencies()
+							.CreateResourcesIf(d => d.HasDiagnostics());
 		}
 
 		private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)

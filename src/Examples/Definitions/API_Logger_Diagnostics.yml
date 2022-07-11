@@ -1,0 +1,53 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+apis:
+  - name: ApiA1
+    displayName: API A v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/a/api
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
+    diagnostics:
+      alwaysLog: allErrors
+      loggerId: myAppInsights
+      sampling:
+        samplingType: fixed
+        percentage: 50
+      frontend: 
+        request:
+          headers:
+          body: 
+            bytes: 512
+        response: 
+          headers:
+          body: 
+            bytes: 512
+      backend: 
+        request:
+          headers:
+          body: 
+            bytes: 512
+        response: 
+          headers:
+          body: 
+            bytes: 512
+      enableHttpCorrelationHeaders: true
+
+
+
+
+loggers:
+    - name: myAppInsights
+      resourceId: $(appInsightName)
+      loggerType: applicationInsights
+      description: a test app insights
+      credentials:
+        instrumentationKey: $(instrumentationKey)
+      isBuffered: true

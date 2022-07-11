@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Apim.DevOps.Toolkit.ApimEntities.Api;
+using Apim.DevOps.Toolkit.ApimEntities.Api.Diagnostics;
 using Apim.DevOps.Toolkit.Core.Infrastructure;
 using Apim.DevOps.Toolkit.Core.Infrastructure.Constants;
 using Apim.DevOps.Toolkit.Extensions;
@@ -38,6 +39,10 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		public ApiTemplateAuthenticationSettings AuthenticationSettings { get; set; }
 
 		public ApiTemplateSubscriptionKeyParameterNames SubscriptionKeyParameterNames { get; set; }
+
+		public ApiDiagnosticsProperties Diagnostics { get; set; }
+
+		public LoggerDeploymentDefinition AssociatedLogger => Root.Loggers?.SingleOrDefault(logger => logger.Name == Diagnostics?.LoggerId);
 
 		public string Type { get; set; }
 
@@ -103,6 +108,8 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		public bool IsDependentOnTags() => Tags != null;
 
+		public bool IsDependentOnLogger() => Diagnostics != null;
+
 		public bool IsDependentOnApiVersionSet() => ApiVersionSetId != null;
 
 		public bool IsDependentOnAuthorizationServers() => AuthenticationSettings != null &&
@@ -156,6 +163,10 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		{
 			return Policy != null;
 		}
+		public bool HasDiagnostics()
+		{
+			return Diagnostics != null;
+		}
 
 		public override IEnumerable<string> Dependencies()
 		{
@@ -177,6 +188,14 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 					.Select(tag => $"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{GetTagName(tag)}')]");
 
 				dependencies.AddRange(dependentTags);
+			}
+
+			if (IsDependentOnLogger())
+			{
+				var dependentLogger = Root.Loggers.Where(logger => Diagnostics.LoggerId == logger.Name)
+					.Select(logger => $"[resourceId('{ResourceType.Logger}', parameters('ApimServiceName'), '{logger.Name}')]");
+
+				dependencies.AddRange(dependentLogger);
 			}
 
 
