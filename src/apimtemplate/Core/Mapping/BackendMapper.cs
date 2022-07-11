@@ -9,12 +9,11 @@ namespace Apim.DevOps.Toolkit.Core.Mapping
 	{
 		public void Map(IMapperConfigurationExpression cfg)
 		{
-			cfg.CreateMap<BackendDeploymentDefinition, BackendProperties>()
-				.ForMember(dst => dst.Properties, opt => opt.MapFrom(src => src.Properties))
-				.ForPath(dst => dst.Properties.ServiceFabricCluster.ClientCertificateId, 
-						opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Properties.ServiceFabricCluster.ClientCertificateId) 
-						? null 
-						: $"[resourceId('{ResourceType.Certificate}', parameters('ApimServiceName'), '{src.Properties.ServiceFabricCluster.ClientCertificateId}')]"));
+			cfg.CreateMap<BackendDeploymentDefinition, BackendProperties>();
+			cfg.CreateMap<ServiceFabricCluster, ServiceFabricCluster>()
+				.ForMember(dst => dst.ClientCertificateId, opt => opt.MapFrom(src => $"[resourceId('{ResourceType.Certificate}', parameters('ApimServiceName'), '{src.ClientCertificateId}')]"));
+			cfg.CreateMap<Properties, Properties>()
+				.ForMember(dst => dst.ServiceFabricCluster, opt => opt.MapFrom(src => src.ServiceFabricCluster));
 		}
 	}
 }
