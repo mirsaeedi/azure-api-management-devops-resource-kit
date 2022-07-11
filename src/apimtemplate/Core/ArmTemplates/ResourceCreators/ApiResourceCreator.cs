@@ -187,7 +187,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 
 			static string GetApiName(ApiDeploymentDefinition apiDeploymentDefinition)
 			{
-				if (int.TryParse(apiDeploymentDefinition.ApiRevision, out var revisionNumber) && revisionNumber >= 1 && apiDeploymentDefinition.IsCurrent == false)
+				if (int.TryParse(apiDeploymentDefinition.ApiRevision, out var revisionNumber) && revisionNumber >= 1 && !(apiDeploymentDefinition.IsCurrent ?? false))
 				{
 					string currentAPIName = apiDeploymentDefinition.Name;
 					return apiDeploymentDefinition.Name += $";rev={revisionNumber}";
