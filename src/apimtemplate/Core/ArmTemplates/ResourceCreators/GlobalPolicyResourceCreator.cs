@@ -17,7 +17,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 		}
 		public IEnumerable<ArmTemplateResource> Create(DeploymentDefinition deploymentDefinition)
 		{
-			if (deploymentDefinition.Policy != null)
+			if (deploymentDefinition.Policy == null)
 			{
 				return Array.Empty<ArmTemplateResource>();
 			}
