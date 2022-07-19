@@ -9,5 +9,21 @@ backends:
     protocol: http
     credentials:
       header:
-        x-functions-key:
-          - "0812038102381223123"
+        headerVariable1:
+          - "{{namedvalue1}}" # Assumes that namedvalue1 is already defined in APIM. 
+        headerVariable2:
+          - "$(headerValue)" # Reads from variables that are passed to the tool.
+      authorization:
+        scheme: "https"
+        parameter: "username"
+      query:
+        queryVariable1:
+          - "{{namedvalue9}}" # the namedvalue9 value is defined in this file. 
+        queryVariable2:
+          - "{{namedvalue9}}"
+
+namedValues:
+  - name: "namedvalue9"
+    displayName: "namevalue9DisplayName"
+    secret: false
+    value: "test"

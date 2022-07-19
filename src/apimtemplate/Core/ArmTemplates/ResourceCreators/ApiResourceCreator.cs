@@ -168,7 +168,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 		{
 			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiDiagnosticsProperties>(_mapper)
 							.ForDeploymentDefinitions(deploymentDefinition.Apis)
-							.WithName(d => $"{d.Name}/{d.AssociatedLogger.LoggerType}")
+							.WithName(d => $"{d.Name}/{d.AssociatedLogger.LoggerType.ToLower()}")
 							.OfType(ResourceType.ApiDiagnostic)
 							.WhichDependsOnResourceOfType(ResourceType.Api)
 							.WhichDependsOnResourceWithName(d => d.Name)
@@ -187,7 +187,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 
 			static string GetApiName(ApiDeploymentDefinition apiDeploymentDefinition)
 			{
-				if (int.TryParse(apiDeploymentDefinition.ApiRevision, out var revisionNumber) && revisionNumber >= 1 && apiDeploymentDefinition.IsCurrent == false)
+				if (int.TryParse(apiDeploymentDefinition.ApiRevision, out var revisionNumber) && revisionNumber >= 1 && apiDeploymentDefinition.IsCurrent != true)
 				{
 					string currentAPIName = apiDeploymentDefinition.Name;
 					return apiDeploymentDefinition.Name += $";rev={revisionNumber}";
