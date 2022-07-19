@@ -5,18 +5,18 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-	public class BackendMapper: IMapper
-	{
-		public void Map(IMapperConfigurationExpression cfg)
-		{
-			cfg.CreateMap<BackendDeploymentDefinition, BackendProperties>();
-			cfg.CreateMap<Properties, Properties>()
-				.ForMember(dst => dst.ServiceFabricCluster, opt => opt.MapFrom(src => src.ServiceFabricCluster));
-			cfg.CreateMap<ServiceFabricCluster, ServiceFabricCluster>()
-				.ForMember(dst => dst.ClientCertificateId,
-					opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.ClientCertificateId)
-						? $"[resourceId('{ResourceType.Certificate}', parameters('ApimServiceName'), '{src.ClientCertificateId}')]"
-						: null));
-		}
-	}
+    public class BackendMapper : IMapper
+    {
+        public void Map(IMapperConfigurationExpression cfg)
+        {
+            cfg.CreateMap<BackendDeploymentDefinition, BackendProperties>()
+                .AfterMap((backendDeploymentDefinition, backendProperties) =>
+                {
+                    if (backendDeploymentDefinition?.Properties?.ServiceFabricCluster?.ClientCertificateId is not null)
+                    {
+                        backendProperties.Properties.ServiceFabricCluster.ClientCertificateId = $"[resourceId('{ResourceType.Certificate}', parameters('ApimServiceName'), '{backendDeploymentDefinition.Properties.ServiceFabricCluster.ClientCertificateId}')]";
+                    }
+                });
+        }
+    }
 }
