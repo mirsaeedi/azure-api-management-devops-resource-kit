@@ -7,6 +7,9 @@ backends:
     description: "Azure Function App for Testing"
     url: $(functionUrl)
     protocol: http
+    properties:
+      serviceFabricCluster:
+        clientCertificateId: 81723908712983
     credentials:
       header:
         headerVariable1:
