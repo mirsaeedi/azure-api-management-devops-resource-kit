@@ -7,7 +7,7 @@
 	<ToolCommandName>dotnet-apim</ToolCommandName>
 	<ProjectGuid>{B5183465-2BC1-4206-9C9F-5AC9615AC941}</ProjectGuid>
 	<PackageId>Apim.DevOps.Toolkit</PackageId>
-	<Version>2.0.3</Version>
+	<Version>2.0.4</Version>
 	<Authors>Ehsan Mirsaeedi</Authors>
 	<Company />
 	<Title>dotnet-apim</Title>
@@ -21,13 +21,10 @@
 	<RootNamespace>Apim.DevOps.Toolkit</RootNamespace>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<LangVersion>latest</LangVersion>
-	<PackageReleaseNotes>v2.0.3
-- Esnure NamedValues are created before Backends.
-- Tags and Products are not necessarily need to be defined in the same yml file. For example, one can define them manually via UI and only refer to their name in the yml.
-- Add support for global policy
-- Respect API revision
-- Support .NET5 and .NET6 
-- Support API Diagnostics</PackageReleaseNotes>
+	<PackageReleaseNotes>
+		v2.0.4
+		- Support Service Fabric client certificate id
+	</PackageReleaseNotes>
 	<PackageProjectUrl>https://github.com/mirsaeedi/dotnet-apim</PackageProjectUrl>
 	</PropertyGroup>
 
