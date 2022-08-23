@@ -32,7 +32,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		public string Tags { get; set; }
 
-		public string Protocols { get; set; }
+        public string Gateways { get; set; }
+
+        public string Protocols { get; set; }
 
 		public string Description { get; set; }
 
@@ -110,7 +112,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 
 		public bool IsDependentOnLogger() => Diagnostics != null;
 
-		public bool IsDependentOnApiVersionSet() => ApiVersionSetId != null;
+        public bool IsDependentOnGateways() => Gateways != null;
+
+        public bool IsDependentOnApiVersionSet() => ApiVersionSetId != null;
 
 		public bool IsDependentOnAuthorizationServers() => AuthenticationSettings != null &&
 			AuthenticationSettings.OAuth2 != null &&
@@ -149,7 +153,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		/// </summary>
 		public IEnumerable<string> TagList => Tags.GetItems(new string[0]);
 
-		public string GetProductName(string productDisplayName)
+        public IEnumerable<string> GatewayList => Gateways.GetItems(new string[0]);
+
+        public string GetProductName(string productDisplayName)
 		{
 			return Root.Products.FirstOrDefault(q => q.DisplayName == productDisplayName || q.Name == productDisplayName)?.Name ?? productDisplayName;
 		}
@@ -159,7 +165,7 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 			return Root.Tags.FirstOrDefault(q => q.DisplayName == tagDisplayName || q.Name == tagDisplayName)?.Name ?? tagDisplayName;
 		}
 
-		public bool HasPolicy()
+        public bool HasPolicy()
 		{
 			return Policy != null;
 		}
@@ -198,8 +204,17 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 				dependencies.AddRange(dependentLogger);
 			}
 
+            if (IsDependentOnGateways())
+            {
+                var dependentGateways = GatewayList
+                    .Where(gateway => Root.Gateways.Any(g => gateway == g.Name))
+                    .Select(gateway => $"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gateway}')]");
 
-			if (IsDependentOnApiVersionSet())
+                dependencies.AddRange(dependentGateways);
+            }
+
+
+            if (IsDependentOnApiVersionSet())
 			{
 				var dependentApiVersionSet = $"[resourceId('{ResourceType.ApiVersionSet}', parameters('ApimServiceName'), '{ApiVersionSetId}')]";
 
