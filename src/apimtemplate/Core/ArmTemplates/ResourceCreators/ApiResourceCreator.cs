@@ -187,24 +187,24 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 						var templateResources = new List<ArmTemplateResource<GatewayApiProperties>>();
 						foreach (string gatewayName in apiDeploymentDefinition.GatewayList)
 						{
-						var dependencies = new List<string>()
+							var dependencies = new List<string>()
 							{
 									$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
 							};
 
-						if (apiDeploymentDefinition.Root.Gateways.Any(gateway => gateway.Name == gatewayName))
-						{
-							dependencies.Add($"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gatewayName}')]");
-						}
+							if (apiDeploymentDefinition.Root.Gateways.Any(gateway => gateway.Name == gatewayName))
+							{
+								dependencies.Add($"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gatewayName}')]");
+							}
 
-						var templateResource = new ArmTemplateResource<GatewayApiProperties>(
+							var templateResource = new ArmTemplateResource<GatewayApiProperties>(
 								$"{gatewayName}/{apiDeploymentDefinition.Name}",
 								$"[concat(parameters('ApimServiceName'), '/{gatewayName}/{apiDeploymentDefinition.Name}')]",
 								ResourceType.GatewayApi,
 								new GatewayApiProperties(),
 								dependencies);
 
-						templateResources.Add(templateResource);
+							templateResources.Add(templateResource);
 						}
 
 						return templateResources;
