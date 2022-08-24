@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Apim.DevOps.Toolkit.ApimEntities.Api.Gateway
 {
-  public class GatewayApiProperties { }
+   public class GatewayApiProperties { }
 }

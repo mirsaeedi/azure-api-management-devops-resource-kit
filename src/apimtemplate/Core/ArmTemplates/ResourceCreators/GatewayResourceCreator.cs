@@ -9,30 +9,30 @@ using System.Linq;
 
 namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 {
-  public class GatewayResourceCreator : IResourceCreator
-  {
-    private IMapper _mapper;
+   public class GatewayResourceCreator : IResourceCreator
+   {
+      private IMapper _mapper;
 
-    public GatewayResourceCreator(IMapper mapper)
-    {
-      _mapper = mapper;
-    }
-
-    public IEnumerable<ArmTemplateResource> Create(DeploymentDefinition deploymentDefinition)
-    {
-      if (deploymentDefinition.Gateways.Count() == 0)
+      public GatewayResourceCreator(IMapper mapper)
       {
-        return Array.Empty<ArmTemplateResource>();
+         _mapper = mapper;
       }
 
-      Console.WriteLine("Creating gateways template");
-      Console.WriteLine("------------------------------------------");
+      public IEnumerable<ArmTemplateResource> Create(DeploymentDefinition deploymentDefinition)
+      {
+         if (deploymentDefinition.Gateways.Count() == 0)
+         {
+            return Array.Empty<ArmTemplateResource>();
+         }
 
-      return new ArmTemplateResourceCreator<GatewayDeploymentDefinition, GatewayProperties>(_mapper)
-          .ForDeploymentDefinitions(deploymentDefinition.Gateways)
-          .WithName(d => d.Name)
-          .OfType(ResourceType.Gateway)
-          .CreateResources();
-    }
-  }
+         Console.WriteLine("Creating gateways template");
+         Console.WriteLine("------------------------------------------");
+
+         return new ArmTemplateResourceCreator<GatewayDeploymentDefinition, GatewayProperties>(_mapper)
+             .ForDeploymentDefinitions(deploymentDefinition.Gateways)
+             .WithName(d => d.Name)
+             .OfType(ResourceType.Gateway)
+             .CreateResources();
+      }
+   }
 }
