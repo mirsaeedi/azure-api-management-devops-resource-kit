@@ -141,10 +141,10 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
                         $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{operationName}/policy')]",
                         ResourceType.ApiOperationPolicy,
                         new ApiOperationPolicyProperties()
-                          {
-                              Format = isUrl ? "rawxml-link" : "rawxml",
-                              Value = isUrl ? operationPolicy : fileReader.RetrieveFileContentsAsync(operationPolicy).Result
-                          },
+                            {
+                                Format = isUrl ? "rawxml-link" : "rawxml",
+                                Value = isUrl ? operationPolicy : fileReader.RetrieveFileContentsAsync(operationPolicy).Result
+                            },
                         new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
 
                             templateResources.Add(templateResource);
