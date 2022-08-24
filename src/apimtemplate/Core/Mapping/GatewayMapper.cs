@@ -4,11 +4,11 @@ using AutoMapper;
 
 namespace Apim.DevOps.Toolkit.Core.Mapping
 {
-    public class GatewayMapper : IMapper
+  public class GatewayMapper : IMapper
+  {
+    public void Map(IMapperConfigurationExpression cfg)
     {
-        public void Map(IMapperConfigurationExpression cfg)
-        {
-            cfg.CreateMap<GatewayDeploymentDefinition, GatewayProperties>();
-        }
+      cfg.CreateMap<GatewayDeploymentDefinition, GatewayProperties>();
     }
+  }
 }
