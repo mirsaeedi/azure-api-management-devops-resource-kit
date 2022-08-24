@@ -51,175 +51,175 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
         private IEnumerable<ArmTemplateResource<TagApiTemplateProperties>> CreateTagApis(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, TagApiTemplateProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .UseResourceCreator(apiDeploymentDefinition =>
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .UseResourceCreator(apiDeploymentDefinition =>
+                    {
+                        var templateResources = new List<ArmTemplateResource<TagApiTemplateProperties>>();
+
+                        foreach (string tagDisplayName in apiDeploymentDefinition.TagList)
+                        {
+                            var tagName = apiDeploymentDefinition.GetTagName(tagDisplayName);
+
+                            var dependencies = new List<string>()
+                        {
+                    $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+                        };
+
+                            if (apiDeploymentDefinition.Root.Tags.Any(tag => tag.Name == tagName))
                             {
-                                var templateResources = new List<ArmTemplateResource<TagApiTemplateProperties>>();
+                                dependencies.Add($"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]");
+                            }
 
-                                foreach (string tagDisplayName in apiDeploymentDefinition.TagList)
-                                {
-                                    var tagName = apiDeploymentDefinition.GetTagName(tagDisplayName);
+                            var templateResource = new ArmTemplateResource<TagApiTemplateProperties>(
+                        $"{apiDeploymentDefinition.Name}/{tagName}",
+                        $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{tagName}')]",
+                        ResourceType.TagApi,
+                        new TagApiTemplateProperties(),
+                        dependencies);
 
-                                    var dependencies = new List<string>()
-                                    {
-                                        $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
-                                    };
+                            templateResources.Add(templateResource);
+                        }
 
-                                    if (apiDeploymentDefinition.Root.Tags.Any(tag => tag.Name == tagName))
-                                    {
-                                        dependencies.Add($"[resourceId('{ResourceType.Tag}', parameters('ApimServiceName'), '{tagName}')]");
-                                    }
-
-                                    var templateResource = new ArmTemplateResource<TagApiTemplateProperties>(
-                                        $"{apiDeploymentDefinition.Name}/{tagName}",
-                                        $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{tagName}')]",
-                                        ResourceType.TagApi,
-                                        new TagApiTemplateProperties(),
-                                        dependencies);
-
-                                    templateResources.Add(templateResource);
-                                }
-
-                                return templateResources;
-                            })
-                            .CreateResourcesIf(d => d.IsDependentOnTags(), true);
+                        return templateResources;
+                    })
+                    .CreateResourcesIf(d => d.IsDependentOnTags(), true);
         }
 
         private IEnumerable<ArmTemplateResource<ProductApiProperties>> CreateProductApis(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ProductApiProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .UseResourceCreator(apiDeploymentDefinition =>
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .UseResourceCreator(apiDeploymentDefinition =>
+                    {
+                        var templateResources = new List<ArmTemplateResource<ProductApiProperties>>();
+                        foreach (string productDisplayName in apiDeploymentDefinition.ProductList)
+                        {
+                            var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
+                            var dependencies = new List<string>()
+                        {
+                    $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+                        };
+
+                            if (apiDeploymentDefinition.Root.Products.Any(product => product.Name == productName))
                             {
-                                var templateResources = new List<ArmTemplateResource<ProductApiProperties>>();
-                                foreach (string productDisplayName in apiDeploymentDefinition.ProductList)
-                                {
-                                    var productName = apiDeploymentDefinition.GetProductName(productDisplayName);
-                                    var dependencies = new List<string>()
-                                    {
-                                        $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
-                                    };
+                                dependencies.Add($"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]");
+                            }
 
-                                    if (apiDeploymentDefinition.Root.Products.Any(product => product.Name == productName))
-                                    {
-                                        dependencies.Add($"[resourceId('{ResourceType.Product}', parameters('ApimServiceName'), '{productName}')]");
-                                    }
+                            var templateResource = new ArmTemplateResource<ProductApiProperties>(
+                        $"{productName}/{apiDeploymentDefinition.Name}",
+                        $"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
+                        ResourceType.ProductApi,
+                        new ProductApiProperties(),
+                        dependencies);
 
-                                    var templateResource = new ArmTemplateResource<ProductApiProperties>(
-                                        $"{productName}/{apiDeploymentDefinition.Name}",
-                                        $"[concat(parameters('ApimServiceName'), '/{productName}/{apiDeploymentDefinition.Name}')]",
-                                        ResourceType.ProductApi,
-                                        new ProductApiProperties(),
-                                        dependencies);
+                            templateResources.Add(templateResource);
+                        }
 
-                                    templateResources.Add(templateResource);
-                                }
-
-                                return templateResources;
-                            })
-                            .CreateResourcesIf(d => d.IsDependentOnProducts(), true);
+                        return templateResources;
+                    })
+                    .CreateResourcesIf(d => d.IsDependentOnProducts(), true);
         }
 
         private IEnumerable<ArmTemplateResource<ApiOperationPolicyProperties>> CreateOperationPolicies(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiOperationPolicyProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .UseResourceCreator(apiDeploymentDefinition =>
-                            {
-                                var templateResources = new List<ArmTemplateResource<ApiOperationPolicyProperties>>();
-                                var fileReader = new FileReader();
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .UseResourceCreator(apiDeploymentDefinition =>
+                    {
+                        var templateResources = new List<ArmTemplateResource<ApiOperationPolicyProperties>>();
+                        var fileReader = new FileReader();
 
-                                foreach (var pair in apiDeploymentDefinition.Operations)
-                                {
-                                    var operationPolicy = pair.Value.Policy;
-                                    var operationName = pair.Key;
+                        foreach (var pair in apiDeploymentDefinition.Operations)
+                        {
+                            var operationPolicy = pair.Value.Policy;
+                            var operationName = pair.Key;
 
-                                    var isUrl = operationPolicy.IsUri(out _);
+                            var isUrl = operationPolicy.IsUri(out _);
 
-                                    var templateResource = new ArmTemplateResource<ApiOperationPolicyProperties>(
-                                        $"{apiDeploymentDefinition.Name}/{operationName}/policy",
-                                        $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{operationName}/policy')]",
-                                        ResourceType.ApiOperationPolicy,
-                                        new ApiOperationPolicyProperties()
-                                        {
-                                            Format = isUrl ? "rawxml-link" : "rawxml",
-                                            Value = isUrl ? operationPolicy : fileReader.RetrieveFileContentsAsync(operationPolicy).Result
-                                        },
-                                        new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
+                            var templateResource = new ArmTemplateResource<ApiOperationPolicyProperties>(
+                        $"{apiDeploymentDefinition.Name}/{operationName}/policy",
+                        $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/{operationName}/policy')]",
+                        ResourceType.ApiOperationPolicy,
+                        new ApiOperationPolicyProperties()
+                          {
+                              Format = isUrl ? "rawxml-link" : "rawxml",
+                              Value = isUrl ? operationPolicy : fileReader.RetrieveFileContentsAsync(operationPolicy).Result
+                          },
+                        new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
 
-                                    templateResources.Add(templateResource);
-                                }
+                            templateResources.Add(templateResource);
+                        }
 
-                                return templateResources;
-                            })
-                            .CreateResourcesIf(d => d.Operations != null, true);
+                        return templateResources;
+                    })
+                    .CreateResourcesIf(d => d.Operations != null, true);
         }
 
         private IEnumerable<ArmTemplateResource<ApiPolicyProperties>> CreateApiPolicies(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiPolicyProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .WithName(d => $"{d.Name}/policy")
-                            .OfType(ResourceType.ApiPolicy)
-                            .WhichDependsOnResourceOfType(ResourceType.Api)
-                            .WhichDependsOnResourceWithName(d => d.Name)
-                            .CreateResourcesIf(d => d.HasPolicy(), true);
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .WithName(d => $"{d.Name}/policy")
+                    .OfType(ResourceType.ApiPolicy)
+                    .WhichDependsOnResourceOfType(ResourceType.Api)
+                    .WhichDependsOnResourceWithName(d => d.Name)
+                    .CreateResourcesIf(d => d.HasPolicy(), true);
         }
 
         private IEnumerable<ArmTemplateResource<ApiDiagnosticsProperties>> CreateApiDiagnostics(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiDiagnosticsProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .WithName(d => $"{d.Name}/{d.AssociatedLogger.LoggerType.ToLower()}")
-                            .OfType(ResourceType.ApiDiagnostic)
-                            .WhichDependsOnResourceOfType(ResourceType.Api)
-                            .WhichDependsOnResourceWithName(d => d.Name)
-                            .CheckDependencies()
-                            .CreateResourcesIf(d => d.HasDiagnostics());
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .WithName(d => $"{d.Name}/{d.AssociatedLogger.LoggerType.ToLower()}")
+                    .OfType(ResourceType.ApiDiagnostic)
+                    .WhichDependsOnResourceOfType(ResourceType.Api)
+                    .WhichDependsOnResourceWithName(d => d.Name)
+                    .CheckDependencies()
+                    .CreateResourcesIf(d => d.HasDiagnostics());
         }
 
         private IEnumerable<ArmTemplateResource<GatewayApiProperties>> CreateGatewayApis(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, GatewayApiProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .UseResourceCreator(apiDeploymentDefinition =>
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .UseResourceCreator(apiDeploymentDefinition =>
+                    {
+                        var templateResources = new List<ArmTemplateResource<GatewayApiProperties>>();
+                        foreach (string gatewayName in apiDeploymentDefinition.GatewayList)
+                        {
+                            var dependencies = new List<string>()
                             {
-                                var templateResources = new List<ArmTemplateResource<GatewayApiProperties>>();
-                                foreach (string gatewayName in apiDeploymentDefinition.GatewayList)
-                                {
-                                    var dependencies = new List<string>()
-                                    {
-                                        $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
-                                    };
+                                $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+                            };
 
-                                    if (apiDeploymentDefinition.Root.Gateways.Any(gateway => gateway.Name == gatewayName))
-                                    {
-                                        dependencies.Add($"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gatewayName}')]");
-                                    }
+                            if (apiDeploymentDefinition.Root.Gateways.Any(gateway => gateway.Name == gatewayName))
+                            {
+                                dependencies.Add($"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gatewayName}')]");
+                            }
 
-                                    var templateResource = new ArmTemplateResource<GatewayApiProperties>(
-                                        $"{gatewayName}/{apiDeploymentDefinition.Name}",
-                                        $"[concat(parameters('ApimServiceName'), '/{gatewayName}/{apiDeploymentDefinition.Name}')]",
-                                        ResourceType.GatewayApi,
-                                        new GatewayApiProperties(),
-                                        dependencies);
+                            var templateResource = new ArmTemplateResource<GatewayApiProperties>(
+                                $"{gatewayName}/{apiDeploymentDefinition.Name}",
+                                $"[concat(parameters('ApimServiceName'), '/{gatewayName}/{apiDeploymentDefinition.Name}')]",
+                                ResourceType.GatewayApi,
+                                new GatewayApiProperties(),
+                                dependencies);
 
-                                    templateResources.Add(templateResource);
-                                }
+                            templateResources.Add(templateResource);
+                        }
 
-                                return templateResources;
-                            })
-                            .CreateResourcesIf(d => d.IsDependentOnGateways(), true);
+                        return templateResources;
+                    })
+                    .CreateResourcesIf(d => d.IsDependentOnGateways(), true);
         }
 
         private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)
         {
             return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .WithName(d => GetApiName(d))
-                            .OfType(ResourceType.Api)
-                            .CheckDependencies()
-                            .CreateResources(true);
+                    .ForDeploymentDefinitions(deploymentDefinition.Apis)
+                    .WithName(d => GetApiName(d))
+                    .OfType(ResourceType.Api)
+                    .CheckDependencies()
+                    .CreateResources(true);
 
             static string GetApiName(ApiDeploymentDefinition apiDeploymentDefinition)
             {

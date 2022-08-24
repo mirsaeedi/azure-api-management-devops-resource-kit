@@ -80,9 +80,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
         public async Task<bool> IsDependOnLogger(FileReader fileReader)
         {
             /*if (Diagnostic != null && Diagnostic.LoggerId != null)
-			{
-				return true;
-			}*/
+      {
+        return true;
+      }*/
 
             string apiPolicy = Policy != null ? await fileReader.RetrieveFileContentsAsync(Policy) : "";
 
