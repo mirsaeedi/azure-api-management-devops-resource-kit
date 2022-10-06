@@ -1,5 +1,6 @@
 ﻿using Apim.DevOps.Toolkit.ApimEntities.Api;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Diagnostics;
+using Apim.DevOps.Toolkit.ApimEntities.Api.Gateway;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Operation.Policy;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Policy;
 using Apim.DevOps.Toolkit.ApimEntities.Api.Product;
@@ -42,6 +43,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			resources.AddRange(CreateProductApis(deploymentDefinition));
 			resources.AddRange(CreateTagApis(deploymentDefinition));
 			resources.AddRange(CreateApiDiagnostics(deploymentDefinition));
+			resources.AddRange(CreateGatewayApis(deploymentDefinition));
 
 			return resources;
 		}
@@ -174,6 +176,40 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.WhichDependsOnResourceWithName(d => d.Name)
 							.CheckDependencies()
 							.CreateResourcesIf(d => d.HasDiagnostics());
+		}
+
+		private IEnumerable<ArmTemplateResource<GatewayApiProperties>> CreateGatewayApis(DeploymentDefinition deploymentDefinition)
+		{
+			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, GatewayApiProperties>(_mapper)
+					.ForDeploymentDefinitions(deploymentDefinition.Apis)
+					.UseResourceCreator(apiDeploymentDefinition =>
+					{
+						var templateResources = new List<ArmTemplateResource<GatewayApiProperties>>();
+						foreach (string gatewayName in apiDeploymentDefinition.GatewayList)
+						{
+							var dependencies = new List<string>()
+							{
+									$"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]"
+							};
+
+							if (apiDeploymentDefinition.Root.Gateways.Any(gateway => gateway.Name == gatewayName))
+							{
+								dependencies.Add($"[resourceId('{ResourceType.Gateway}', parameters('ApimServiceName'), '{gatewayName}')]");
+							}
+
+							var templateResource = new ArmTemplateResource<GatewayApiProperties>(
+								$"{gatewayName}/{apiDeploymentDefinition.Name}",
+								$"[concat(parameters('ApimServiceName'), '/{gatewayName}/{apiDeploymentDefinition.Name}')]",
+								ResourceType.GatewayApi,
+								new GatewayApiProperties(),
+								dependencies);
+
+							templateResources.Add(templateResource);
+						}
+
+						return templateResources;
+					})
+					.CreateResourcesIf(d => d.IsDependentOnGateways(), true);
 		}
 
 		private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)

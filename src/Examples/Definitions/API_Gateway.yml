@@ -1,0 +1,26 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+apis:
+  - name: ApiG1
+    displayName: API G v1
+    serviceUrl: $(ApiServiceURL)
+    openApiSpec: $(apimBasePath)\OpenApi.json
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    protocols: https
+    subscriptionRequired: true
+    gateways: testGateway, testGateway2
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
+
+gateways:
+  - name: testGateway
+    description: Test self hosted gateway
+    locationData:
+      name: onprem
+  - name: testGateway2
+    description: Test self hosted gateway 2
+    locationData:
+      name: onprem
