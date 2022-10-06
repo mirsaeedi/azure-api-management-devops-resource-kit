@@ -5,9 +5,9 @@
 3. If there is any variable in yml definitions which doesn't have any corresponding value, the tool raises an [exception](https://github.com/mirsaeedi/dotnet-apim#unmatched-variables).
 4. The tool support [splitted](https://github.com/mirsaeedi/dotnet-apim#maintaining-large-yaml-definitions-by-splitting-them) yml definitions to make maintenance of large projects easier.
 5. The flags `-v` or `--printVariables` are added to print the variables before generating the output. This helps in debugging the tool.
-6. The tool now runs on either .NET Core 2.1 or 3.1.
+6. The tool now runs on either .NET Core 2.1 or 3.1, as well as .NET 5 and 6
 7. The tool has undergone major changes which were highly required to speed up the development of the project.
-8. Uses API version `2019-12-01`
+8. Uses API version `2021-08-01`
 9. The tool supports [NamedValue](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-properties).
 
 ## The Problem
