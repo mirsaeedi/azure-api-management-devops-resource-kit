@@ -4,7 +4,7 @@ apimServiceName: $(apimServiceName) # Required, must match name of an apim servi
 apis:
   - name: ApiG1
     displayName: API G v1
-    graphQlEndpoint: https://swapi-graphql.azure-api.net/graphql
+    graphQlSpec: https://swapi-graphql.azure-api.net/graphql
     policy: $(apimBasePath)\Policies\ApiPolicy.xml
     path: $(prefix)/g/api
     serviceUrl: https://swapi-graphql.azure-api.net/graphql

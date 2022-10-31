@@ -22,9 +22,9 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		public string OpenApiSpec { get; set; }
 
 		/// <summary>
-		/// Url to GraphQL API server endpoint
+		/// local path or url to GraphQL API specification
 		/// </summary>
-		public string GraphQlEndpoint { get; set; }
+		public string GraphQlSpec { get; set; }
 
 		/// <summary>
 		/// local path or url to policy

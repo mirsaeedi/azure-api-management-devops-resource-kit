@@ -2,7 +2,7 @@
   "profiles": {
     "apimtemplate": {
       "commandName": "Project",
-      "commandLineArgs": "-c  \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Definitions\\API_Policy_NamedValue.yml\" -f \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\Replacement\\replace_dont_track.yml\"  -v -o \"C:\\Users\\6104652\\source\\repos\\dotnet-apim\\src\\Examples\\\\output\""
+      "commandLineArgs": "-c \"C:\\Users\\muriukilm\\source\\repos\\test\\test.yml\" -v -o \"C:\\Users\\muriukilm\\source\\repos\\test\\output\""
     }
   }
 }
