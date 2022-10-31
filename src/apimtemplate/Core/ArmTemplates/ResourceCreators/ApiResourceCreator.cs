@@ -43,7 +43,7 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 			resources.AddRange(CreateProductApis(deploymentDefinition));
 			resources.AddRange(CreateTagApis(deploymentDefinition));
 			resources.AddRange(CreateApiDiagnostics(deploymentDefinition));
-            resources.AddRange(CreateGraphQlApiSchema(deploymentDefinition));
+			resources.AddRange(CreateGraphQlApiSchema(deploymentDefinition));
 
 			return resources;
 		}
@@ -178,37 +178,37 @@ namespace Apim.DevOps.Toolkit.Core.ArmTemplates.ResourceCreators
 							.CreateResourcesIf(d => d.HasDiagnostics());
 		}
 
-        /// <summary>
-        /// Api schemas currently only added if GraphQL schema file is specified in deployment definition.
-        /// </summary>
-        /// <param name="deploymentDefinition"></param>
-        /// <returns></returns>
-        private IEnumerable<ArmTemplateResource<SchemaApiProperties>> CreateGraphQlApiSchema(DeploymentDefinition deploymentDefinition)
-        {
-            return new ArmTemplateResourceCreator<ApiDeploymentDefinition, SchemaApiProperties>(_mapper)
-                            .ForDeploymentDefinitions(deploymentDefinition.Apis)
-                            .UseResourceCreator(apiDeploymentDefinition =>
-                            {
-                                var templateResource = new ArmTemplateResource<SchemaApiProperties>(
-                                    $"{apiDeploymentDefinition.Name}/graphql",
-                                    $"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/graphql')]",
-                                    ResourceType.ApiSchema,
-                                    new SchemaApiProperties
-                                    {
-                                        ContentType = "application/vnd.ms-azure-apim.graphql.schema",
-                                        Document = new Document
-                                        {
-                                            Value = new GraphQlSpecReader(apiDeploymentDefinition.GraphQlSpec).GetFileContent().Result
-                                        }
-                                    },
-                                    new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
+		/// <summary>
+		/// Api schemas currently only added if GraphQL schema file is specified in deployment definition.
+		/// </summary>
+		/// <param name="deploymentDefinition"></param>
+		/// <returns></returns>
+		private IEnumerable<ArmTemplateResource<SchemaApiProperties>> CreateGraphQlApiSchema(DeploymentDefinition deploymentDefinition)
+		{
+			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, SchemaApiProperties>(_mapper)
+							.ForDeploymentDefinitions(deploymentDefinition.Apis)
+							.UseResourceCreator(apiDeploymentDefinition =>
+							{
+								var templateResource = new ArmTemplateResource<SchemaApiProperties>(
+									$"{apiDeploymentDefinition.Name}/graphql",
+									$"[concat(parameters('ApimServiceName'), '/{apiDeploymentDefinition.Name}/graphql')]",
+									ResourceType.ApiSchema,
+									new SchemaApiProperties
+									{
+										ContentType = "application/vnd.ms-azure-apim.graphql.schema",
+										Document = new Document
+										{
+											Value = new GraphQlSpecReader(apiDeploymentDefinition.GraphQlSpec).GetFileContent().Result
+										}
+									},
+									new string[] { $"[resourceId('{ResourceType.Api}', parameters('ApimServiceName'), '{apiDeploymentDefinition.Name}')]" });
 
-                                return new List<ArmTemplateResource<SchemaApiProperties>> { templateResource };
-                            })
-                            .CreateResourcesIf(d => !d.GraphQlSpec.IsUri(out _), true); // create only if graphQL spec is a file
-        }
+								return new List<ArmTemplateResource<SchemaApiProperties>> { templateResource };
+							})
+							.CreateResourcesIf(d => !d.GraphQlSpec.IsUri(out _), true); // create only if graphQL spec is a file
+		}
 
-        private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)
+		private IEnumerable<ArmTemplateResource<ApiProperties>> CreateApis(DeploymentDefinition deploymentDefinition)
 		{
 			return new ArmTemplateResourceCreator<ApiDeploymentDefinition, ApiProperties>(_mapper)
 							.ForDeploymentDefinitions(deploymentDefinition.Apis)

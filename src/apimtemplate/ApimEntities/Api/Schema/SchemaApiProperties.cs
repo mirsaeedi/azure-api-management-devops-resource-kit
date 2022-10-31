@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Apim.DevOps.Toolkit.ApimEntities.Api.Schema
 {
-    public class SchemaApiProperties
-    {
-        public string ContentType { get; set; }
-        public Document Document { get; set; }
-    }
+	public class SchemaApiProperties
+	{
+		public string ContentType { get; set; }
+		public Document Document { get; set; }
+	}
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Apim.DevOps.Toolkit.ApimEntities.Api.Schema
 {
-    public class Document
-    {
-        public string Value { get; set; }
-    }
+	public class Document
+	{
+		public string Value { get; set; }
+	}
 }
