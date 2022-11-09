@@ -110,9 +110,13 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Validation
 				{
 					throw new ArgumentException("API name is required");
 				}
-				if (api.OpenApiSpec == null)
+				if (api.OpenApiSpec == null && api.GraphQlSpec == null)
 				{
-					throw new ArgumentException("Open API Spec is required");
+					throw new ArgumentException("Open API Spec or Graph QL Endpoint is required");
+				}
+				if (api.OpenApiSpec != null && api.GraphQlSpec != null)
+				{
+					throw new ArgumentException("Specifying both Open API Spec and Graph QL Endpoint is not allowed");
 				}
 				if (api.Path == null)
 				{

@@ -17,9 +17,14 @@ namespace Apim.DevOps.Toolkit.Core.DeploymentDefinitions.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// local path or url to policy
+		/// local path or url to OpenAPI specification
 		/// </summary>
 		public string OpenApiSpec { get; set; }
+
+		/// <summary>
+		/// local path or url to GraphQL API specification
+		/// </summary>
+		public string GraphQlSpec { get; set; }
 
 		/// <summary>
 		/// local path or url to policy

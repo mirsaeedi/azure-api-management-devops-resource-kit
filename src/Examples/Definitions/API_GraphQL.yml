@@ -1,0 +1,16 @@
+version: 0.0.1 # Required
+apimServiceName: $(apimServiceName) # Required, must match name of an apim service deployed in the specified resource group
+
+apis:
+  - name: ApiG1
+    displayName: API G v1
+    graphQlSpec: https://swapi-graphql.azure-api.net/graphql
+    policy: $(apimBasePath)\Policies\ApiPolicy.xml
+    path: $(prefix)/g/api
+    serviceUrl: https://swapi-graphql.azure-api.net/graphql
+    protocols: https
+    subscriptionRequired: true
+    isCurrent: true
+    subscriptionKeyParameterNames:
+      header: ProviderKey
+      query: ProviderKey
